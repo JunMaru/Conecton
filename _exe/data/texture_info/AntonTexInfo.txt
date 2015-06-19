@@ -1,0 +1,15 @@
+DATASUM
+10
+TEXPATH
+data/texture/anton/arufa.png
+
+DATASTART
+FORX 8
+0.0,0.0,0.125,0.333
+DATA
+0.0,0.333,0.125,0.333
+DATA
+0.0,0.666,0.125,0.333
+
+DATAEND
+

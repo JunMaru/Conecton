@@ -1,0 +1,10 @@
+DATASUM
+8
+TEXPATH
+data/texture/beecon/beecon.png
+
+DATASTART
+FORX 8
+0.0,0.0,0.125,1.0
+
+DATAEND

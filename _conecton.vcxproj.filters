@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\framework">
+      <UniqueIdentifier>{cef29899-2f0f-4fac-8396-d37bafc0d0f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\framework\collision">
+      <UniqueIdentifier>{4ea981a3-0edd-4534-9f62-c7b3b330a0fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\framework\object">
+      <UniqueIdentifier>{5b683b3a-2004-4bc8-a693-9141544c3b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\framework\object\fade">
+      <UniqueIdentifier>{9f35c22f-6de9-476f-9cfd-cb654e9f71ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\framework\phase">
+      <UniqueIdentifier>{01c424a4-9a75-4f1c-ac89-55ddb879a541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\framework\sound">
+      <UniqueIdentifier>{567e9c50-0415-4247-a81a-076d96e431b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application">
+      <UniqueIdentifier>{49a2a676-3cf0-4360-b366-21f8a3e994e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\framework\utility">
+      <UniqueIdentifier>{2f1fe2e4-f088-4050-aaeb-5aab24b358db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\framework\system">
+      <UniqueIdentifier>{821e5a20-93a1-4454-9f1c-e4807746ed9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\framework\object\_scene sample">
+      <UniqueIdentifier>{801c506d-b994-41b6-bf11-b00cc7b64ef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CBlock">
+      <UniqueIdentifier>{e0d0dddc-eb50-493e-b861-32c144481a13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CBackGround">
+      <UniqueIdentifier>{0511b88f-8f16-4c32-992d-62e826eabec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CAnton">
+      <UniqueIdentifier>{dce95473-070c-4fb5-9f70-55388725753b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CBeecon">
+      <UniqueIdentifier>{776ffe4d-caee-41bf-80d6-b1535acaede7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CInstacing">
+      <UniqueIdentifier>{b00f90ab-f1a3-4794-9c55-6bb46a419fd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CPlayer">
+      <UniqueIdentifier>{e93f3507-5990-49ab-a9ed-88e156ed6d02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CScrollManager">
+      <UniqueIdentifier>{570a6587-2f13-437e-a1ff-3fc8feca8fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CEnemy">
+      <UniqueIdentifier>{b3d0d06d-3850-40a4-a1d4-6b63d8c813cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CItem">
+      <UniqueIdentifier>{ad64ebf7-f0af-41ef-adda-7eee31b6512f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CTitle.cpp">
+      <Filter>ソース ファイル\framework\phase</Filter>
+    </ClCompile>
+    <ClCompile Include="CResult.cpp">
+      <Filter>ソース ファイル\framework\phase</Filter>
+    </ClCompile>
+    <ClCompile Include="CGame.cpp">
+      <Filter>ソース ファイル\framework\phase</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoundXAudio2.cpp">
+      <Filter>ソース ファイル\framework\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene2D.cpp">
+      <Filter>ソース ファイル\framework\object\_scene sample</Filter>
+    </ClCompile>
+    <ClCompile Include="CFade.cpp">
+      <Filter>ソース ファイル\framework\object\fade</Filter>
+    </ClCompile>
+    <ClCompile Include="CPhase.cpp">
+      <Filter>ソース ファイル\framework\phase</Filter>
+    </ClCompile>
+    <ClCompile Include="Define.cpp">
+      <Filter>ソース ファイル\framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenCaptureDX9.cpp">
+      <Filter>ソース ファイル\framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="MathHelper.cpp">
+      <Filter>ソース ファイル\framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="collisionDetection.cpp">
+      <Filter>ソース ファイル\framework\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamera.cpp">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClCompile>
+    <ClCompile Include="CInput.cpp">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClCompile>
+    <ClCompile Include="CLight.cpp">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClCompile>
+    <ClCompile Include="CManager.cpp">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClCompile>
+    <ClCompile Include="CRenderer.cpp">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene.cpp">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene3D.cpp">
+      <Filter>ソース ファイル\framework\object\_scene sample</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneBillboard.cpp">
+      <Filter>ソース ファイル\framework\object\_scene sample</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneX.cpp">
+      <Filter>ソース ファイル\framework\object\_scene sample</Filter>
+    </ClCompile>
+    <ClCompile Include="CDebugProcDX9.cpp">
+      <Filter>ソース ファイル\framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="CBlock.cpp">
+      <Filter>ソース ファイル\application\CBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnton.cpp">
+      <Filter>ソース ファイル\application\CAnton</Filter>
+    </ClCompile>
+    <ClCompile Include="CBeecon.cpp">
+      <Filter>ソース ファイル\application\CBeecon</Filter>
+    </ClCompile>
+    <ClCompile Include="CInstancingObject.cpp">
+      <Filter>ソース ファイル\application\CInstacing</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayer.cpp">
+      <Filter>ソース ファイル\application\CPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="CScrollManager.cpp">
+      <Filter>ソース ファイル\application\CScrollManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CBlockManager.cpp">
+      <Filter>ソース ファイル\application\CBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="CEnemy.cpp">
+      <Filter>ソース ファイル\application\CEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="CItem.cpp">
+      <Filter>ソース ファイル\application\CItem</Filter>
+    </ClCompile>
+    <ClCompile Include="CBackGround.cpp">
+      <Filter>ソース ファイル\application\CBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CLaser.cpp">
+      <Filter>ソース ファイル\application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CGame.h">
+      <Filter>ソース ファイル\framework\phase</Filter>
+    </ClInclude>
+    <ClInclude Include="CPhase.h">
+      <Filter>ソース ファイル\framework\phase</Filter>
+    </ClInclude>
+    <ClInclude Include="CResult.h">
+      <Filter>ソース ファイル\framework\phase</Filter>
+    </ClInclude>
+    <ClInclude Include="CTitle.h">
+      <Filter>ソース ファイル\framework\phase</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoundXAudio2.h">
+      <Filter>ソース ファイル\framework\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene2D.h">
+      <Filter>ソース ファイル\framework\object\_scene sample</Filter>
+    </ClInclude>
+    <ClInclude Include="CFade.h">
+      <Filter>ソース ファイル\framework\object\fade</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenCaptureDX9.h">
+      <Filter>ソース ファイル\framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>ソース ファイル\framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h">
+      <Filter>ソース ファイル\framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="collisionDetection.h">
+      <Filter>ソース ファイル\framework\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamera.h">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClInclude>
+    <ClInclude Include="CInput.h">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClInclude>
+    <ClInclude Include="CLight.h">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClInclude>
+    <ClInclude Include="CManager.h">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClInclude>
+    <ClInclude Include="CRenderer.h">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene.h">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene3D.h">
+      <Filter>ソース ファイル\framework\object\_scene sample</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneBillboard.h">
+      <Filter>ソース ファイル\framework\object\_scene sample</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneX.h">
+      <Filter>ソース ファイル\framework\object\_scene sample</Filter>
+    </ClInclude>
+    <ClInclude Include="CDebugProcDX9.h">
+      <Filter>ソース ファイル\framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="CBlock.h">
+      <Filter>ソース ファイル\application\CBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnton.h">
+      <Filter>ソース ファイル\application\CAnton</Filter>
+    </ClInclude>
+    <ClInclude Include="CBeecon.h">
+      <Filter>ソース ファイル\application\CBeecon</Filter>
+    </ClInclude>
+    <ClInclude Include="CInstancingObject.h">
+      <Filter>ソース ファイル\application\CInstacing</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayer.h">
+      <Filter>ソース ファイル\application\CPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="CScrollManager.h">
+      <Filter>ソース ファイル\application\CScrollManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CBlockManager.h">
+      <Filter>ソース ファイル\application\CBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="CEnemy.h">
+      <Filter>ソース ファイル\application\CEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="CItem.h">
+      <Filter>ソース ファイル\application\CItem</Filter>
+    </ClInclude>
+    <ClInclude Include="CBackGround.h">
+      <Filter>ソース ファイル\application\CBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CLaser.h">
+      <Filter>ソース ファイル\application</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RC.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
