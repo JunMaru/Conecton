@@ -180,7 +180,7 @@ void CDebugProcDX9::Draw(void)
 
 	if(m_bDisp)
 	{
-		RECT rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+		RECT rect = {0, 0, (LONG)(SCREEN_WIDTH), (LONG)(SCREEN_HEIGHT)};
 
 		m_pD3DXFont->DrawText(
 								nullptr,
