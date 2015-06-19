@@ -153,9 +153,6 @@ void CGame::Init(void)
 	pScrollManager->Init();
 
 	// レーザー動作テスト
-	CLaser::Create(D3DXVECTOR3(0.0f,100.0f,0.0f), CLaser::DIRECTION_UP);
-	CLaser::Create(D3DXVECTOR3(0.0f,100.0f,0.0f), CLaser::DIRECTION_DOWN);
-	CLaser::Create(D3DXVECTOR3(0.0f,100.0f,0.0f), CLaser::DIRECTION_LEFT);
 	CLaser::Create(D3DXVECTOR3(0.0f,100.0f,0.0f), CLaser::DIRECTION_RIGHT);
 
 	// 1秒間のフェードイン
