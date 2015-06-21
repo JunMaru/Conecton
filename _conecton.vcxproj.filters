@@ -167,6 +167,9 @@
     <ClCompile Include="CLaser.cpp">
       <Filter>ソース ファイル\application</Filter>
     </ClCompile>
+    <ClCompile Include="CInputCommand.cpp">
+      <Filter>ソース ファイル\framework\system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGame.h">
@@ -270,6 +273,9 @@
     </ClInclude>
     <ClInclude Include="CLaser.h">
       <Filter>ソース ファイル\application</Filter>
+    </ClInclude>
+    <ClInclude Include="CInputCommand.h">
+      <Filter>ソース ファイル\framework\system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

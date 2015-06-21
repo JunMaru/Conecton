@@ -11,6 +11,7 @@
 #include "CAnton.h"
 #include "CBeecon.h"
 #include "CInput.h"
+#include "CInputCommand.h"
 
 /*-----------------------------------------------------------------------------
 	マクロ定義
@@ -25,6 +26,7 @@ CPlayer::CPlayer()
 {
 	m_pAnton = nullptr;
 	m_pBeecon = nullptr;
+	m_pInputCommand = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -71,6 +73,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 	m_pBeecon->SetSpd(8);
 	m_pBeecon->LoadTextureInfoFromText("data/texture_info/BeeconTexInfo.txt");
 
+	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
+	m_pInputCommand->Init();
+
 	return S_OK;
 }
 
@@ -79,6 +84,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 -----------------------------------------------------------------------------*/
 void CPlayer::Uninit(void)
 {
+	m_pInputCommand->Uninit();
+	delete m_pInputCommand;
+
 	// CSceneが勝手にdeleteまでしてくれるので、nullptrを代入するだけ
 	m_pAnton = nullptr;
 	m_pBeecon = nullptr;
@@ -89,58 +97,29 @@ void CPlayer::Uninit(void)
 -----------------------------------------------------------------------------*/
 void CPlayer::Update(void)
 {
-	CInputKeyboard *pKeyboard = CManager::GetInputKeyboard();
-	CInputJoypad *pJoypad = CManager::GetInputJoypad();
-	
-	if (pJoypad != nullptr)
-	{
-		if (pJoypad->GetKeyPress(CInputJoypad::GAMEPAD_LSTICK_LEFT))
-		{
-			m_pBeecon->CommandLeftMove();
-		}
-		else if (pJoypad->GetKeyPress(CInputJoypad::GAMEPAD_LSTICK_RIGHT))
-		{
-			m_pBeecon->CommandRightMove();
-		}
+	m_pInputCommand->Update();
 
-		if (pJoypad->GetKeyTrigger(CInputJoypad::GAMEPAD_2))
-		{
-			m_pAnton->SetState(CAnton::STATE_METAL);
-		}
-		else if (pJoypad->GetKeyTrigger(CInputJoypad::GAMEPAD_1))
-		{
-		m_pAnton->SetState(CAnton::STATE_NORMAL);
-		}
-		else if (pJoypad->GetKeyTrigger(CInputJoypad::GAMEPAD_3))
-		{
-			D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
-
-			m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
-		}
-	}
-
-	if (pKeyboard->GetKeyPress(DIK_D))
+	if (m_pInputCommand->IsPress(CInputCommand::COMMAND_RIGHT))
 	{
 		m_pBeecon->CommandRightMove();
 	}
-	else if (pKeyboard->GetKeyPress(DIK_A))
+	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_LEFT))
 	{
 		m_pBeecon->CommandLeftMove();
 	}
-	else if (pKeyboard->GetKeyTrigger(DIK_1))
+	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_NORMAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_NORMAL);
 	}
-	else if (pKeyboard->GetKeyTrigger(DIK_2))
+	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_METTAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_METAL);
 	}
-	else if (pKeyboard->GetKeyTrigger(DIK_3))
+	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_MINIMAMU))
 	{
 		m_pAnton->SetState(CAnton::STATE_MINIMUM);
 	}
-	
-		else if (pKeyboard->GetKeyTrigger(DIK_4))
+	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_CALLANTON))
 	{
 		D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
 

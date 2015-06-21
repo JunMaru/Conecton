@@ -18,6 +18,7 @@
 -----------------------------------------------------------------------------*/
 class CAnton;
 class CBeecon;
+class CInputCommand;
 
 /*-----------------------------------------------------------------------------
  プレイヤークラス
@@ -50,4 +51,5 @@ private:
 	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col);
 	CAnton *m_pAnton;
 	CBeecon *m_pBeecon;
+	CInputCommand *m_pInputCommand;
 };

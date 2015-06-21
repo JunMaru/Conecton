@@ -102,6 +102,7 @@
     <ClCompile Include="CFade.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CInput.cpp" />
+    <ClCompile Include="CInputCommand.cpp" />
     <ClCompile Include="CInstancingObject.cpp" />
     <ClCompile Include="CItem.cpp" />
     <ClCompile Include="CLaser.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="CFade.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CInput.h" />
+    <ClInclude Include="CInputCommand.h" />
     <ClInclude Include="CInstancingObject.h" />
     <ClInclude Include="CItem.h" />
     <ClInclude Include="CLaser.h" />
