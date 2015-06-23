@@ -66,6 +66,9 @@
     <Filter Include="ソース ファイル\application\CItem">
       <UniqueIdentifier>{ad64ebf7-f0af-41ef-adda-7eee31b6512f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\CLaser">
+      <UniqueIdentifier>{4cecf94b-7b47-4c1c-be1d-b373c9089413}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTitle.cpp">
@@ -164,11 +167,14 @@
     <ClCompile Include="CBackGround.cpp">
       <Filter>ソース ファイル\application\CBackGround</Filter>
     </ClCompile>
-    <ClCompile Include="CLaser.cpp">
-      <Filter>ソース ファイル\application</Filter>
-    </ClCompile>
     <ClCompile Include="CInputCommand.cpp">
       <Filter>ソース ファイル\framework\system</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>ソース ファイル\application</Filter>
+    </ClCompile>
+    <ClCompile Include="CLaser.cpp">
+      <Filter>ソース ファイル\application\CLaser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,11 +277,14 @@
     <ClInclude Include="CBackGround.h">
       <Filter>ソース ファイル\application\CBackGround</Filter>
     </ClInclude>
-    <ClInclude Include="CLaser.h">
-      <Filter>ソース ファイル\application</Filter>
-    </ClInclude>
     <ClInclude Include="CInputCommand.h">
       <Filter>ソース ファイル\framework\system</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>ソース ファイル\application</Filter>
+    </ClInclude>
+    <ClInclude Include="CLaser.h">
+      <Filter>ソース ファイル\application\CLaser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

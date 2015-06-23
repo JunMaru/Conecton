@@ -156,6 +156,7 @@ namespace TexLoader
 		}
 
 		fclose( file );
+		delete[] texPath;
 		return dataSum;
 	}
 }

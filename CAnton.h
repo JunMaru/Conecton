@@ -12,6 +12,7 @@
 -----------------------------------------------------------------------------*/
 
 #include "CScene.h"
+#include "TextureLoader.h"
 
 /*-----------------------------------------------------------------------------
 	アントンクラス
@@ -123,13 +124,6 @@ class CAnton : public CScene
 
 		void CommandChangeNormal();
 		void CommandChangeMetal();
-
-		/*------------------------------------------------------------------------------
-			テクスチャ情報ロード
-			param テクスチャファイルパス（テキストへの）
-		-------------------------------------------------------------------------------*/
-
-		bool LoadTextureInfoFromText( const char *file_path );
 		
 		void SetState(const STATE state);
 		STATE GetState(void){ return m_state; }
@@ -163,15 +157,8 @@ class CAnton : public CScene
 
 		int m_mass;//質量
 		
-		//テクスチャUv値情報
-		typedef struct
-		{
-			D3DXVECTOR2 uv;
-			D3DXVECTOR2 size;
-		}TexInfo;
-
 		//テクスチャのＵｖ値とサイズを保存しているデータ配列
-		TexInfo *m_pTexInfoArray;
+		TexLoader::UvInfo *m_pTexInfoArray;
 
 		//これらはテクスチャ空間での話
 		//テクスチャ位置(0~1)

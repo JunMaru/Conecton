@@ -92,23 +92,6 @@ void CAnton::Draw()
 }
 
 /*-----------------------------------------------------------------------------
-	テクスチャをロード
------------------------------------------------------------------------------*/
-
-HRESULT CAnton::LoadTexture( const char *file_path )
-{
-	//別にNULLチェックとかはしません
-	LPDIRECT3DDEVICE9 device = CManager::GetRenderer()->GetDevice();
-
-	if( FAILED( D3DXCreateTextureFromFile(device,file_path,&m_pTex) ) )
-	{
-		return E_FAIL;
-	}
-
-	return S_OK;
-}
-
-/*-----------------------------------------------------------------------------
 	移動命令
 -----------------------------------------------------------------------------*/
 
@@ -156,98 +139,12 @@ void CAnton::CommandChangeMetal()
 	m_selectAnimIdx = 2;
 }
 
-/*-----------------------------------------------------------------------------
-	テクスチャ情報読み込み
------------------------------------------------------------------------------*/
-
-bool CAnton::LoadTextureInfoFromText( const char *file_path )
-{
-	FILE *file;
-
-	file = fopen( file_path,"rt" );
-
-	if( file == NULL )
-	{
-		return false;
-	}
-
-	char buf[256];
-	int dataSum = 0;
-	int idx = 0;
-	while(1)
-	{
-		//文字列ロード
-		fscanf( file,"%s",buf );
-
-		if( feof( file ) )
-		{
-			break;
-		}
-
-		if( strcmp( buf,"DATASUM" ) == 0 )
-		{
-			//総データ数ロード
-			fscanf( file,"%d",&dataSum );
-
-			//配列作成
-			m_pTexInfoArray = new TexInfo[ dataSum ];
-		}
-		else if( strcmp( buf,"TEXPATH" ) == 0 )
-		{
-			//テクスチャロード
-			fscanf( file,"%s",buf );
-			LoadTexture( buf );
-		}
-		else if( strcmp( buf,"DATASTART" ) == 0 )//ループ指定など特殊データ指定を行う
-		{
-			while( 1 )
-			{
-				fscanf( file,"%s",buf );
-
-				if( strcmp( buf,"FORX" ) == 0 )
-				{
-					int roopSum;
-					fscanf( file,"%d",&roopSum );
-
-					D3DXVECTOR2 texPos,texSize;
-					fscanf( file,"%f,%f,%f,%f",&texPos.x,&texPos.y,&texSize.x,&texSize.y );
-
-					for( int i = 0 ; i < roopSum ; i++ )
-					{
-						m_pTexInfoArray[ idx ].uv   = texPos;
-						m_pTexInfoArray[ idx ].size = texSize;
-
-						texPos.x += texSize.x;
-
-						idx++;
-					}
-				}
-				else if( strcmp( buf,"DATA" ) == 0 )
-				{
-					D3DXVECTOR2 texPos,texSize;
-					fscanf( file,"%f,%f,%f,%f",&texPos.x,&texPos.y,&texSize.x,&texSize.y );
-
-					m_pTexInfoArray[ idx ].uv   = texPos;
-					m_pTexInfoArray[ idx ].size = texSize;
-
-					idx++;
-				}
-				else if( strcmp( buf,"DATAEND" ) == 0 )
-				{
-					break;
-				}
-			}
-		}
-	}
-	
-	return true;
-}
-
 //消えるかもしれないのでコメントは最少で
-
 void CAnton::TemporaryInit()
 {
 	SetState(STATE_NORMAL);
+
+	TexLoader::LoadTexSheetFromBin("data/texture_info/AntonTexInfo.bin", m_pTexInfoArray, &m_pTex);
 
 	//アニメーション管理テスト！！！
 	m_animSet = new AnimationInfo[4];
@@ -276,8 +173,6 @@ void CAnton::TemporaryInit()
 	m_animSet[2].texIdArray = new int [1];
 	m_animSet[2].bRoop = false;
 	m_animSet[2].texIdArray[0] = 9;
-
-
 
 	LPDIRECT3DDEVICE9 device = CManager::GetRenderer()->GetDevice();
 
@@ -329,6 +224,7 @@ void CAnton::TemporaryUninit()
 		m_pTex = NULL;
 	}
 
+
 	delete []m_pTexInfoArray;
 
 	// 仮メモリーリーク対策
@@ -339,8 +235,6 @@ void CAnton::TemporaryUninit()
 
 	delete[] m_animSet;
 }
-
-	
 
 void CAnton::TemporaryUpdate()
 {

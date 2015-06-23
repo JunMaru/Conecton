@@ -3,7 +3,7 @@
 	author	HaradaYuto
 	since	20150616
 -----------------------------------------------------------------------------*/
-
+#pragma once
 #include <d3dx9.h>
 
 namespace TexLoader

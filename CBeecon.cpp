@@ -68,113 +68,6 @@ void CBeecon::Draw()
 	TemporaryDraw();
 }
 
-/*-----------------------------------------------------------------------------
-	テクスチャロード
------------------------------------------------------------------------------*/
-HRESULT CBeecon::LoadTexture(const char *file_path)
-{
-	LPDIRECT3DDEVICE9 device = CManager::GetRenderer() -> GetDevice();
-
-	if ( FAILED( D3DXCreateTextureFromFile( device, file_path, &m_pTex ) ) )
-	{
-		return E_FAIL;
-	}
-
-	return S_OK;
-}
-
-/*-----------------------------------------------------------------------------
-	テクスチャ情報読み込み
------------------------------------------------------------------------------*/
-bool CBeecon::LoadTextureInfoFromText( const char *file_path )
-{
-	FILE *file;
-	char buf[ 256 ];
-	int dataSum = 0;
-	int idx = 0;
-
-	file = fopen( file_path, "rt" );
-
-	if ( file == NULL )
-	{
-		return false;
-	}
-
-	while ( 1 )
-	{
-		// 文字列ロード
-		fscanf( file, "%s", buf );
-
-		if ( feof( file ) )
-		{
-			break;
-		}
-
-		// 総データ数ロード
-		if ( strcmp( buf, "DATASUM" ) == 0 )
-		{
-			fscanf( file, "%d", &dataSum );
-
-			// 指定された数の配列作成
-			m_pTexInfoArray = new TexInfo[ dataSum ];
-		}
-
-		// テクスチャロード
-		else if ( strcmp( buf, "TEXPATH" ) == 0 )
-		{
-			fscanf( file, "%s", buf );
-			LoadTexture( buf );
-		}
-
-		// テクスチャステータスロード
-		else if ( strcmp( buf, "DATASTART" ) == 0 )
-		{
-			while ( 1 )
-			{
-				fscanf( file, "%s", buf );
-
-				//ループ指定など特殊データ指定を行う
-				if ( strcmp( buf, "FORX" ) == 0 )
-				{
-					int roopSum;
-					fscanf( file, "%d", &roopSum );
-
-					D3DXVECTOR2 texPos, texSize;
-					fscanf( file, "%f,%f,%f,%f", &texPos.x, &texPos.y, &texSize.x, &texSize.y );
-
-					for ( int i = 0; i < roopSum; i++ )
-					{
-						m_pTexInfoArray[ idx ].uv = texPos;
-						m_pTexInfoArray[ idx ].size = texSize;
-
-						texPos.x += texSize.x;
-
-						idx++;
-					}
-				}
-				else if ( strcmp( buf, "DATA" ) == 0 )
-				{
-					D3DXVECTOR2 texPos, texSize;
-					fscanf( file, "%f,%f,%f,%f", &texPos.x, &texPos.y, &texSize.x, &texSize.y );
-
-					m_pTexInfoArray[ idx ].uv = texPos;
-					m_pTexInfoArray[ idx ].size = texSize;
-
-					idx++;
-				}
-				else if ( strcmp(buf, "DATAEND" ) == 0 )
-				{
-					break;
-				}
-			}
-		}
-	}
-
-	fclose( file );
-
-	return true;
-}
-
 void CBeecon::CommandRightMove()
 {
 	m_bDirectionRight = true;
@@ -189,6 +82,8 @@ void CBeecon::CommandLeftMove()
 
 void CBeecon::TemporaryInit()
 {
+	TexLoader::LoadTexSheetFromBin("data/texture_info/BeeconTexInfo.bin", m_pTexInfoArray, &m_pTex);
+
 	// アニメーションテスト
 	m_animSet = new AnimationInfo;
 

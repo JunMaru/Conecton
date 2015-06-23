@@ -62,7 +62,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 	m_pAnton->SetTargetPosition(0, 0);
 	m_pAnton->SetSpd(8);
 	m_pAnton->CommandChangeNormal();
-	m_pAnton->LoadTextureInfoFromText("data/texture_info/AntonTexInfo.txt");
 
 	m_pBeecon = new CBeecon(7);
 	m_pBeecon->Init();
@@ -71,7 +70,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 	m_pBeecon->SetScaling(100, 130);
 	m_pBeecon->SetTargetPosition(0, 0);
 	m_pBeecon->SetSpd(8);
-	m_pBeecon->LoadTextureInfoFromText("data/texture_info/BeeconTexInfo.txt");
 
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
 	m_pInputCommand->Init();

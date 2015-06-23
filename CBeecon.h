@@ -12,6 +12,7 @@
 -----------------------------------------------------------------------------*/
 
 #include "CScene.h"
+#include "TextureLoader.h"
 
 /*-----------------------------------------------------------------------------
 	class
@@ -75,14 +76,6 @@ class CBeecon : public CScene
 
 		D3DXVECTOR2 GetPreviewPosition(void){ return m_prevPos; }
 
-		HRESULT LoadTexture(const char *file_path);
-
-		/*------------------------------------------------------------------------------
-		テクスチャ情報ロード
-		param テクスチャファイルパス（テキストへの）
-		-------------------------------------------------------------------------------*/
-		bool LoadTextureInfoFromText(const char *file_path);
-
 	private:
 
 		void TemporaryInit();
@@ -106,15 +99,8 @@ class CBeecon : public CScene
 		float m_spd;//速度情報
 		bool m_bDirectionRight;//向き
 
-		//テクスチャUv値情報
-		typedef struct
-		{
-			D3DXVECTOR2 uv;
-			D3DXVECTOR2 size;
-		}TexInfo;
-
 		//テクスチャのＵｖ値とサイズを保存しているデータ配列
-		TexInfo *m_pTexInfoArray;
+		TexLoader::UvInfo *m_pTexInfoArray;
 
 		//これらはテクスチャ空間での話
 		//テクスチャ位置(0~1)
