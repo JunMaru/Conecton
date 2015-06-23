@@ -2,3 +2,4 @@ testFromIchikawa
 testFromMaruyama
 testFromHarada
 testFormOkada
+testBranch
