@@ -104,7 +104,7 @@ void CAnton::CommandRightMove()
 	{
 		m_bDirectionRight = true;
 
-		m_selectAnimIdx = ACTION_WALK;
+		m_action = ACTION_WALK;
 		ResetSelectAnimetionIndex();
 	}
 }
@@ -115,7 +115,7 @@ void CAnton::CommandLeftMove()
 	{
 		m_bDirectionRight = false;
 
-		m_selectAnimIdx = ACTION_WALK;
+		m_action = ACTION_WALK;
 		ResetSelectAnimetionIndex();
 	}
 }
