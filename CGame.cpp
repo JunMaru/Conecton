@@ -211,79 +211,10 @@ void CGame::Update(void)
 	m_pPlayer->Update();
 
 	CAnton *ant = m_pPlayer->GetAnton();
-
-	if (ant->GetState() == CAnton::STATE_MINIMUM)
-	{
-		HitCheckMinimumAnton();
-	}
-	else
-	{
-		HitCheckAnton();
-	}
+	
+	HitCheckAnton();
 }
 
-// ミニマム用のあたり判定。多分普通のと同じソースで実装できる
-void CGame::HitCheckMinimumAnton(void)
-{
-	CAnton *ant = m_pPlayer->GetAnton();
-	D3DXVECTOR3 workAntonSize;
-	workAntonSize.x = 10.0f;
-	workAntonSize.y = ant->GetParameter().size.y;
-	workAntonSize.z = 0.0f;
-
-
-	//Hack くっそ雑なあたり判定
-	for (int cnt = 0; cnt < 63; cnt++)
-	{
-		//アントン
-		D3DXVECTOR3 left_ant = ant->GetPosition();
-
-		left_ant.x -= workAntonSize.x;
-		left_ant.y -= workAntonSize.y / 2;
-
-		//ブロック
-		D3DXVECTOR3 left_b = Block[cnt]->GetPosition();
-		left_b.x -= 50;
-		left_b.y -= 50;
-
-		if (CheckCollisionRectVsRect(left_ant, workAntonSize, left_b, D3DXVECTOR3(100, 100, 0)) && left_b.y - left_ant.y >= 0)
-		{
-			D3DXVECTOR3 set_pos = Block[cnt]->GetPosition();
-			float fAntonSize = workAntonSize.y * 0.75f;			// 0.5fだと半分めり込むのでさらにもう半分引き上げる
-			set_pos.x = ant->GetPosition().x;
-			set_pos.y -= fAntonSize + 50;
-			ant->SetPosition(set_pos);
-		}
-	}
-
-	for (int cnt = 0; cnt < 20; cnt++)
-	{
-		if (SpBlock[cnt] == NULL)
-		{
-			continue;
-		}
-		//アントン
-		D3DXVECTOR3 left_ant = ant->GetPosition();
-
-		left_ant.x -= workAntonSize.x;
-		left_ant.y -= workAntonSize.y / 2;
-
-		//ブロック
-		D3DXVECTOR3 left_b = SpBlock[cnt]->GetPosition();
-		left_b.x -= 50;
-		left_b.y -= 50;
-
-		if (CheckCollisionRectVsRect(left_ant, workAntonSize, left_b, D3DXVECTOR3(100, 100, 0)) && left_b.y - left_ant.y >= 0)
-		{
-				D3DXVECTOR3 set_pos = SpBlock[cnt]->GetPosition();
-				float fAntonSize = workAntonSize.y * 0.75f;			// 0.5fだと半分めり込むのでさらにもう半分引き上げる
-				set_pos.x = ant->GetPosition().x;
-				set_pos.y -= fAntonSize + 50;
-				ant->SetPosition(set_pos);
-		}
-	}
-
-}
 void CGame::HitCheckAnton(void)
 {
 	CAnton *ant = m_pPlayer->GetAnton();

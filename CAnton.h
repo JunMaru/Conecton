@@ -37,6 +37,14 @@ class CAnton : public CScene
 			STATE_MAX,
 		};
 
+		enum ACTION
+		{
+			ACTION_WAIT = 0,
+			ACTION_WALK,
+			ACTION_FRONT,
+			ACTION_MAX,
+		};
+
 		struct PARAMETER
 		{
 			int nMass;
@@ -139,6 +147,8 @@ class CAnton : public CScene
 
 		//test
 		void AnimationUpdate();
+		void AnimationInit();
+		void ResetSelectAnimetionIndex();
 
 		//とりあえず普通に描画
 		LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;
@@ -194,6 +204,7 @@ class CAnton : public CScene
 
 		AnimationInfo *m_animSet;
 		PARAMETER m_parameter;
-		STATE m_state;
+		STATE m_state;				// アントンの状態(ノーマル/メタル/ミニマム/パワフル)
+		ACTION m_action;			// アントンの行動(待機/歩く/正面を向く)
 };
 

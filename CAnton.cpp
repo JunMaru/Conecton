@@ -22,8 +22,10 @@ static const float ANTON_MOVE_THRESHOLD = (3.0f);
 													// 重さ		腕力	サイズ
 static const CAnton::PARAMETER PERAMETER_TABLE[] = { { 20,		0,		D3DXVECTOR2(100.0f, 120.0f) },			// NORMAL
 													{ 80,		0,		D3DXVECTOR2(100.0f, 120.0f) },			// METAL
-													{ 20,		0,		D3DXVECTOR2(25.0f, 30.0f) },			// MINIMUM
+													{ 20,		0,		D3DXVECTOR2(100.0f, 120.0f) },			// MINIMUM
 													{ 20,		100,	D3DXVECTOR2(100.0f, 120.0f) }, };		// POWERFUL
+
+static const int ANTON_TEXTURETABLE_OFFSET[] = { 0, 3, 7, 10 };		// state毎によるテクスチャテーブルのオフセット
 
 /*-----------------------------------------------------------------------------
 	初期化
@@ -98,26 +100,23 @@ void CAnton::Draw()
 
 void CAnton::CommandRightMove()
 {
-	if( m_selectAnimIdx != 2 )
+	if (m_action != ACTION_WALK)
 	{
 		m_bDirectionRight = true;
 
-		//m_tarPos.x += m_spd;
-
-	
-		m_selectAnimIdx = 0;
+		m_selectAnimIdx = ACTION_WALK;
+		ResetSelectAnimetionIndex();
 	}
 }
 
 void CAnton::CommandLeftMove()
 {
-	if( m_selectAnimIdx != 2 )
+	if( m_action != ACTION_WALK )
 	{
 		m_bDirectionRight = false;
-		//m_tarPos.x -= m_spd;
 
-		if(m_selectAnimIdx != 2 )
-		m_selectAnimIdx = 0;
+		m_selectAnimIdx = ACTION_WALK;
+		ResetSelectAnimetionIndex();
 	}
 }
 
@@ -143,36 +142,9 @@ void CAnton::CommandChangeMetal()
 void CAnton::TemporaryInit()
 {
 	SetState(STATE_NORMAL);
+	AnimationInit();
 
 	TexLoader::LoadTexSheetFromBin("data/texture_info/AntonTexInfo.bin", m_pTexInfoArray, &m_pTex);
-
-	//アニメーション管理テスト！！！
-	m_animSet = new AnimationInfo[4];
-
-	m_animSet[0].animSum = 8;
-	m_animSet[0].animWait = 3;
-	m_animSet[0].texIdArray = new int [8];
-	m_animSet[0].bRoop = true;
-	m_animSet[0].texIdArray[0] = 0;
-	m_animSet[0].texIdArray[1] = 1;
-	m_animSet[0].texIdArray[2] = 2;
-	m_animSet[0].texIdArray[3] = 3;
-	m_animSet[0].texIdArray[4] = 4;
-	m_animSet[0].texIdArray[5] = 5;
-	m_animSet[0].texIdArray[6] = 6;
-	m_animSet[0].texIdArray[7] = 7;
-
-	m_animSet[1].animSum = 1;
-	m_animSet[1].animWait = 1;
-	m_animSet[1].texIdArray = new int [1];
-	m_animSet[1].bRoop = false;
-	m_animSet[1].texIdArray[0] = 8;
-
-	m_animSet[2].animSum = 1;
-	m_animSet[2].animWait = 1;
-	m_animSet[2].texIdArray = new int [1];
-	m_animSet[2].bRoop = false;
-	m_animSet[2].texIdArray[0] = 9;
 
 	LPDIRECT3DDEVICE9 device = CManager::GetRenderer()->GetDevice();
 
@@ -208,6 +180,7 @@ void CAnton::TemporaryInit()
 	m_animWait = 10;
 	m_animSum = 8;
 	m_selectAnimIdx = 0;
+	m_action = ACTION_WAIT;
 }
 
 void CAnton::TemporaryUninit()
@@ -257,7 +230,9 @@ void CAnton::TemporaryUpdate()
 
 	if( (abs( m_prevPos.x - m_pos.x )< 1) && m_selectAnimIdx != 2)
 	{
-		m_selectAnimIdx = 1;
+		// 待機モーション
+		m_action = ACTION_WAIT;
+		ResetSelectAnimetionIndex();
 	}
 
 
@@ -316,7 +291,6 @@ void CAnton::TemporaryUpdate()
 		vtx[3].tex = D3DXVECTOR2( m_texPos.x,m_texPos.y + m_texSize.y );
 	}
 
-
 	m_pVtxBuff->Unlock();
 }
 
@@ -327,10 +301,8 @@ void CAnton::TemporaryDraw()
 	device->SetFVF( FVF_VERTEX_2D );
 	device->SetStreamSource( 0,m_pVtxBuff,0,sizeof( VERTEX_2D ) );
 
-	//
 	device->SetTexture( 0,m_pTex );
 	device->DrawPrimitive( D3DPT_TRIANGLESTRIP,0,2 );
-
 }
 
 void CAnton::AnimationUpdate()
@@ -342,10 +314,38 @@ void CAnton::SetState(const CAnton::STATE state)
 {
 	m_state = state;
 	m_parameter = PERAMETER_TABLE[m_state];
+	ResetSelectAnimetionIndex();
+}
 
-	// TODO:テクスチャが用意されたら外す
-	if (m_state < 2)
+void CAnton::AnimationInit(void)
+{
+	// アニメーション設定テーブル
+	const int anTexIdArrayNumTable[] = { 4, 8, 1, 1, 8, 1, 1, 1, 6, 1, 1, 8, 6, };
+	const bool abLoopTable[] = { true, true, false, false, true, false,
+		false, false, true, false, false, true, true, };
+	const int anWaitTimeTable[] = { 3, 3, 1, 1, 3, 1, 1, 1, 3, 1, 1, 3, 3, };
+	const int nAnimationInfoNum = 13;
+	int nTexIdCount = 0;
+
+	//アニメーション管理テスト！！！
+	m_animSet = new AnimationInfo[nAnimationInfoNum];
+
+	for (int nAnimSetIdx = 0; nAnimSetIdx < nAnimationInfoNum; ++nAnimSetIdx)
 	{
-		m_selectAnimIdx = m_state + 1;
+		m_animSet[nAnimSetIdx].animSum = anTexIdArrayNumTable[nAnimSetIdx];
+		m_animSet[nAnimSetIdx].animWait = anWaitTimeTable[nAnimSetIdx];
+		m_animSet[nAnimSetIdx].bRoop = abLoopTable[nAnimSetIdx];
+		m_animSet[nAnimSetIdx].texIdArray = new int[anTexIdArrayNumTable[nAnimSetIdx]];
+	
+		for (int nTexIdArrayIdx = 0; nTexIdArrayIdx < anTexIdArrayNumTable[nAnimSetIdx]; ++nTexIdArrayIdx)
+		{
+			m_animSet[nAnimSetIdx].texIdArray[nTexIdArrayIdx] = nTexIdCount;
+			++nTexIdCount;
+		}
 	}
+}
+
+void CAnton::ResetSelectAnimetionIndex(void)
+{
+	m_selectAnimIdx = ANTON_TEXTURETABLE_OFFSET[m_state] + m_action;
 }

@@ -38,6 +38,5 @@ class CGame : public CPhase
 		// プレイヤーへのポインタ
 		static CPlayer* m_pPlayer;
 
-		void HitCheckMinimumAnton(void);
 		void HitCheckAnton(void);
 };
