@@ -31,7 +31,7 @@ HRESULT CInstancingObject::Init( void )
 	//シェーダー準備
 
 	//バーテックスシェーダー
-	D3DXCompileShaderFromFile( "InstancingShader2D.sh",NULL,NULL,"vsMain","vs_2_0",0,&code,&err,&m_pVsConstantTable);
+	D3DXCompileShaderFromFile( "data/shader/InstancingShader2D.sh",NULL,NULL,"vsMain","vs_2_0",0,&code,&err,&m_pVsConstantTable);
 
 	if( err != NULL )
 	{
@@ -45,7 +45,7 @@ HRESULT CInstancingObject::Init( void )
 	code->Release();
 
 	//ピクセルシェーダー
-	D3DXCompileShaderFromFile( "InstancingShader2D.sh",NULL,NULL,"psMain","ps_2_0",0,&code,NULL,&m_pPsConstantTable);
+	D3DXCompileShaderFromFile( "data/shader/InstancingShader2D.sh",NULL,NULL,"psMain","ps_2_0",0,&code,NULL,&m_pPsConstantTable);
 
 	if( err != NULL )
 	{

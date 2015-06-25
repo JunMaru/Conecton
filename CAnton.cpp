@@ -19,6 +19,8 @@
 
 static const float ANTON_SPEED_X = (0.01f);
 static const float ANTON_MOVE_THRESHOLD = (3.0f);
+static const int ANTON_ANIMATIONINFO_NUM = 13;
+
 													// 重さ		腕力	サイズ
 static const CAnton::PARAMETER PERAMETER_TABLE[] = { { 20,		0,		D3DXVECTOR2(100.0f, 120.0f) },			// NORMAL
 													{ 80,		0,		D3DXVECTOR2(100.0f, 120.0f) },			// METAL
@@ -201,7 +203,7 @@ void CAnton::TemporaryUninit()
 	delete []m_pTexInfoArray;
 
 	// 仮メモリーリーク対策
-	for (int nCnt = 0; nCnt < 3; ++nCnt)
+	for (int nCnt = 0; nCnt < ANTON_ANIMATIONINFO_NUM; ++nCnt)
 	{
 		delete[] m_animSet[nCnt].texIdArray;
 	}
@@ -324,13 +326,12 @@ void CAnton::AnimationInit(void)
 	const bool abLoopTable[] = { true, true, false, false, true, false,
 		false, false, true, false, false, true, true, };
 	const int anWaitTimeTable[] = { 3, 3, 1, 1, 3, 1, 1, 1, 3, 1, 1, 3, 3, };
-	const int nAnimationInfoNum = 13;
 	int nTexIdCount = 0;
 
 	//アニメーション管理テスト！！！
-	m_animSet = new AnimationInfo[nAnimationInfoNum];
+	m_animSet = new AnimationInfo[ANTON_ANIMATIONINFO_NUM];
 
-	for (int nAnimSetIdx = 0; nAnimSetIdx < nAnimationInfoNum; ++nAnimSetIdx)
+	for (int nAnimSetIdx = 0; nAnimSetIdx < ANTON_ANIMATIONINFO_NUM; ++nAnimSetIdx)
 	{
 		m_animSet[nAnimSetIdx].animSum = anTexIdArrayNumTable[nAnimSetIdx];
 		m_animSet[nAnimSetIdx].animWait = anWaitTimeTable[nAnimSetIdx];
