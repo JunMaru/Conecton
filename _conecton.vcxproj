@@ -92,6 +92,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CAnton.cpp" />
+    <ClCompile Include="CAntonIconUI.cpp" />
     <ClCompile Include="CBackGround.cpp" />
     <ClCompile Include="CBeecon.cpp" />
     <ClCompile Include="CBlock.cpp" />
@@ -129,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CAnton.h" />
+    <ClInclude Include="CAntonIconUI.h" />
     <ClInclude Include="CBackGround.h" />
     <ClInclude Include="CBeecon.h" />
     <ClInclude Include="CBlock.h" />

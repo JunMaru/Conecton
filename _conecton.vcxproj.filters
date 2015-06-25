@@ -69,6 +69,9 @@
     <Filter Include="ソース ファイル\application\CLaser">
       <UniqueIdentifier>{4cecf94b-7b47-4c1c-be1d-b373c9089413}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\CAntonIconUI">
+      <UniqueIdentifier>{504c6d1e-49bc-43f6-ae74-dc458db6b949}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTitle.cpp">
@@ -175,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="CLaser.cpp">
       <Filter>ソース ファイル\application\CLaser</Filter>
+    </ClCompile>
+    <ClCompile Include="CAntonIconUI.cpp">
+      <Filter>ソース ファイル\application\CAntonIconUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +291,9 @@
     </ClInclude>
     <ClInclude Include="CLaser.h">
       <Filter>ソース ファイル\application\CLaser</Filter>
+    </ClInclude>
+    <ClInclude Include="CAntonIconUI.h">
+      <Filter>ソース ファイル\application\CAntonIconUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

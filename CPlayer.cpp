@@ -12,6 +12,7 @@
 #include "CBeecon.h"
 #include "CInput.h"
 #include "CInputCommand.h"
+#include "CAntonIconUI.h"
 
 /*-----------------------------------------------------------------------------
 	マクロ定義
@@ -74,6 +75,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
 	m_pInputCommand->Init();
 
+	m_pAntonIconUI = CAntonIconUI::Create(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+
 	return S_OK;
 }
 
@@ -88,6 +91,7 @@ void CPlayer::Uninit(void)
 	// CSceneが勝手にdeleteまでしてくれるので、nullptrを代入するだけ
 	m_pAnton = nullptr;
 	m_pBeecon = nullptr;
+	m_pAntonIconUI = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -108,14 +112,17 @@ void CPlayer::Update(void)
 	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_NORMAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_NORMAL);
+		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_NORMAL);
 	}
 	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_METTAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_METAL);
+		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_METAL);
 	}
 	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_MINIMAMU))
 	{
 		m_pAnton->SetState(CAnton::STATE_MINIMUM);
+		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_MINIMUM);
 	}
 	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_CALLANTON))
 	{
