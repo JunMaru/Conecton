@@ -15,12 +15,12 @@
 #include "CFade.h"
 #include "CScene2D.h"
 #include "collisionDetection.h"
+#include "CBlockManager.h"
 
 //テスト
 #include "CInstancingObject.h"
 #include "CBlock.h"
 #include "CAnton.h"
-CInstancingObject *ins;
 
 // temp(maru)
 #include "CLaser.h"
@@ -36,6 +36,7 @@ CBlock *SpBlock[ 20 ];
 	静的メンバ変数の初期化
 -----------------------------------------------------------------------------*/
 CPlayer *CGame::m_pPlayer = nullptr;
+CBlockManager *CGame::m_pBlockManager = nullptr;
 
 /*-----------------------------------------------------------------------------
 	グローバル変数
@@ -61,90 +62,9 @@ CGame::~CGame()
 -----------------------------------------------------------------------------*/
 void CGame::Init(void)
 {
+	m_pBlockManager = CBlockManager::Create();
+
 	m_pPlayer = CPlayer::Create(VEC3_ZERO,VEC3_ZERO);
-
-	//test
-	ins = new CInstancingObject(6);
-	ins->LoadTexture( "data/texture/block/block.jpg",D3DXVECTOR2(300,100),D3DXVECTOR2(100,100) );
-	ins->Init();
-	
-	for( int cnt = 0 ; cnt < 10 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( cnt * 100.0f,200.0f,0.0f );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 0,0 );
-
-		Block[ cnt ] = b;
-	}
-
-	for( int cnt = 10 ; cnt < 20 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( cnt * 100.0f,700,0 );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 1,0 );
-
-		Block[ cnt ] = b;
-	}
-
-	for( int cnt = 20 ; cnt < 40 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( 900,700  + 100 *(-20.0f +  cnt),0 );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 1,0 );
-
-		Block[ cnt ] = b;
-	}
-
-	for( int cnt = 40 ; cnt < 60 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( 700.0f,700.0f + 100.0f *(-40 +  cnt),0.0f );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 1,0 );
-
-		Block[ cnt ] = b;
-	}
-	
-	for( int cnt = 60 ; cnt < 63 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( 700 + ( -60.0f +cnt) * 100,700 + 20 * 100,0 );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 1,0 );
-
-		Block[ cnt ] = b;
-	}
-	
-	for( int cnt = 0 ; cnt < 20 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( 800,700.0f + 100.0f * cnt,0 );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 2,0 );
-
-		SpBlock[ cnt ] = b;		
-	}
 	
 	// temp(maru)
 	pBackGround = CBackGround::Create("data/texture/anton/anton_t.png");
@@ -214,11 +134,11 @@ void CGame::Update(void)
 
 	if (ant->GetState() == CAnton::STATE_MINIMUM)
 	{
-		HitCheckMinimumAnton();
+		//HitCheckMinimumAnton();
 	}
 	else
 	{
-		HitCheckAnton();
+		//HitCheckAnton();
 	}
 }
 

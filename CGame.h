@@ -18,6 +18,7 @@
 -----------------------------------------------------------------------------*/
 class CPlayer;
 class CFade;
+class CBlockManager;
 class CGame : public CPhase
 {
 	public:
@@ -33,10 +34,12 @@ class CGame : public CPhase
 			return	CPlayer*		プレイヤーへのポインタ
 		-----------------------------------------------------------------------------*/
 		static CPlayer* GetPlayer(void){ return m_pPlayer; }
+		static CBlockManager* GetBlockManager(void){ return m_pBlockManager; }
 
 	private:
 		// プレイヤーへのポインタ
 		static CPlayer* m_pPlayer;
+		static CBlockManager* m_pBlockManager;
 
 		void HitCheckMinimumAnton(void);
 		void HitCheckAnton(void);
