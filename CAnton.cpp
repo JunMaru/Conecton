@@ -77,7 +77,7 @@ void CAnton::Update()
 
 	D3DXVECTOR2 sc;
 
-	sc.x = -SCREEN_WIDTH/2+m_pos.x;//(m_pos.x - m_prevPos.x);
+	sc.x = 0.0f;//-SCREEN_WIDTH/2+m_pos.x;//(m_pos.x - m_prevPos.x);
 
 	sc.y = -SCREEN_HEIGHT/2+m_pos.y;;
 

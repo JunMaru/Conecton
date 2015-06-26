@@ -18,6 +18,8 @@
 -----------------------------------------------------------------------------*/
 class CPlayer;
 class CFade;
+class CAntonLifeUI;
+
 class CGame : public CPhase
 {
 	public:
@@ -37,6 +39,8 @@ class CGame : public CPhase
 	private:
 		// プレイヤーへのポインタ
 		static CPlayer* m_pPlayer;
+
+		CAntonLifeUI *m_pLifeUI;
 
 		void HitCheckAnton(void);
 };

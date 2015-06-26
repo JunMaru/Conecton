@@ -25,6 +25,7 @@ CInstancingObject *ins;
 // temp(maru)
 #include "CLaser.h"
 #include "CBackGround.h"
+#include "CAntonLifeUI.h"
 #include "CScrollManager.h"
 CScrollManager *pScrollManager;
 CBackGround *pBackGround;
@@ -47,6 +48,7 @@ CPlayer *CGame::m_pPlayer = nullptr;
 CGame::CGame()
 {
 	m_pPlayer = nullptr;
+	m_pLifeUI = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -61,6 +63,8 @@ CGame::~CGame()
 -----------------------------------------------------------------------------*/
 void CGame::Init(void)
 {
+	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
+
 	m_pPlayer = CPlayer::Create(VEC3_ZERO,VEC3_ZERO);
 
 	//test
@@ -276,4 +280,15 @@ void CGame::HitCheckAnton(void)
 		}
 	}
 
+
+	CInputKeyboard *pKeyborad = CManager::GetInputKeyboard();
+
+	if (pKeyborad->GetKeyTrigger(DIK_P))
+	{
+		m_pLifeUI->AddLife(1);
+	}
+	if (pKeyborad->GetKeyTrigger(DIK_O))
+	{
+		m_pLifeUI->AddLife(-1);
+	}
 }

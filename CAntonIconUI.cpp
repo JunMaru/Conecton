@@ -61,6 +61,7 @@ CAntonIconUI* CAntonIconUI::Create(D3DXVECTOR3 pos)
 	D3DXCOLOR color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	pAntonIconUI->Init(pos, rot, color);
+	pAntonIconUI->SetScale(188.0f, 154.0f);
 	pAntonIconUI->PrepareTextures();
 
 	return pAntonIconUI;
