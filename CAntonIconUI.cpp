@@ -1,6 +1,19 @@
+//=============================================================================
+//
+// アイコン処理 [CAntonIconUI.cpp]
+// Author : JUN MARUYAMA
+// Since  : 2015/06/25
+//
+//=============================================================================
+//*****************************************************************************
+// インクルード
+//*****************************************************************************
 #include "CAntonIconUI.h"
 #include "CManager.h"
 
+//=============================================================================
+// コンストラクタ
+//=============================================================================
 CAntonIconUI::CAntonIconUI(int priority, OBJTYPE object_type) : CScene2D(priority,object_type)
 {
 	for (int nCnt = 0; nCnt < ICONTYPE_MAX; ++nCnt)
@@ -11,10 +24,16 @@ CAntonIconUI::CAntonIconUI(int priority, OBJTYPE object_type) : CScene2D(priorit
 	m_iconType = ICONTYPE_NORMAL;
 }
 
+//=============================================================================
+// デストラクタ
+//=============================================================================
 CAntonIconUI::~CAntonIconUI()
 {
 }
 
+//=============================================================================
+// 終了処理
+//=============================================================================
 void CAntonIconUI::Uninit(void)
 {
 	for (int nCnt = 0; nCnt < ICONTYPE_MAX; ++nCnt)
@@ -31,6 +50,9 @@ void CAntonIconUI::Uninit(void)
 	CScene2D::Uninit();
 }
 
+//=============================================================================
+// 生成処理
+//=============================================================================
 CAntonIconUI* CAntonIconUI::Create(D3DXVECTOR3 pos)
 {
 	CAntonIconUI *pAntonIconUI = new CAntonIconUI();
@@ -44,6 +66,9 @@ CAntonIconUI* CAntonIconUI::Create(D3DXVECTOR3 pos)
 	return pAntonIconUI;
 }
 
+//=============================================================================
+// 描画処理
+//=============================================================================
 void CAntonIconUI::Draw(void)
 {
 	// デバイス取得
@@ -62,12 +87,15 @@ void CAntonIconUI::Draw(void)
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 }
 
+//=============================================================================
+// テクスチャ準備処理
+//=============================================================================
 void CAntonIconUI::PrepareTextures(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	HRESULT hr = D3DXCreateTextureFromFile(pDevice, "data/texture/ui/normal.png", &m_pIconTextures[ICONTYPE_NORMAL]);
+	D3DXCreateTextureFromFile(pDevice, "data/texture/ui/normal.png", &m_pIconTextures[ICONTYPE_NORMAL]);
 	D3DXCreateTextureFromFile(pDevice, "data/texture/ui/metal.png", &m_pIconTextures[ICONTYPE_METAL]);
 	D3DXCreateTextureFromFile(pDevice, "data/texture/ui/minimum.png", &m_pIconTextures[ICONTYPE_MINIMUM]);
-	D3DXCreateTextureFromFile(pDevice, "data/texture/ui/powerhul.png", &m_pIconTextures[ICONTYPE_POWERFUL]);
+	D3DXCreateTextureFromFile(pDevice, "data/texture/ui/powerful.png", &m_pIconTextures[ICONTYPE_POWERFUL]);
 }
