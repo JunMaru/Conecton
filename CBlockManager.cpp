@@ -11,6 +11,7 @@
 #include "CInstancingObject.h"
 #include "CBlockManager.h"
 #include "CBlock.h"
+#include "Utility.h"
 #include <stdio.h>
 
 //=============================================================================
@@ -21,7 +22,7 @@ CInstancingObject *ins;
 //=============================================================================
 // 静的メンバ変数
 //=============================================================================
-CBlock *CBlockManager::m_pBlockArray[MAX_BLOCK_Y][MAX_BLOCK_X] = { nullptr };
+CBlock *CBlockManager::m_pBlockArray[MAX_BLOCK_Y * MAX_BLOCK_X] = { nullptr };
 
 //=============================================================================
 // 生成処理
@@ -35,13 +36,12 @@ CBlockManager* CBlockManager::Create(void)
 
 //=============================================================================
 // 初期化処理
-// この初期化は、ゲームでの初期化のときだけ呼んでください。
 //=============================================================================
 HRESULT CBlockManager::Init()
 {
 	// テキストか何かにステージ情報を書き込んでおき、それを読み込んで
 	// ステージを作成する
-	if ( !CreateBlockMap("data/stage_info/stage1.bin") )
+	if ( !CreateBlockMap("data/stage_info/stage_sample.csv") )
 	{
 		return E_FAIL;
 	}
@@ -60,7 +60,7 @@ void CBlockManager::Uninit()
 		{
 			if ( m_pBlockArray != nullptr )
 			{
-				m_pBlockArray[ nLoopY ][ nLoopX ] = nullptr;
+				m_pBlockArray[ nLoopY * MAX_BLOCK_X + nLoopX ] = nullptr;
 			}
 		}
 	}
@@ -82,34 +82,25 @@ void CBlockManager::Update()
 //=============================================================================
 bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 {
-	int nMaxStageWidth = 0, nMaxStageHeight = 0, nBlockID = 0;
-	char cBlockID;
+	int nBlockID = 0;
 
-	FILE *file = fopen( p_stagemap_filename, "rb" );
+	int **ppCreateBlockMapArray = nullptr;
 
-	if ( file == nullptr )
-	{
-		return false;
-	}
+	// この関数の説明。
+	Utility::LoadCsv( p_stagemap_filename, ppCreateBlockMapArray, &m_nMaxArrayNumX, &m_nMaxArrayNumY );
 
 	ins = new CInstancingObject( 6 );
 	ins -> LoadTexture("data/texture/block/block.jpg", D3DXVECTOR2( 1000.0f, 1500.0f ), D3DXVECTOR2( 100.0f, 100.0f ) );
 	ins -> Init();
 
-	for ( int nCntY = 0; nCntY < MAX_BLOCK_Y; nCntY++ )
+	for ( int nCntY = 0; nCntY < m_nMaxArrayNumY; nCntY++ )
 	{
 
-		for ( int nCntX = 0; nCntX < MAX_BLOCK_X; nCntX++ )
+		for ( int nCntX = 0; nCntX < m_nMaxArrayNumX; nCntX++ )
 		{
-			fread( &cBlockID, 1, 1, file );
+			nBlockID = ppCreateBlockMapArray[nCntY][nCntX];
 
-			if ( cBlockID < 48 )
-			{
-				nCntX--;
-			}
-
-			nBlockID = atoi( &cBlockID );
-
+			// 何もないところをあらかじめはじくことで、コード量を短くする
 			if ( nBlockID != 0 )
 			{
 				// ここでブロックの生成
@@ -119,59 +110,114 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 				pBlock -> SetPosition( D3DXVECTOR3( nCntX * BLOCK_WIDTH, nCntY * BLOCK_HEIGHT, 0.0f ) );
 				pBlock -> SetRotation( 0.0f, 0.0f, 0.0f );
 				pBlock -> SetScaling( 50.0f, 50.0f );
+				pBlock -> SetBlockId( ( CBlock::BLOCKID )nBlockID );
 
 				switch ( nBlockID )
 				{
-				case 1:		// 土ブロック
+				case CBlock::BLOCKID_SOIL:
 					pBlock -> SetBlockTexID( 0, 0 );
 					break;
 
-				case 2:
+				case CBlock::BLOCKID_GRASS:
 					pBlock -> SetBlockTexID( 1, 0 );
 					break;
 
-				case 3:
+				case CBlock::BLOCKID_SOIL_CRACK:
 					pBlock -> SetBlockTexID( 2, 0 );
 					break;
 
-				case 4:
+				case CBlock::BLOCKID_GRASS_CRACK:
 					pBlock -> SetBlockTexID( 3, 0 );
 					break;
 
-				case 5:
+				case CBlock::BLOCKID_METAL:
+					pBlock -> SetBlockTexID( 0, 1 );
+					break;
+
+				case CBlock::BLOCKID_MINIMUM:
+					pBlock -> SetBlockTexID( 0, 2 );
+					break;
+
+				case CBlock::BLOCKID_POWERFUL:
+					pBlock -> SetBlockTexID( 0, 3 );
+					break;
+
+				case CBlock::BLOCKID_LASER_GOAL_TOP:
+					pBlock -> SetBlockTexID( 0, 8 );
+					break;
+
+				case CBlock::BLOCKID_LASER_GOAL_BOTTOM:
+					pBlock -> SetBlockTexID( 1, 8 );
+					break;
+
+				case CBlock::BLOCKID_LASER_GOAL_LEFT:
+					pBlock -> SetBlockTexID( 2, 8 );
+					break;
+
+				case CBlock::BLOCKID_LASER_GOAL_RIGHT:
+					pBlock -> SetBlockTexID( 3, 8 );
+					break;
+
+				case CBlock::BLOCKID_LASER_START_TOP:
+					pBlock -> SetBlockTexID( 4, 8 );
+					break;
+
+				case CBlock::BLOCKID_LASER_START_BOTTOM:
+					pBlock -> SetBlockTexID( 5, 8 );
+					break;
+
+				case CBlock::BLOCKID_LASER_START_LEFT:
+					pBlock -> SetBlockTexID( 6, 8 );
+					break;
+
+				case CBlock::BLOCKID_LASER_START_RIGHT:
+					pBlock -> SetBlockTexID( 7, 8 );
+					break;
+
+				case CBlock::BLOCKID_LASER_CONTROL_DOWN:
+					pBlock -> SetBlockTexID( 0, 10 );
+					break;
+
+				case CBlock::BLOCKID_LASER_CONTROL_UP:
+					pBlock -> SetBlockTexID( 1, 10 );
+					break;
+
+				case CBlock::BLOCKID_LASER_CONTROL_RIGHT:
+					pBlock -> SetBlockTexID( 2, 10 );
+					break;
+
+				case CBlock::BLOCKID_LASER_CONTROL_LEFT:
+					pBlock -> SetBlockTexID( 3, 10 );
+					break;
+
+				case CBlock::BLOCKID_MAGNET:
+					pBlock -> SetBlockTexID( 0, 11 );
+					break;
+
+				case CBlock::BLOCKID_WOODBOX:
+					pBlock -> SetBlockTexID( 0, 12 );
+					break;
+
+				case CBlock::BLOCKID_SWITCH:
+					pBlock -> SetBlockTexID( 0, 13 );
+					break;
+
+				case CBlock::BLOCKID_WARP:
+					pBlock -> SetBlockTexID( 0, 14 );
 					break;
 
 				default:
 					break;
 				}
 
-				m_pBlockArray[nCntY][nCntX] = pBlock;
+				m_pBlockArray[ nCntY * MAX_BLOCK_X + nCntX ] = pBlock;
 			}
 		}
 	}
 
+	Utility::Delete2DArrayInt( ppCreateBlockMapArray, m_nMaxArrayNumY );
+
 	return true;
-}
-
-//=============================================================================
-// 当たり判定用のブロックのアドレスゲッター
-// 引数の説明
-// character_pos....当たり判定を取るオブジェクトの座標。ここから判定を取るべき
-// ブロックの配列番号を求める。
-//
-// character_size...配列番号を求める際に必要。今までのままなら座標は左上なので、
-// sizeの半分ずらし、中心として判定する。
-//
-// 返り値:CBlock*型
-//=============================================================================
-CBlock* CBlockManager::GetBlock(D3DXVECTOR3 character_pos, D3DXVECTOR2 character_size)
-{
-	// Xは中心で、Yは足元で判定を取るので、それぞれずらす
-	int nBlockArrayIdxNumX = ( character_pos.x + ( character_size.x / 2.0f ) ) / BLOCK_WIDTH;
-	int nBlockArrayIdxNumY = ( character_pos.y + character_size.y ) / BLOCK_HEIGHT;
-
-	// 足元の座標にあるブロックのアドレスを返す
-	return m_pBlockArray[ nBlockArrayIdxNumY ][ nBlockArrayIdxNumY ];
 }
 
 //=============================================================================
@@ -183,7 +229,14 @@ CBlock* CBlockManager::GetBlock(D3DXVECTOR3 character_pos, D3DXVECTOR2 character
 //=============================================================================
 CBlock* CBlockManager::GetBlock(int n_block_idx_x, int n_block_idx_y)
 {
-	return m_pBlockArray[ n_block_idx_x][n_block_idx_y];
+	if ( n_block_idx_x < MAX_BLOCK_X && n_block_idx_x >= 0
+	  && n_block_idx_y < MAX_BLOCK_Y && n_block_idx_y >= 0
+	  && m_pBlockArray[n_block_idx_y * MAX_BLOCK_X + n_block_idx_x] != nullptr)
+	{
+		return m_pBlockArray[n_block_idx_y * MAX_BLOCK_X + n_block_idx_x];
+	}
+
+	return nullptr;
 }
 
 // End of file

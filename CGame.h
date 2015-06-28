@@ -42,5 +42,6 @@ class CGame : public CPhase
 		static CBlockManager* m_pBlockManager;
 
 		void HitCheckMinimumAnton(void);
+		void HitCheckMetalAnton(void);
 		void HitCheckAnton(void);
 };

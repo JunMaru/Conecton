@@ -12,12 +12,13 @@
 // インクルード
 //=============================================================================
 #include "Main.h"
+#include < stdio.h >
 
 //=============================================================================
 // マクロ
 //=============================================================================
-#define MAX_BLOCK_X ( 10 )
-#define MAX_BLOCK_Y ( 10 )
+#define MAX_BLOCK_X ( 30 )
+#define MAX_BLOCK_Y ( 50 )
 
 //=============================================================================
 // 前方定義
@@ -43,14 +44,16 @@ public:
 	bool CreateBlockMap(char *p_stagemap_filename);
 
 	// ブロックへのアドレスゲッター
-	static CBlock* GetBlock(D3DXVECTOR3 character_pos, D3DXVECTOR2 character_size);		// 座標から
-	static CBlock* GetBlock(int n_block_idx_x, int n_block_idx_y);						// 配列番号指定
+	static CBlock* GetBlock(int n_block_idx_x, int n_block_idx_y);		// 配列番号指定
+	static void SetBlock(int n_block_idx_x, int n_block_idx_y, CBlock* p_block){ m_pBlockArray[n_block_idx_y * MAX_BLOCK_X + n_block_idx_x] = p_block; }
 
 private:
 	// ステージ上のブロックへのアドレス管理場所
-	static CBlock *m_pBlockArray[MAX_BLOCK_Y][MAX_BLOCK_X];
+	static CBlock *m_pBlockArray[MAX_BLOCK_Y * MAX_BLOCK_X];
 
 	// CSVの情報を受け取る場所？
+	int m_nMaxArrayNumX;	// ブロック配列最大数-X
+	int m_nMaxArrayNumY;	// ブロック配列最大数-Y
 };
 
 // End of file
