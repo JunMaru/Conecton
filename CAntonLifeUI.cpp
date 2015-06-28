@@ -65,15 +65,15 @@ HRESULT CAntonLifeUI::Init(void)
 //=============================================================================
 void CAntonLifeUI::Uninit(void)
 {
-	// CScene2D‚È‚Ì‚ÅRelease‚ÍÅŒã‚É‚â‚Á‚Ä‚à‚ç‚¤
+	m_pLifeBaseLinePolygon->Uninit();
 	m_pLifeBaseLinePolygon = nullptr;
 
 	for (int nCnt = 0; nCnt < LIFE_MAX; ++nCnt)
 	{
+		m_pLifeHeartPolygon[nCnt]->Uninit();
 		m_pLifeHeartPolygon[nCnt] = nullptr;
 	}
 	
-	// Ž©•ª‚ÍCScene‚È‚Ì‚ÅRelease‚ð‚·‚é
 	Release();
 }
 
