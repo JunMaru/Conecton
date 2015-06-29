@@ -57,7 +57,7 @@ CPlayer* CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 -----------------------------------------------------------------------------*/
 HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 {
-	m_pAnton = new CAnton(7);
+	m_pAnton = new CAnton(6);
 	m_pAnton->Init();
 	m_pAnton->SetPosition(0, 0, 0);
 	m_pAnton->SetRotation(0, 0, 0);
@@ -66,7 +66,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 	m_pAnton->SetSpd(8);
 	m_pAnton->CommandChangeNormal();
 
-	m_pBeecon = new CBeecon(7);
+	m_pBeecon = new CBeecon(6);
 	m_pBeecon->Init();
 	m_pBeecon->SetPosition(0, 0, 0);
 	m_pBeecon->SetRotation(0, 0, 0);
@@ -103,15 +103,13 @@ void CPlayer::Update(void)
 {
 	m_pInputCommand->Update();
 
-	if (m_pInputCommand->IsPress(CInputCommand::COMMAND_RIGHT))
-	{
-		m_pBeecon->CommandRightMove();
-	}
-	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_LEFT))
-	{
-		m_pBeecon->CommandLeftMove();
-	}
-	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_NORMAL))
+	MoveCheck();
+
+	// アントンの自動移動
+	D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
+	m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
+
+	if (m_pInputCommand->IsPress(CInputCommand::COMMAND_NORMAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_NORMAL);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_NORMAL);
@@ -126,13 +124,6 @@ void CPlayer::Update(void)
 		m_pAnton->SetState(CAnton::STATE_MINIMUM);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_MINIMUM);
 	}
-	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_CALLANTON))
-	{
-		D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
-
-		m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
-	}
-
 
 	// アントンが重力落下時
 	float fAntonDownSpeed = m_pAnton->GetSpd();
@@ -141,5 +132,29 @@ void CPlayer::Update(void)
 		D3DXVECTOR3 workPos = m_pBeecon->GetPosition();
 		workPos.y += fAntonDownSpeed;
 		m_pBeecon->SetPosition(workPos);
+		m_pBeecon->SetTargetPosition(workPos.x, workPos.y);
+	}
+}
+
+/*-----------------------------------------------------------------------------
+	移動確認
+-----------------------------------------------------------------------------*/
+void CPlayer::MoveCheck(void)
+{
+	if (m_pInputCommand->IsPress(CInputCommand::COMMAND_RIGHT))
+	{
+		m_pBeecon->CommandRightMove();
+	}
+	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_LEFT))
+	{
+		m_pBeecon->CommandLeftMove();
+	}
+	if (m_pInputCommand->IsPress(CInputCommand::COMMAND_UP))
+	{
+		m_pBeecon->CommandUpMove();
+	}
+	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_DOWN))
+	{
+		m_pBeecon->CommandDownMove();
 	}
 }

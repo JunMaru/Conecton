@@ -50,6 +50,7 @@ public:
 	
 private:
 	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col);
+	void MoveCheck(void);
 	CAnton *m_pAnton;
 	CBeecon *m_pBeecon;
 	CInputCommand *m_pInputCommand;

@@ -59,6 +59,9 @@ class CBeecon : public CScene
 		-------------------------------------------------------------------------------*/
 		void CommandRightMove();
 		void CommandLeftMove();
+		void CommandUpMove();
+		void CommandDownMove();
+
 
 		float GetSpd(){ return m_spd; }
 		void  SetSpd(const float spd){ m_spd = spd; }

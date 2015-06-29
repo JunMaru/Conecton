@@ -56,6 +56,7 @@ void CBeecon::Update()
 	}
 
 	m_pos.x += diff.x * 0.1f;
+	m_pos.y += diff.y * 0.1f;
 
 	//Ç∆ÇËÇ†Ç¶Ç∏ÉXÉNÉçÅ[Éã
 
@@ -86,6 +87,16 @@ void CBeecon::CommandLeftMove()
 {
 	m_bDirectionRight = false;
 	m_tarPos.x -= m_spd;
+}
+
+void CBeecon::CommandUpMove()
+{
+	m_tarPos.y -= m_spd;
+}
+
+void CBeecon::CommandDownMove()
+{
+	m_tarPos.y += m_spd;
 }
 
 void CBeecon::TemporaryInit()
