@@ -46,6 +46,8 @@ public:
 	// ブロックへのアドレスゲッター
 	static CBlock* GetBlock(int n_block_idx_x, int n_block_idx_y);		// 配列番号指定
 	static void SetBlock(int n_block_idx_x, int n_block_idx_y, CBlock* p_block){ m_pBlockArray[n_block_idx_y * MAX_BLOCK_X + n_block_idx_x] = p_block; }
+	static CBlock* GetLaserStart(){ return m_pLaserStart; }
+	static CBlock* GetLaserGoal(){ return m_pLaserGoal; }
 
 private:
 	// ステージ上のブロックへのアドレス管理場所

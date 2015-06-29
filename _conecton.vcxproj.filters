@@ -194,6 +194,9 @@
     <ClCompile Include="CAntonLifeUI.cpp">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
     </ClCompile>
+    <ClCompile Include="CLaserManager.cpp">
+      <Filter>ソース ファイル\application\CLaser</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGame.h">
@@ -315,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="CAntonLifeUI.h">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLaserManager.h">
+      <Filter>ソース ファイル\application\CLaser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
