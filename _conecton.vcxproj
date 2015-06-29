@@ -102,6 +102,7 @@
     <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CFade.cpp" />
     <ClCompile Include="CGame.cpp" />
+    <ClCompile Include="CGauge.cpp" />
     <ClCompile Include="CInput.cpp" />
     <ClCompile Include="CInputCommand.cpp" />
     <ClCompile Include="CInstancingObject.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="CEnemy.h" />
     <ClInclude Include="CFade.h" />
     <ClInclude Include="CGame.h" />
+    <ClInclude Include="CGauge.h" />
     <ClInclude Include="CInput.h" />
     <ClInclude Include="CInputCommand.h" />
     <ClInclude Include="CInstancingObject.h" />
