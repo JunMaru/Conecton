@@ -66,13 +66,14 @@ public:
 
 	//=============================================================================
 	// 生成処理
+	// arg : D3DXVECTOR3 pos(生成座標)
 	//=============================================================================
 	static CBeeconIconUI* Create(D3DXVECTOR3 pos);
 
 	//=============================================================================
 	// アイコンタイプセッター
 	//=============================================================================
-	void SetIconType(ICONTYPE icontype){ m_iconType = icontype; }
+	void SetIconType(ICONTYPE icontype){ m_iconType = icontype; ChangeTexture(); }
 
 	//=============================================================================
 	// ポジションゲッター
@@ -84,7 +85,7 @@ private:
 	//=============================================================================
 	// テクスチャ切替処理
 	//=============================================================================
-	void ChangeTextures(void);
+	void ChangeTexture(void);
 
 	void SetPosition(D3DXVECTOR3 pos){ m_pos = pos; }
 	void SetPosition(float x, float y, float z){ m_pos = D3DXVECTOR3(x, y, z); }
@@ -96,7 +97,6 @@ private:
 	ICONTYPE m_iconType;										// アイコンタイプ
 	D3DXVECTOR3 m_pos;
 	D3DXVECTOR3 m_rot;
-	CScene2D *m_pTVFrame;
 	CScene2D *m_pBeeconIcon;
 };
 

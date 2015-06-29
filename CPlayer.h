@@ -20,6 +20,7 @@ class CAnton;
 class CBeecon;
 class CInputCommand;
 class CAntonIconUI;
+class CBeeconIconUI;
 
 /*-----------------------------------------------------------------------------
  プレイヤークラス
@@ -55,4 +56,5 @@ private:
 	CBeecon *m_pBeecon;
 	CInputCommand *m_pInputCommand;
 	CAntonIconUI *m_pAntonIconUI;
+	CBeeconIconUI *m_pBeeconIconUI;
 };
