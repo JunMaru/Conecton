@@ -218,7 +218,7 @@ void CGauge::Draw()
 	device->SetTexture( 0,m_pTex[1] );
 	device->DrawPrimitive( D3DPT_TRIANGLESTRIP,0,2 );
 
-		//ステンシルバッファ無効化
+	//ステンシルバッファ無効化
 	device->SetRenderState( D3DRS_STENCILENABLE,false );
 
 
