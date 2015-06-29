@@ -20,6 +20,9 @@ class CPlayer;
 class CFade;
 class CAntonLifeUI;
 class CBlockManager;
+class CGauge;
+class CBackGround;
+class CScrollManager;
 class CGame : public CPhase
 {
 	public:
@@ -42,8 +45,12 @@ class CGame : public CPhase
 		static CPlayer* m_pPlayer;
 		static CBlockManager* m_pBlockManager;
 
+		CScrollManager *m_pScrollManager;
+		CBackGround *m_pBackGround;
 		CAntonLifeUI *m_pLifeUI;
+		CGauge *m_pGauge;
 
+		void InitGauge(void);
 		void HitCheckMinimumAnton(void);
 		void HitCheckMetalAnton(void);
 		void HitCheckAnton(void);
