@@ -75,6 +75,9 @@
     <Filter Include="ソース ファイル\application\CAntonLifeUI">
       <UniqueIdentifier>{bef19d9c-a708-4fbd-acf3-831bda7ca5c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\CBeeconIconUI">
+      <UniqueIdentifier>{d300ff4d-a544-409c-b2a6-2688f0a3e485}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTitle.cpp">
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="CAntonLifeUI.cpp">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CBeeconIconUI.cpp">
+      <Filter>ソース ファイル\application\CBeeconIconUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,6 +321,9 @@
     </ClInclude>
     <ClInclude Include="CAntonLifeUI.h">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CBeeconIconUI.h">
+      <Filter>ソース ファイル\application\CBeeconIconUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
