@@ -110,6 +110,7 @@
     <ClCompile Include="CItem.cpp" />
     <ClCompile Include="CLaser.cpp" />
     <ClCompile Include="CLight.cpp" />
+    <ClCompile Include="C2DLogo.cpp" />
     <ClCompile Include="CManager.cpp" />
     <ClCompile Include="collisionDetection.cpp" />
     <ClCompile Include="CPhase.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="CItem.h" />
     <ClInclude Include="CLaser.h" />
     <ClInclude Include="CLight.h" />
+    <ClInclude Include="C2DLogo.h" />
     <ClInclude Include="CManager.h" />
     <ClInclude Include="collisionDetection.h" />
     <ClInclude Include="CPhase.h" />
