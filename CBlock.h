@@ -96,6 +96,12 @@ class CBlock : public CScene
 		-------------------------------------------------------------------------------*/
 		void SetBlockTexID( const int id_x,const int id_y ){ m_blockIdX = id_x; m_blockIdY = id_y; }
 
+		/*------------------------------------------------------------------------------
+			２枚目のテクスチャIDのセッター
+			param テクスチャへのID
+		------------------------------------------------------------------------------*/
+		void SetSecondTexID( const int id_x, const int id_y ){ m_secondTexIdX = id_x; m_secondTexIdY = id_y; }
+
 	private:
 
 
@@ -111,11 +117,9 @@ class CBlock : public CScene
 		int m_blockIdX;
 		int m_blockIdY;
 
+		int m_secondTexIdX;
+		int m_secondTexIdY;
+
 		// 読み込んだテクスチャID保存場所
 		BLOCKID m_blockType;
-
-
-
-
-
 };

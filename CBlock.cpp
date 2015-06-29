@@ -57,8 +57,14 @@ void CBlock::Draw()
 	{
 		if( scroll_pos.y > -m_scl.y/2 && scroll_pos.y < SCREEN_HEIGHT + m_scl.y/2 )
 		{
+			// 先に下地となるテクスチャを設置
+			if (m_secondTexIdX != -1 && m_secondTexIdY != -1)
+			{
+				m_pInsObj->AddDataScreen(m_scl, m_rot, scroll_pos, m_secondTexIdX, m_secondTexIdY);
+			}
+
 			//配置
-			m_pInsObj->AddDataScreen( m_scl,m_rot,scroll_pos,m_blockIdX,m_blockIdY );
+			m_pInsObj->AddDataScreen( m_scl, m_rot, scroll_pos, m_blockIdX, m_blockIdY );
 		}
 	}
 	
