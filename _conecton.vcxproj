@@ -128,6 +128,7 @@
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="ScreenCaptureDX9.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
+    <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CAnton.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScreenCaptureDX9.h" />
     <ClInclude Include="TextureLoader.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RC.rc" />

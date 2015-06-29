@@ -14,6 +14,12 @@
 #include "CScene.h"
 
 /*-----------------------------------------------------------------------------
+	マクロ
+-----------------------------------------------------------------------------*/
+#define BLOCK_WIDTH ( 50.0f )
+#define BLOCK_HEIGHT ( 50.0f )
+
+/*-----------------------------------------------------------------------------
 	class
 -----------------------------------------------------------------------------*/
 
@@ -27,29 +33,42 @@ class CBlock : public CScene
 {
 	public:
 
+		typedef enum
+		{
+			BLOCKID_NONE = 0,				// なし
+			BLOCKID_SOIL,					// 土ブロック
+			BLOCKID_GRASS,				// 草ブロック
+			BLOCKID_SOIL_CRACK,			// ひび割れ土ブロック
+			BLOCKID_GRASS_CRACK,			// ひび割れ草ブロック
+			BLOCKID_METAL,				// メタル変身ブロック
+			BLOCKID_MINIMUM,				// ミニマム変身ブロック
+			BLOCKID_POWERFUL,				// パワフル変身ブロック
+			BLOCKID_LASER_GOAL_TOP,		// レーザーのゴール_上
+			BLOCKID_LASER_GOAL_BOTTOM,	// レーザーのゴール_下
+			BLOCKID_LASER_GOAL_LEFT,		// レーザーのゴール_左
+			BLOCKID_LASER_GOAL_RIGHT,		// レーザーのゴール_右
+			BLOCKID_LASER_START_TOP,		// レーザーのスタート_上
+			BLOCKID_LASER_START_BOTTOM,	// レーザーのスタート_下
+			BLOCKID_LASER_START_LEFT,		// レーザーのスタート_左
+			BLOCKID_LASER_START_RIGHT,	// レーザーのスタート_右
+			BLOCKID_LASER_CONTROL_DOWN,	// レーザー進行方向変更ブロック_下
+			BLOCKID_LASER_CONTROL_UP,		// レーザー進行方向変更ブロック_上
+			BLOCKID_LASER_CONTROL_RIGHT,	// レーザー進行方向変更ブロック_右
+			BLOCKID_LASER_CONTROL_LEFT,	// レーザー進行方向変更ブロック_左
+			BLOCKID_MAGNET,				// 磁石
+			BLOCKID_WOODBOX,				// 木箱
+			BLOCKID_SWITCH,				// スイッチ
+			BLOCKID_WARP,					// ワープゾーン
+			BLOCKID_ALL,
+		}BLOCKID;
+
 		CBlock( const int Layer = 0 ) : m_scl(D3DXVECTOR2(0,0) ),m_rot( D3DXVECTOR3(0,0,0) ),m_pos( D3DXVECTOR2(0,0) ),
 										m_blockIdX(0),m_blockIdY(0),CScene( Layer ){}
 		virtual ~CBlock(){}
 
-		/*-----------------------------------------------------------------------------
-			初期化
-			return 成否
-		------------------------------------------------------------------------------*/
 		HRESULT Init();
-
-		/*-----------------------------------------------------------------------------
-			後処理
-		------------------------------------------------------------------------------*/
 		void Uninit();
-
-		/*-----------------------------------------------------------------------------
-			更新
-		------------------------------------------------------------------------------*/
 		void Update();
-
-		/*-----------------------------------------------------------------------------
-			描画
-		------------------------------------------------------------------------------*/
 		void Draw();
 
 		/*-----------------------------------------------------------------------------
@@ -67,6 +86,9 @@ class CBlock : public CScene
 		void SetRotation( float x,float y,float z ){ m_rot = D3DXVECTOR3(x,y,z); }
 
 		void SetScaling( const float x,const float y ){ m_scl.x = x; m_scl.y = y; }
+
+		void SetBlockId(BLOCKID blockType){ m_blockType = blockType; }
+		BLOCKID GetBlockId(void){ return m_blockType; }
 
 		/*------------------------------------------------------------------------------
 			ブロックのテクスチャIDをセットする
@@ -89,7 +111,8 @@ class CBlock : public CScene
 		int m_blockIdX;
 		int m_blockIdY;
 
-
+		// 読み込んだテクスチャID保存場所
+		BLOCKID m_blockType;
 
 
 

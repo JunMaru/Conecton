@@ -59,7 +59,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 	m_pAnton->Init();
 	m_pAnton->SetPosition(0, 0, 0);
 	m_pAnton->SetRotation(0, 0, 0);
-	m_pAnton->SetScaling(100, 120);
+	m_pAnton->SetScaling(100, 130);
 	m_pAnton->SetTargetPosition(0, 0);
 	m_pAnton->SetSpd(8);
 	m_pAnton->CommandChangeNormal();

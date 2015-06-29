@@ -182,6 +182,9 @@
     <ClCompile Include="CLaser.cpp">
       <Filter>ソース ファイル\application\CLaser</Filter>
     </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="CAntonIconUI.cpp">
       <Filter>ソース ファイル\application\CAntonIconUI</Filter>
     </ClCompile>
@@ -297,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="CLaser.h">
       <Filter>ソース ファイル\application\CLaser</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CAntonIconUI.h">
       <Filter>ソース ファイル\application\CAntonIconUI</Filter>

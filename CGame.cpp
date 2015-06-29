@@ -1,11 +1,11 @@
 /*-----------------------------------------------------------------------------
-	ゲーム画面フェーズクラス
-	author	OkadaMoeto
-	since	20140713
+ゲーム画面フェーズクラス
+author	OkadaMoeto
+since	20140713
 -----------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------
-	インクルードファイル
+インクルードファイル
 -----------------------------------------------------------------------------*/
 #include "CGame.h"
 #include "Define.h"
@@ -13,14 +13,15 @@
 #include "CInput.h"
 #include "CPlayer.h"
 #include "CFade.h"
+#include "CScene.h"
 #include "CScene2D.h"
 #include "collisionDetection.h"
+#include "CBlockManager.h"
 
 //テスト
 #include "CInstancingObject.h"
 #include "CBlock.h"
 #include "CAnton.h"
-CInstancingObject *ins;
 
 // temp(maru)
 #include "CLaser.h"
@@ -30,20 +31,18 @@ CInstancingObject *ins;
 CScrollManager *pScrollManager;
 CBackGround *pBackGround;
 
-CBlock *Block[63];
-CBlock *SpBlock[ 20 ];
-
 /*-----------------------------------------------------------------------------
-	静的メンバ変数の初期化
+静的メンバ変数の初期化
 -----------------------------------------------------------------------------*/
 CPlayer *CGame::m_pPlayer = nullptr;
+CBlockManager *CGame::m_pBlockManager = nullptr;
 
 /*-----------------------------------------------------------------------------
-	グローバル変数
+グローバル変数
 -----------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------
-	コンストラクタ
+コンストラクタ
 -----------------------------------------------------------------------------*/
 CGame::CGame()
 {
@@ -52,119 +51,37 @@ CGame::CGame()
 }
 
 /*-----------------------------------------------------------------------------
-	デストラクタ
+デストラクタ
 -----------------------------------------------------------------------------*/
 CGame::~CGame()
 {
 }
 
 /*-----------------------------------------------------------------------------
-	初期化
+初期化
 -----------------------------------------------------------------------------*/
 void CGame::Init(void)
 {
 	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
+	m_pBlockManager = CBlockManager::Create();
 
 	m_pPlayer = CPlayer::Create(VEC3_ZERO,VEC3_ZERO);
 
-	//test
-	ins = new CInstancingObject(6);
-	ins->LoadTexture( "data/texture/block/block.jpg",D3DXVECTOR2(300,100),D3DXVECTOR2(100,100) );
-	ins->Init();
-	
-	for( int cnt = 0 ; cnt < 10 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( cnt * 100.0f,200.0f,0.0f );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 0,0 );
-
-		Block[ cnt ] = b;
-	}
-
-	for( int cnt = 10 ; cnt < 20 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( cnt * 100.0f,700,0 );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 1,0 );
-
-		Block[ cnt ] = b;
-	}
-
-	for( int cnt = 20 ; cnt < 40 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( 900,700  + 100 *(-20.0f +  cnt),0 );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 1,0 );
-
-		Block[ cnt ] = b;
-	}
-
-	for( int cnt = 40 ; cnt < 60 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( 700.0f,700.0f + 100.0f *(-40 +  cnt),0.0f );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 1,0 );
-
-		Block[ cnt ] = b;
-	}
-	
-	for( int cnt = 60 ; cnt < 63 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( 700 + ( -60.0f +cnt) * 100,700 + 20 * 100,0 );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 1,0 );
-
-		Block[ cnt ] = b;
-	}
-	
-	for( int cnt = 0 ; cnt < 20 ; cnt++ )
-	{
-		CBlock *b = new CBlock;
-		b->SetInsObj(ins);
-		b->Init();
-		b->SetPosition( 800,700.0f + 100.0f * cnt,0 );
-		b->SetRotation(0,0,0);
-		b->SetScaling( 100,100 );
-		b->SetBlockTexID( 2,0 );
-
-		SpBlock[ cnt ] = b;		
-	}
-	
 	// temp(maru)
 	pBackGround = CBackGround::Create("data/texture/anton/anton_t.png");
-	
+
 	pScrollManager = new CScrollManager();
 	pScrollManager->Init();
 
 	// レーザー動作テスト
-	CLaser::Create(D3DXVECTOR3(0.0f,100.0f,0.0f), CLaser::DIRECTION_RIGHT);
+	CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), CLaser::DIRECTION_RIGHT);
 
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
 }
 
 /*-----------------------------------------------------------------------------
-	終了
+終了
 -----------------------------------------------------------------------------*/
 void CGame::Uninit(void)
 {
@@ -176,33 +93,36 @@ void CGame::Uninit(void)
 
 	m_pPlayer->Uninit();
 	delete m_pPlayer;
+
+	m_pBlockManager->Uninit();
+	delete m_pBlockManager;
 }
 
 /*-----------------------------------------------------------------------------
-	更新
+更新
 -----------------------------------------------------------------------------*/
 void CGame::Update(void)
 {
 	// キーボード入力を取得
 	CInputKeyboard *pKeyboard = CManager::GetInputKeyboard();
 	CInputJoypad *pJoyPad = CManager::GetInputJoypad();
-	
+
 	// フェードしていなければ更新
-	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
+	if (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
 	{
 #ifdef _DEBUG
-		if(pKeyboard->GetKeyTrigger(DIK_RETURN))
+		if (pKeyboard->GetKeyTrigger(DIK_RETURN))
 		{
 			CManager::GetPhaseFade()->Start(
-												CFade::FADETYPE_OUT,
-												60.0f,
-												D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+				CFade::FADETYPE_OUT,
+				60.0f,
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 #endif
 	}
-	
+
 	// フェードアウト完了後に画面遷移
-	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_UNOUT)
+	if (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_UNOUT)
 	{
 		CManager::SetPhase(CManager::PHASE_RESULT);
 	}
@@ -215,80 +135,252 @@ void CGame::Update(void)
 	m_pPlayer->Update();
 
 	CAnton *ant = m_pPlayer->GetAnton();
-	
-	HitCheckAnton();
+
+	if (ant->GetState() == CAnton::STATE_MINIMUM)
+	{
+		HitCheckMinimumAnton();
+	}
+	else if (ant->GetState() == CAnton::STATE_METAL)
+	{
+		HitCheckMetalAnton();
+	}
+	else
+	{
+		HitCheckAnton();
+	}
+}
+
+// ミニマム用のあたり判定。多分普通のと同じソースで実装できる
+void CGame::HitCheckMinimumAnton(void)
+{
+	CAnton *ant = m_pPlayer->GetAnton();
+	CBlock *pBlock = nullptr;
+
+	D3DXVECTOR3 antonPos = ant->GetPosition();
+	D3DXVECTOR3 antonPosOld = ant->GetPositionOld();
+	D3DXVECTOR3 antonPosTar = ant->GetTargetPosition();
+	D3DXVECTOR3 antonSize = D3DXVECTOR3(25.0f, 32.5f, 0.0f);
+	D3DXVECTOR3 setAntonPos = antonPos;
+
+	D3DXVECTOR3 blockPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 blockSize = D3DXVECTOR3(BLOCK_WIDTH / 2.0f, BLOCK_HEIGHT / 2.0f, 0.0f);
+
+	int nBlockIdxX = (int)(antonPos.x / BLOCK_WIDTH);
+	int nBlockIdxY = (int)(antonPos.y / BLOCK_HEIGHT);
+
+	// 中心にずらす
+	antonPos.x += antonSize.x * 2.0f;
+	antonPos.y += antonSize.y * 3.0f;
+
+	// アントンを地面の上に乗せるための当たり判定
+	for (int nCntX = 0; nCntX < 2; nCntX++)
+	{
+		pBlock = CBlockManager::GetBlock(nBlockIdxX + nCntX, nBlockIdxY + 2);
+
+		if (pBlock != nullptr)
+		{
+			// 座標を中心に変更
+			blockPos = pBlock->GetPosition() + blockSize;
+
+			// X方向の当たり判定
+			if ((antonPos.x + antonSize.x) > (blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x) < (blockPos.x + blockSize.x))
+			{
+				// Y方向の当たり判定
+				if ((antonPos.y + antonSize.y) > (blockPos.y - blockSize.y)
+					&& (antonPos.y - antonSize.y) < (blockPos.y + blockSize.y))
+				{
+					setAntonPos.y = (blockPos.y) - ( (antonSize.y * 3.0f ) - ( 5.0f * 2.0f ) );
+				}
+			}
+		}
+	}
+
+	// 壁へのめり込みを防ぐループ( 未完成 )
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		pBlock = CBlockManager::GetBlock(nBlockIdxX + (nCnt * 2) - 1, nBlockIdxY + 1);
+
+		if (pBlock != nullptr)
+		{
+			blockPos = pBlock->GetPosition() + blockSize;
+
+			if ((antonPos.y + antonSize.y) - (blockPos.y - blockSize.y) >= BLOCK_HEIGHT
+				&& (antonPos.x + antonSize.x - 20.0f) >(blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x + 20.0f) < (blockPos.x + blockSize.x))
+			{
+				// 進んでいる方向に壁がある場合は目的の座標と現在の座標を１つ前に戻す
+				if ((antonPosTar.x - antonPos.x) * (blockPos.x - antonPos.x) > 0)
+				{
+					setAntonPos = antonPosOld;
+
+					antonPosTar = setAntonPos;
+
+					ant->SetTargetPosition(antonPosTar.x, antonPosTar.y);
+				}
+
+			}
+		}
+	}
+
+	ant->SetPosition(setAntonPos);
+}
+
+void CGame::HitCheckMetalAnton(void)
+{
+	CAnton *ant = m_pPlayer->GetAnton();
+	CBlock *pBlock = nullptr;
+
+	D3DXVECTOR3 antonPos = ant->GetPosition();
+	D3DXVECTOR3 antonPosOld = ant->GetPositionOld();
+	D3DXVECTOR3 antonPosTar = ant->GetTargetPosition();
+	D3DXVECTOR3 antonSize = D3DXVECTOR3(50.0f, 65.0f, 0.0f);
+	D3DXVECTOR3 setAntonPos = antonPos;
+
+	int nBlockIdxX = (int)(antonPos.x / BLOCK_WIDTH);
+	int nBlockIdxY = (int)(antonPos.y / BLOCK_HEIGHT);
+
+	D3DXVECTOR3 blockPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 blockSize = D3DXVECTOR3(BLOCK_WIDTH / 2.0f, BLOCK_HEIGHT / 2.0f, 0.0f);
+
+	// 中心にずらす
+	antonPos += antonSize;
+
+	// アントンを地面の上に乗せるための当たり判定
+	for (int nCntX = 0; nCntX < 2; nCntX++)
+	{
+		pBlock = CBlockManager::GetBlock(nBlockIdxX + nCntX, nBlockIdxY + 2);
+
+		if (pBlock != nullptr)
+		{
+			// 座標を中心に変更
+			blockPos = pBlock->GetPosition() + blockSize;
+
+			// X方向の当たり判定
+			if ((antonPos.x + antonSize.x) >(blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x) < (blockPos.x + blockSize.x))
+			{
+				// Y方向の当たり判定
+				if ( (antonPos.y + antonSize.y) > (blockPos.y - blockSize.y)
+				  && (antonPos.y - antonSize.y) < (blockPos.y + blockSize.y) )
+				{
+					if ( pBlock -> GetBlockId() == CBlock::BLOCKID_SOIL_CRACK
+					  || pBlock -> GetBlockId() == CBlock::BLOCKID_GRASS_CRACK )
+					{
+						pBlock -> Uninit();
+						pBlock = NULL;
+						CBlockManager::SetBlock( nBlockIdxX + nCntX, nBlockIdxY + 2, nullptr );
+					}
+					else
+					{
+						// 30.0fは、地面にめり込まないための補正値
+						setAntonPos.y = ( blockPos.y ) - ( ( antonSize.y - 5.0f ) * 2 ) - 30.0f;
+					}
+				}
+			}
+		}
+	}
+
+	// 壁へのめり込みを防ぐループ( 未完成 )
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		pBlock = CBlockManager::GetBlock(nBlockIdxX + (nCnt * 3) - 1, nBlockIdxY + nCnt);
+
+		if (pBlock != nullptr)
+		{
+			blockPos = pBlock->GetPosition() + blockSize;
+
+			if ((antonPos.y + antonSize.y) - (blockPos.y - blockSize.y) >= BLOCK_HEIGHT
+				&& (antonPos.x + antonSize.x - 20.0f) >(blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x + 20.0f) < (blockPos.x + blockSize.x))
+			{
+				// 進んでいる方向に壁がある場合は目的の座標と現在の座標を１つ前に戻す
+				if ((antonPosTar.x - antonPos.x) * (blockPos.x - antonPos.x) > 0)
+				{
+					setAntonPos.x = antonPosOld.x;
+
+					antonPosTar = setAntonPos;
+
+					ant->SetTargetPosition(antonPosTar.x, antonPosTar.y);
+				}
+
+			}
+		}
+	}
+
+	ant->SetPosition(setAntonPos);
 }
 
 void CGame::HitCheckAnton(void)
 {
 	CAnton *ant = m_pPlayer->GetAnton();
+	CBlock *pBlock = nullptr;
 
-	//Hack くっそ雑なあたり判定
-	for (int cnt = 0; cnt < 63; cnt++)
+	D3DXVECTOR3 antonPos = ant->GetPosition();
+	D3DXVECTOR3 antonPosOld = ant->GetPositionOld();
+	D3DXVECTOR3 antonPosTar = ant->GetTargetPosition();
+	D3DXVECTOR3 antonSize = D3DXVECTOR3(50.0f, 65.0f, 0.0f);
+	D3DXVECTOR3 setAntonPos = antonPos;
+
+	int nBlockIdxX = (int)(antonPos.x / BLOCK_WIDTH);
+	int nBlockIdxY = (int)(antonPos.y / BLOCK_HEIGHT);
+
+	D3DXVECTOR3 blockPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 blockSize = D3DXVECTOR3(BLOCK_WIDTH / 2.0f, BLOCK_HEIGHT / 2.0f, 0.0f);
+
+	// 中心にずらす
+	antonPos += antonSize;
+
+	// アントンを地面の上に乗せるための当たり判定
+	for (int nCntX = 0; nCntX < 2; nCntX++)
 	{
-		//アントン
-		D3DXVECTOR3 left_ant = ant->GetPosition();
+		pBlock = CBlockManager::GetBlock(nBlockIdxX + nCntX, nBlockIdxY + 2);
 
-		left_ant.x -= 10;
-		left_ant.y -= 60;
-
-		//ブロック
-		D3DXVECTOR3 left_b = Block[cnt]->GetPosition();
-		left_b.x -= 50;
-		left_b.y -= 50;
-
-		if (CheckCollisionRectVsRect(left_ant, D3DXVECTOR3(10, 120, 0), left_b, D3DXVECTOR3(100, 100, 0)) && left_b.y - left_ant.y >= 0)
+		if (pBlock != nullptr)
 		{
-			D3DXVECTOR3 set_pos = Block[cnt]->GetPosition();
-			set_pos.x = ant->GetPosition().x;
-			set_pos.y -= 60 + 50;
-			ant->SetPosition(set_pos);
-		}
-	}
+			// 座標を中心に変更
+			blockPos = pBlock->GetPosition() + blockSize;
 
-	for (int cnt = 0; cnt < 20; cnt++)
-	{
-		if (SpBlock[cnt] == NULL)
-		{
-			continue;
-		}
-		//アントン
-		D3DXVECTOR3 left_ant = ant->GetPosition();
-
-		left_ant.x -= 10;
-		left_ant.y -= 60;
-
-		//ブロック
-		D3DXVECTOR3 left_b = SpBlock[cnt]->GetPosition();
-		left_b.x -= 50;
-		left_b.y -= 50;
-
-		if (CheckCollisionRectVsRect(left_ant, D3DXVECTOR3(10, 120, 0), left_b, D3DXVECTOR3(100, 100, 0)) && left_b.y - left_ant.y >= 0)
-		{
-			if (ant->GetMass() >= 50)
+			// X方向の当たり判定
+			if ((antonPos.x + antonSize.x) > (blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x) < (blockPos.x + blockSize.x))
 			{
-				SpBlock[cnt]->Uninit();
-				SpBlock[cnt] = NULL;
-			}
-			else
-			{
-				D3DXVECTOR3 set_pos = SpBlock[cnt]->GetPosition();
-				set_pos.x = ant->GetPosition().x;
-				set_pos.y -= 60 + 50;
-				ant->SetPosition(set_pos);
+				// Y方向の当たり判定
+				if ((antonPos.y + antonSize.y) > (blockPos.y - blockSize.y)
+					&& (antonPos.y - antonSize.y) < (blockPos.y + blockSize.y))
+				{
+					setAntonPos.y = (blockPos.y) - ((antonSize.y - 5.0f) * 2);
+				}
 			}
 		}
 	}
 
-
-	CInputKeyboard *pKeyborad = CManager::GetInputKeyboard();
-
-	if (pKeyborad->GetKeyTrigger(DIK_P))
+	// 壁へのめり込みを防ぐループ( 未完成 )
+	for (int nCnt = 0; nCnt < 2; nCnt++)
 	{
-		m_pLifeUI->AddLife(1);
+		pBlock = CBlockManager::GetBlock(nBlockIdxX + (nCnt * 3) - 1, nBlockIdxY + nCnt);
+
+		if (pBlock != nullptr)
+		{
+			blockPos = pBlock->GetPosition() + blockSize;
+
+			if ((antonPos.y + antonSize.y) - (blockPos.y - blockSize.y) >= BLOCK_HEIGHT
+				&& (antonPos.x + antonSize.x - 20.0f) > (blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x + 20.0f) < (blockPos.x + blockSize.x))
+			{
+				// 進んでいる方向に壁がある場合は目的の座標と現在の座標を１つ前に戻す
+				if ((antonPosTar.x - antonPos.x) * (blockPos.x - antonPos.x) > 0)
+				{
+					setAntonPos = antonPosOld;
+
+					antonPosTar = setAntonPos;
+
+					ant->SetTargetPosition(antonPosTar.x, antonPosTar.y);
+				}
+				
+			}
+		}
 	}
-	if (pKeyborad->GetKeyTrigger(DIK_O))
-	{
-		m_pLifeUI->AddLife(-1);
-	}
+
+	ant->SetPosition(setAntonPos);
 }
