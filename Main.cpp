@@ -27,7 +27,7 @@ using std::string;
 // ウインドウのクラス名
 static const string CLASS_NAME = "AppClass";
 // ウインドウのキャプション名
-static const string WINDOW_NAME = "タイトル";
+static const string WINDOW_NAME = "こねくとん";
 // フレームレート
 static const float FRAME_RATE = 1000.0f / 30.0f;
 
