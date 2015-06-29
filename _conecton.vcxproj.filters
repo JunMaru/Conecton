@@ -188,6 +188,9 @@
     <ClCompile Include="CAntonIconUI.cpp">
       <Filter>ソース ファイル\application\CAntonIconUI</Filter>
     </ClCompile>
+    <ClCompile Include="CGauge.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="CAntonLifeUI.cpp">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
     </ClCompile>
@@ -306,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="CAntonIconUI.h">
       <Filter>ソース ファイル\application\CAntonIconUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CGauge.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CAntonLifeUI.h">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
