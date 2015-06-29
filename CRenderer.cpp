@@ -68,7 +68,7 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 	d3dpp.EnableAutoDepthStencil	= TRUE;						// デプスバッファ（Ｚバッファ）とステンシルバッファを作成
 
 	// D16以下でもダメならばエラーメッセージ
-	d3dpp.AutoDepthStencilFormat	= D3DFMT_D16;				// デプスバッファとして16bitを使う
+	d3dpp.AutoDepthStencilFormat	= D3DFMT_D24S8;				// デプスバッファとして16bitを使う
 
 	if(bWindow)
 	{
@@ -211,7 +211,7 @@ void CRenderer::Draw(void)
 	m_pD3DDevice->Clear(
 						0,
 						nullptr,
-						(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),
+						(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL),
 						D3DCOLOR_RGBA(0, 0, 0, 0),
 						1.0f,
 						0);

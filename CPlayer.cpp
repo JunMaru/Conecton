@@ -28,6 +28,7 @@ CPlayer::CPlayer()
 	m_pAnton = nullptr;
 	m_pBeecon = nullptr;
 	m_pInputCommand = nullptr;
+	m_pAntonIconUI = nullptr;
 }
 
 /*-----------------------------------------------------------------------------

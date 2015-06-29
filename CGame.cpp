@@ -17,19 +17,14 @@ since	20140713
 #include "CScene2D.h"
 #include "collisionDetection.h"
 #include "CBlockManager.h"
-
-//テスト
+#include "CGauge.h"
 #include "CInstancingObject.h"
 #include "CBlock.h"
 #include "CAnton.h"
-
-// temp(maru)
 #include "CLaser.h"
 #include "CBackGround.h"
 #include "CAntonLifeUI.h"
 #include "CScrollManager.h"
-CScrollManager *pScrollManager;
-CBackGround *pBackGround;
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
@@ -48,6 +43,9 @@ CGame::CGame()
 {
 	m_pPlayer = nullptr;
 	m_pLifeUI = nullptr;
+	m_pGauge = nullptr;
+	m_pScrollManager = nullptr;
+	m_pBackGround = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -62,16 +60,16 @@ CGame::~CGame()
 -----------------------------------------------------------------------------*/
 void CGame::Init(void)
 {
-	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
 	m_pBlockManager = CBlockManager::Create();
 
+	InitGauge();
+
+	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
 	m_pPlayer = CPlayer::Create(VEC3_ZERO,VEC3_ZERO);
+	m_pBackGround = CBackGround::Create("data/texture/game_bg/game_bg.png");
 
-	// temp(maru)
-	pBackGround = CBackGround::Create("data/texture/anton/anton_t.png");
-
-	pScrollManager = new CScrollManager();
-	pScrollManager->Init();
+	m_pScrollManager = new CScrollManager();
+	m_pScrollManager->Init();
 
 	// レーザー動作テスト
 	CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), CLaser::DIRECTION_RIGHT);
@@ -88,14 +86,17 @@ void CGame::Uninit(void)
 	// 描画対象オブジェクトの解放
 	CScene::ReleaseAll();
 
-	pScrollManager->SetScrollWorld(VEC2_ZERO);
-	delete pScrollManager;
+	m_pScrollManager->SetScrollWorld(VEC2_ZERO);
+	delete m_pScrollManager;
 
 	m_pPlayer->Uninit();
 	delete m_pPlayer;
 
 	m_pBlockManager->Uninit();
 	delete m_pBlockManager;
+
+	m_pGauge->Uninit();
+	delete m_pGauge;
 }
 
 /*-----------------------------------------------------------------------------
@@ -147,6 +148,19 @@ void CGame::Update(void)
 	else
 	{
 		HitCheckAnton();
+	}
+
+	// ゲージテスト
+	static float fTestGaugeVal = 50.0f;
+	if (pKeyboard->GetKeyTrigger(DIK_8))
+	{
+		fTestGaugeVal -= 1.0f;
+		m_pGauge->SetGaugeVal(fTestGaugeVal);
+	}
+	if (pKeyboard->GetKeyTrigger(DIK_9))
+	{
+		fTestGaugeVal += 1.0f;
+		m_pGauge->SetGaugeVal(fTestGaugeVal);
 	}
 }
 
@@ -383,4 +397,24 @@ void CGame::HitCheckAnton(void)
 	}
 
 	ant->SetPosition(setAntonPos);
+}
+
+/*-----------------------------------------------------------------------------
+ ゲージの初期化
+-----------------------------------------------------------------------------*/
+void CGame::InitGauge(void)
+{
+	m_pGauge = new CGauge(6);
+	m_pGauge->Init();
+	m_pGauge->SetPosition(D3DXVECTOR3(1200.0f, 100.0f, 0.0f));
+	m_pGauge->SetScling(D3DXVECTOR2(116.0f, 116.0f));
+	m_pGauge->SetGaugeBaseVal(100.0f);
+	m_pGauge->SetGaugeVal(50.0f);
+
+	const char *pFilePathTable[] = { "data/texture/ui/gauge_base.png", "data/texture/ui/gauge.png", "data/texture/ui/gauge_frame.png", };
+	const int nLoadFileNum = 3;
+	for (int nCnt = 0; nCnt < nLoadFileNum; ++nCnt)
+	{
+		m_pGauge->LoadTexture(nCnt, pFilePathTable[nCnt]);
+	}
 }
