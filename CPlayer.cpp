@@ -13,6 +13,7 @@
 #include "CInput.h"
 #include "CInputCommand.h"
 #include "CAntonIconUI.h"
+#include "CBeeconIconUI.h"
 
 /*-----------------------------------------------------------------------------
 	定数定義
@@ -30,6 +31,7 @@ CPlayer::CPlayer()
 	m_pBeecon = nullptr;
 	m_pInputCommand = nullptr;
 	m_pAntonIconUI = nullptr;
+	m_pBeeconIconUI = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -78,6 +80,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col)
 	m_pInputCommand->Init();
 
 	m_pAntonIconUI = CAntonIconUI::Create(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+	m_pBeeconIconUI = CBeeconIconUI::Create(D3DXVECTOR3(200.0f, 150.0f, 0.0f));
 
 	return S_OK;
 }
@@ -113,16 +116,19 @@ void CPlayer::Update(void)
 	{
 		m_pAnton->SetState(CAnton::STATE_NORMAL);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_NORMAL);
+		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_NONE);
 	}
 	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_METTAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_METAL);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_METAL);
+		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_METAL);
 	}
 	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_MINIMAMU))
 	{
 		m_pAnton->SetState(CAnton::STATE_MINIMUM);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_MINIMUM);
+		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_MINIMUM);
 	}
 
 	// アントンが重力落下時

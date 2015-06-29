@@ -96,6 +96,7 @@
     <ClCompile Include="CAntonLifeUI.cpp" />
     <ClCompile Include="CBackGround.cpp" />
     <ClCompile Include="CBeecon.cpp" />
+    <ClCompile Include="CBeeconIconUI.cpp" />
     <ClCompile Include="CBlock.cpp" />
     <ClCompile Include="CBlockManager.cpp" />
     <ClCompile Include="CCamera.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="CAntonLifeUI.h" />
     <ClInclude Include="CBackGround.h" />
     <ClInclude Include="CBeecon.h" />
+    <ClInclude Include="CBeeconIconUI.h" />
     <ClInclude Include="CBlock.h" />
     <ClInclude Include="CBlockManager.h" />
     <ClInclude Include="CCamera.h" />
