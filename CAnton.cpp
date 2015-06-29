@@ -55,6 +55,10 @@ void CAnton::Uninit()
 
 void CAnton::Update()
 {
+	// 落下速度を計算
+	// 落下している場合、あたり判定でposをいじくっているため、prevPosを更新する前に速度を取る
+	m_spd = m_pos.y - m_prevPos.y;
+
 	m_prevPos = m_pos;
 
 	D3DXVECTOR2 diff;
@@ -62,7 +66,9 @@ void CAnton::Update()
 	diff = m_tarPos - m_pos;
 	//Hack とりあえず重力
 	m_pos.x += diff.x * ANTON_SPEED_X;
-	m_pos.y += m_parameter.nMass * 0.5f;//体重の0.1倍の落下
+
+	m_pos.y += m_parameter.nMass * 0.5f;
+
 
 	if (diff.x > ANTON_MOVE_THRESHOLD)
 	{
@@ -72,16 +78,6 @@ void CAnton::Update()
 	{
 		CommandLeftMove();
 	}
-
-	//とりあえずスクロール
-
-	D3DXVECTOR2 sc;
-
-	sc.x = 0.0f;//-SCREEN_WIDTH/2+m_pos.x;//(m_pos.x - m_prevPos.x);
-
-	sc.y = -SCREEN_HEIGHT/2+m_pos.y;;
-
-	CScrollManager::SetScrollWorld( sc );
 	
 	TemporaryUpdate();
 }
@@ -183,6 +179,7 @@ void CAnton::TemporaryInit()
 	m_animSum = 8;
 	m_selectAnimIdx = 0;
 	m_action = ACTION_WAIT;
+	m_spd = 0.0f;
 }
 
 void CAnton::TemporaryUninit()

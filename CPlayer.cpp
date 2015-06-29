@@ -15,8 +15,9 @@
 #include "CAntonIconUI.h"
 
 /*-----------------------------------------------------------------------------
-	マクロ定義
+	定数定義
 -----------------------------------------------------------------------------*/
+static const float BEECON_FOLLOW_ANTON_DOWN_SPEED_THRESHOLD = (30.0f);		// ビーコンがアントンに追従するy方向速度判定値
 
 /*-----------------------------------------------------------------------------
 *
@@ -130,5 +131,15 @@ void CPlayer::Update(void)
 		D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
 
 		m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
+	}
+
+
+	// アントンが重力落下時
+	float fAntonDownSpeed = m_pAnton->GetSpd();
+	if (fAntonDownSpeed > BEECON_FOLLOW_ANTON_DOWN_SPEED_THRESHOLD)
+	{
+		D3DXVECTOR3 workPos = m_pBeecon->GetPosition();
+		workPos.y += fAntonDownSpeed;
+		m_pBeecon->SetPosition(workPos);
 	}
 }
