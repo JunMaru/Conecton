@@ -63,7 +63,7 @@ CGame::~CGame()
 void CGame::Init(void)
 {
 	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
-	m_pBlockManager = CBlockManager::Create();
+	m_pBlockManager = CBlockManager::Create( "data/stage_info/stage_sample.csv" );
 
 	m_pPlayer = CPlayer::Create(VEC3_ZERO,VEC3_ZERO);
 
@@ -190,7 +190,7 @@ void CGame::HitCheckMinimumAnton(void)
 				if ((antonPos.y + antonSize.y) > (blockPos.y - blockSize.y)
 					&& (antonPos.y - antonSize.y) < (blockPos.y + blockSize.y))
 				{
-					setAntonPos.y = (blockPos.y) - ( (antonSize.y * 3.0f ) - ( 5.0f * 2.0f ) );
+					setAntonPos.y = ( blockPos.y ) - ( antonSize.y * 4.0f ) + ( 5.0f * 2.0f );
 				}
 			}
 		}

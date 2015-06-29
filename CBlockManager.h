@@ -38,7 +38,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 
-	static CBlockManager* Create( void );
+	static CBlockManager* Create( char *pFileName );
 
 	// ステージ生成処理
 	bool CreateBlockMap(char *p_stagemap_filename);
@@ -50,10 +50,14 @@ public:
 private:
 	// ステージ上のブロックへのアドレス管理場所
 	static CBlock *m_pBlockArray[MAX_BLOCK_Y * MAX_BLOCK_X];
+	static CBlock *m_pLaserStart;		// レーザースタート位置へのアドレス
+	static CBlock *m_pLaserGoal;		// レーザーゴール位置へのアドレス
 
 	// CSVの情報を受け取る場所？
 	int m_nMaxArrayNumX;	// ブロック配列最大数-X
 	int m_nMaxArrayNumY;	// ブロック配列最大数-Y
+
+	char *m_pFileName;
 };
 
 // End of file

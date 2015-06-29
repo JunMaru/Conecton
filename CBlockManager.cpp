@@ -23,13 +23,16 @@ CInstancingObject *ins;
 // 静的メンバ変数
 //=============================================================================
 CBlock *CBlockManager::m_pBlockArray[MAX_BLOCK_Y * MAX_BLOCK_X] = { nullptr };
+CBlock *CBlockManager::m_pLaserStart = nullptr;
+CBlock *CBlockManager::m_pLaserGoal = nullptr;
 
 //=============================================================================
 // 生成処理
 //=============================================================================
-CBlockManager* CBlockManager::Create(void)
+CBlockManager* CBlockManager::Create( char *pFileName )
 {
 	CBlockManager *pBlockManager = new CBlockManager;
+	pBlockManager -> m_pFileName = pFileName;
 	pBlockManager -> Init();
 	return pBlockManager;
 }
@@ -39,9 +42,7 @@ CBlockManager* CBlockManager::Create(void)
 //=============================================================================
 HRESULT CBlockManager::Init()
 {
-	// テキストか何かにステージ情報を書き込んでおき、それを読み込んで
-	// ステージを作成する
-	if ( !CreateBlockMap("data/stage_info/stage_sample.csv") )
+	if ( !CreateBlockMap( m_pFileName ) )
 	{
 		return E_FAIL;
 	}
@@ -111,6 +112,7 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 				pBlock -> SetRotation( 0.0f, 0.0f, 0.0f );
 				pBlock -> SetScaling( 50.0f, 50.0f );
 				pBlock -> SetBlockId( ( CBlock::BLOCKID )nBlockID );
+				pBlock->SetSecondTexID( -1, -1 );
 
 				switch ( nBlockID )
 				{
@@ -144,34 +146,42 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 
 				case CBlock::BLOCKID_LASER_GOAL_TOP:
 					pBlock -> SetBlockTexID( 0, 8 );
+					m_pLaserGoal = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_GOAL_BOTTOM:
 					pBlock -> SetBlockTexID( 1, 8 );
+					m_pLaserGoal = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_GOAL_LEFT:
 					pBlock -> SetBlockTexID( 2, 8 );
+					m_pLaserGoal = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_GOAL_RIGHT:
 					pBlock -> SetBlockTexID( 3, 8 );
+					m_pLaserGoal = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_START_TOP:
 					pBlock -> SetBlockTexID( 4, 8 );
+					m_pLaserStart = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_START_BOTTOM:
 					pBlock -> SetBlockTexID( 5, 8 );
+					m_pLaserStart = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_START_LEFT:
 					pBlock -> SetBlockTexID( 6, 8 );
+					m_pLaserStart = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_START_RIGHT:
 					pBlock -> SetBlockTexID( 7, 8 );
+					m_pLaserStart = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_CONTROL_DOWN:
@@ -208,6 +218,21 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 
 				default:
 					break;
+				}
+
+				// 変身アイテムの下地のテクスチャを設定。上に別のブロックがある場合は
+				// 土ブロックを設定。無い場合は草ブロックを設定。
+				if ( pBlock -> GetBlockId() > CBlock::BLOCKID_GRASS_CRACK
+				  && pBlock -> GetBlockId() < CBlock::BLOCKID_LASER_GOAL_TOP
+				  && m_pBlockArray[ ( nCntY - 1 ) * MAX_BLOCK_X + nCntX ] != nullptr )
+				{
+					pBlock -> SetSecondTexID( 0, 0 );
+				}
+				else if ( pBlock -> GetBlockId() > CBlock::BLOCKID_GRASS_CRACK
+					   && pBlock -> GetBlockId() < CBlock::BLOCKID_LASER_GOAL_TOP
+					   && m_pBlockArray[ ( nCntY - 1 ) * MAX_BLOCK_X + nCntX ] == nullptr )
+				{
+					pBlock->SetSecondTexID( 1, 0 );
 				}
 
 				m_pBlockArray[ nCntY * MAX_BLOCK_X + nCntX ] = pBlock;
