@@ -110,6 +110,7 @@
     <ClCompile Include="CInstancingObject.cpp" />
     <ClCompile Include="CItem.cpp" />
     <ClCompile Include="CLaser.cpp" />
+    <ClCompile Include="CLaserManager.cpp" />
     <ClCompile Include="CLight.cpp" />
     <ClCompile Include="C2DLogo.cpp" />
     <ClCompile Include="CManager.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="CInstancingObject.h" />
     <ClInclude Include="CItem.h" />
     <ClInclude Include="CLaser.h" />
+    <ClInclude Include="CLaserManager.h" />
     <ClInclude Include="CLight.h" />
     <ClInclude Include="C2DLogo.h" />
     <ClInclude Include="CManager.h" />

@@ -197,6 +197,9 @@
     <ClCompile Include="CAntonLifeUI.cpp">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
     </ClCompile>
+    <ClCompile Include="CLaserManager.cpp">
+      <Filter>ソース ファイル\application\CLaser</Filter>
+    </ClCompile>
     <ClCompile Include="C2DLogo.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -324,6 +327,9 @@
     </ClInclude>
     <ClInclude Include="CAntonLifeUI.h">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLaserManager.h">
+      <Filter>ソース ファイル\application\CLaser</Filter>
     </ClInclude>
     <ClInclude Include="CBeeconIconUI.h">
       <Filter>ソース ファイル\application\CBeeconIconUI</Filter>

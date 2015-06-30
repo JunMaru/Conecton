@@ -25,12 +25,14 @@ since	20140713
 #include "CBackGround.h"
 #include "CAntonLifeUI.h"
 #include "CScrollManager.h"
+#include "CLaserManager.h"
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
 -----------------------------------------------------------------------------*/
 CPlayer *CGame::m_pPlayer = nullptr;
 CBlockManager *CGame::m_pBlockManager = nullptr;
+CLaserManager *CGame::m_pLaserManager = nullptr;
 
 /*-----------------------------------------------------------------------------
 グローバル変数
@@ -70,7 +72,8 @@ void CGame::Init(void)
 	m_pScrollManager->Init();
 
 	// レーザー動作テスト
-	CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), CLaser::DIRECTION_RIGHT);
+	//CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), CLaser::DIRECTION_RIGHT);
+	m_pLaserManager = CLaserManager::Create();
 
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
@@ -95,6 +98,9 @@ void CGame::Uninit(void)
 
 	m_pGauge->Uninit();
 	delete m_pGauge;
+
+	m_pLaserManager->Uninit();
+	delete m_pLaserManager;
 }
 
 /*-----------------------------------------------------------------------------
@@ -132,6 +138,8 @@ void CGame::Update(void)
 #endif
 
 	m_pPlayer->Update();
+
+	m_pLaserManager->Update();
 
 	CAnton *ant = m_pPlayer->GetAnton();
 

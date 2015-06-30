@@ -23,27 +23,30 @@ class CBlockManager;
 class CGauge;
 class CBackGround;
 class CScrollManager;
+class CLaserManager;
 class CGame : public CPhase
 {
-	public:
-		CGame();
-		~CGame();
+public:
+	CGame();
+	~CGame();
 
-		void Init(void);
-		void Uninit(void);
-		void Update(void);
+	void Init(void);
+	void Uninit(void);
+	void Update(void);
 
-		/*-----------------------------------------------------------------------------
-			プレイヤーの取得
-			return	CPlayer*		プレイヤーへのポインタ
+	/*-----------------------------------------------------------------------------
+		プレイヤーの取得
+		return	CPlayer*		プレイヤーへのポインタ
 		-----------------------------------------------------------------------------*/
-		static CPlayer* GetPlayer(void){ return m_pPlayer; }
-		static CBlockManager* GetBlockManager(void){ return m_pBlockManager; }
+	static CPlayer* GetPlayer(void){ return m_pPlayer; }
+	static CBlockManager* GetBlockManager(void){ return m_pBlockManager; }
+	static CLaserManager* GetLaserManager(void){ return m_pLaserManager; }
 
 	private:
 		// プレイヤーへのポインタ
 		static CPlayer* m_pPlayer;
 		static CBlockManager* m_pBlockManager;
+		static CLaserManager* m_pLaserManager;
 
 		CScrollManager *m_pScrollManager;
 		CBackGround *m_pBackGround;
