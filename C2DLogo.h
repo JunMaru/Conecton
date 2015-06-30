@@ -27,7 +27,7 @@ class C2DLogo : public CScene
 {
 	public:
 		C2DLogo() : CScene(7),m_pVtxBuff(NULL),m_pTex(NULL),m_bAnim(false),
-					m_bAnimRoop(false),m_animScl(D3DXVECTOR2(0,0)),m_animIdx(-1),
+					m_bAnimRoop(false),m_animMoveScl(D3DXVECTOR2(0,0)),m_animStartScl(D3DXVECTOR2(0,0)),m_animIdx(-1),
 					m_animSpd(0),m_animNow(0){}
 		~C2DLogo(){}
 		HRESULT Init();
@@ -49,9 +49,9 @@ class C2DLogo : public CScene
 		
 		/*----------------------------------------------------------------------------
 			スケーリングアニメーション関数
-			param ループ　目標大きさ　速度
+			param ループ　開始スケール　変化量　速度
 		-----------------------------------------------------------------------------*/
-		void StartSclAnimation(const bool b_roop, const D3DXVECTOR2 tar_scl, float anim_spd);
+		void StartSclAnimation( const bool b_roop,const D3DXVECTOR2  &start_scl,const D3DXVECTOR2 &move_scl, float anim_spd );
 
 		/*------------------------------------------------------------------------
 			テクスチャをロードする
@@ -82,5 +82,7 @@ class C2DLogo : public CScene
 		float m_animNow;
 
 		//アニメーション情報
-		D3DXVECTOR2 m_animScl;
+		D3DXVECTOR2 m_animMoveScl;
+		D3DXVECTOR2 m_animStartScl;
+
 };
