@@ -17,7 +17,7 @@ CBackGround::CBackGround(int priority, CScene::OBJTYPE objtype)
 	: CScene2D(priority, objtype)
 {
 	m_scrollVol = VEC2_ZERO;
-	m_scrollSpeed = 0.01f;
+	m_scrollSpeed = 0.0001f;
 }
 
 /*-----------------------------------------------------------------------------
@@ -55,7 +55,7 @@ CBackGround* CBackGround::Create(const char *file_name, int priority)
 	CBackGround* pBackGround = new CBackGround(priority, CScene::OBJTYPE_2D);
 	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
 
-	pBackGround->Init(file_name,pos,VEC3_ZERO,COL_WHITE,SCREEN_WIDTH,SCREEN_HEIGHT);
+	pBackGround->Init(file_name,pos,VEC3_ZERO,COL_WHITE,SCREEN_WIDTH * 2,SCREEN_HEIGHT);
 
 	return pBackGround;
 }
