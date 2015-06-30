@@ -67,7 +67,7 @@ void CDebugProcDX9::Init(void)
 					"Terminal",				// フォント名
 					&m_pD3DXFont);			// フォントポインタへのアドレス
 
-	m_bDisp = true;
+	m_bDisp = false;
 	m_countFrame = 0;
 }
 
