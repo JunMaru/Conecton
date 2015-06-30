@@ -177,6 +177,7 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 				case CBlock::BLOCKID_LASER_START_LEFT:
 					pBlock -> SetBlockTexID( 6, 8 );
 					m_pLaserStart = pBlock;
+					m_pLaserStart->SetPosition(D3DXVECTOR3(nCntX * BLOCK_WIDTH + 25.0f, nCntY * BLOCK_HEIGHT, 0.0f));
 					break;
 
 				case CBlock::BLOCKID_LASER_START_RIGHT:
