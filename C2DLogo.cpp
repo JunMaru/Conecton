@@ -88,11 +88,11 @@ void C2DLogo::Update()
 			//スケーリングアニメーション
 			case 0:
 
-				m_scl = m_animScl * m_animNow;
+				m_scl = m_animStartScl + m_animMoveScl * m_animNow;
 
 				m_animNow += m_animSpd;
 
-				if (m_animNow > 1 || m_animNow < 0 )
+				if (m_animNow >= 1 || m_animNow <= 0 )
 				{
 					if (m_bAnimRoop)
 					{
@@ -164,14 +164,15 @@ void C2DLogo::Draw()
 	スケーリングアニメーションスタート
 ---------------------------------------------------------------------------------------------------------------*/
 
-void C2DLogo::StartSclAnimation(const bool b_roop, const D3DXVECTOR2 tar_scl, float anim_spd)
+void C2DLogo::StartSclAnimation(const bool b_roop,const D3DXVECTOR2 &start_scl, const D3DXVECTOR2 &move_scl, float anim_spd)
 {
 	m_bAnim = true;
 	m_bAnimRoop = b_roop;
-	m_animScl = tar_scl;
+	m_animMoveScl = move_scl;
 	m_animSpd = anim_spd;
 	m_animNow = 0;
 	m_animIdx = 0;
+	m_animStartScl = start_scl;
 }
 
 /*--------------------------------------------------------------------------------------------------------------
