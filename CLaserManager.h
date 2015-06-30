@@ -39,15 +39,21 @@ public:
 	static CLaserManager* Create(void);
 
 	// ÉåÅ[ÉUÅ[ê∂ê¨èàóù
-	void CreateLaser(const D3DXVECTOR3& start_pos, const int& direction);
+	void CreateLaser(const D3DXVECTOR3& start_pos, int direction);
 
 	static int GetCurrentLaser(void){ return m_nCurrentLaser; }
 	static CLaser *GetLaser(int n_idx){ return m_pLaserArray[n_idx]; }
 
+	bool GetLaserGoalFlag(void){ return m_bLaserGoalFlag; }
+
 private:
 	static CLaser *m_pLaserArray[MAX_LASER_NUM];
 
+	bool m_bStopLaserFlag[MAX_LASER_NUM];
+
 	static int m_nCurrentLaser;
+
+	bool m_bLaserGoalFlag;
 };
 
 // End of file

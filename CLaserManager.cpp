@@ -70,6 +70,10 @@ HRESULT CLaserManager::Init()
 		m_pLaserArray[m_nCurrentLaser] = CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f ), CLaser::DIRECTION_RIGHT);
 	}
 
+	ZeroMemory(m_bStopLaserFlag, sizeof(bool) * MAX_LASER_NUM);
+
+	m_bLaserGoalFlag = false;
+
 	return E_FAIL;
 }
 
@@ -95,9 +99,10 @@ void CLaserManager::Update()
 	D3DXVECTOR3 laserPos = m_pLaserArray[m_nCurrentLaser]->GetPosition();
 	D3DXVECTOR3 laserEndPos = m_pLaserArray[m_nCurrentLaser]->GetWorldEndPosition();
 	D3DXVECTOR3 laserRot = m_pLaserArray[m_nCurrentLaser]->GetRotation();
+	D3DXVECTOR3 workLaserPos = laserEndPos;
 
-	int nBlockIdxX = (int)(laserEndPos.x / BLOCK_WIDTH);
-	int nBlockIdxY = (int)(laserEndPos.y / BLOCK_HEIGHT);
+	int nBlockIdxX = 0;
+	int nBlockIdxY = 0;
 
 	bool bBlockHitCheck = false;
 
@@ -108,25 +113,56 @@ void CLaserManager::Update()
 	// レーザーの向きから取ってくるブロックのアドレスを変更
 	if ( nLaserDir == CLaser::DIRECTION_RIGHT )
 	{
+		workLaserPos.y += 25.0f;
+
+		nBlockIdxX = (int)(workLaserPos.x / BLOCK_WIDTH);
+		nBlockIdxY = (int)(workLaserPos.y / BLOCK_HEIGHT);
+
 		pBlock = CBlockManager::GetBlock(nBlockIdxX + 1, nBlockIdxY );
 	}
 	else if ( nLaserDir == CLaser::DIRECTION_DOWN )
 	{
+		workLaserPos.x += 25.0f;
+
+		nBlockIdxX = (int)(workLaserPos.x / BLOCK_WIDTH);
+		nBlockIdxY = (int)(workLaserPos.y / BLOCK_HEIGHT);
+
 		pBlock = CBlockManager::GetBlock(nBlockIdxX, nBlockIdxY + 1 );
 	}
 	else if ( nLaserDir == CLaser::DIRECTION_LEFT )
 	{
-		pBlock = CBlockManager::GetBlock(nBlockIdxX - 1, nBlockIdxY );
+		workLaserPos.y += 25.0f;
+
+		nBlockIdxX = (int)(workLaserPos.x / BLOCK_WIDTH);
+		nBlockIdxY = (int)(workLaserPos.y / BLOCK_HEIGHT);
+
+		pBlock = CBlockManager::GetBlock(nBlockIdxX, nBlockIdxY );
 	}
 	else if ( nLaserDir == CLaser::DIRECTION_UP )
 	{
-		pBlock = CBlockManager::GetBlock(nBlockIdxX, nBlockIdxY - 1 );
+		workLaserPos.x += 25.0f;
+
+		nBlockIdxX = (int)(workLaserPos.x / BLOCK_WIDTH);
+		nBlockIdxY = (int)(workLaserPos.y / BLOCK_HEIGHT);
+
+		pBlock = CBlockManager::GetBlock(nBlockIdxX, nBlockIdxY );
 	}
 
-	// アドレスがなかった場合は、処理終了
+	// ブロックのアドレスがなかったら、処理終了
 	if (pBlock == nullptr)
 	{
-		return;
+		if (m_bStopLaserFlag[m_nCurrentLaser] == true)
+		{
+			m_bStopLaserFlag[m_nCurrentLaser] = false;
+
+			m_pLaserArray[m_nCurrentLaser] -> MoveRestart();
+
+			return;
+		}
+		else
+		{
+			return;
+		}
 	}
 
 	D3DXVECTOR3 blockSize = D3DXVECTOR3(BLOCK_WIDTH / 2.0f, BLOCK_HEIGHT / 2.0f, 0.0f);
@@ -135,10 +171,8 @@ void CLaserManager::Update()
 	// 当たっていた場合は、レーザーを伸ばさない
 	if (nLaserDir == CLaser::DIRECTION_RIGHT)
 	{
-		if ( laserEndPos.x + 25.0f > blockPos.x - blockSize.x
-		  && laserEndPos.x + 25.0f < blockPos.x + blockSize.x
-		  && laserEndPos.y > blockPos.y - blockSize.y
-		  && laserEndPos.y < blockPos.y + blockSize.y )
+		if ( workLaserPos.x > blockPos.x - BLOCK_WIDTH
+		  && m_bStopLaserFlag[ m_nCurrentLaser ] == false )
 		{
 			m_pLaserArray[m_nCurrentLaser]->MoveStop();
 
@@ -147,10 +181,8 @@ void CLaserManager::Update()
 	}
 	else if (nLaserDir == CLaser::DIRECTION_DOWN)
 	{
-		if ( laserEndPos.x > blockPos.x - blockSize.x
-		  && laserEndPos.x < blockPos.x + blockSize.x
-		  && laserEndPos.y + 25.0f > blockPos.y - blockSize.y
-		  && laserEndPos.y + 25.0f < blockPos.y + blockSize.y)
+		if (workLaserPos.y > blockPos.y - BLOCK_HEIGHT
+		  && m_bStopLaserFlag[m_nCurrentLaser] == false )
 		{
 			m_pLaserArray[m_nCurrentLaser]->MoveStop();
 
@@ -159,10 +191,8 @@ void CLaserManager::Update()
 	}
 	else if (nLaserDir == CLaser::DIRECTION_LEFT)
 	{
-		if ( laserEndPos.x - 25.0f > blockPos.x - blockSize.x
-		  && laserEndPos.x - 25.0f < blockPos.x + blockSize.x
-		  && laserEndPos.y > blockPos.y - blockSize.y
-		  && laserEndPos.y < blockPos.y + blockSize.y)
+		if (workLaserPos.x < blockPos.x + blockSize.x
+		  && m_bStopLaserFlag[m_nCurrentLaser] == false )
 		{
 			m_pLaserArray[m_nCurrentLaser]->MoveStop();
 
@@ -171,10 +201,8 @@ void CLaserManager::Update()
 	}
 	else if (nLaserDir == CLaser::DIRECTION_UP)
 	{
-		if ( laserEndPos.x > blockPos.x - blockSize.x
-		  && laserEndPos.x < blockPos.x + blockSize.x
-		  && laserEndPos.y - 25.0f > blockPos.y - blockSize.y
-		  && laserEndPos.y - 25.0f < blockPos.y + blockSize.y)
+		if (workLaserPos.y < blockPos.y + BLOCK_HEIGHT
+		  && m_bStopLaserFlag[m_nCurrentLaser] == false )
 		{
 			m_pLaserArray[m_nCurrentLaser]->MoveStop();
 
@@ -191,20 +219,57 @@ void CLaserManager::Update()
 		{
 		case CBlock::BLOCKID_LASER_CONTROL_DOWN:
 
+			if ( nLaserDir == CLaser::DIRECTION_RIGHT )
+			{
+				laserEndPos = D3DXVECTOR3(laserEndPos.x - 25.0f, laserEndPos.y - 25.0f, 0.0f);
+			}
+			else if ( nLaserDir == CLaser::DIRECTION_LEFT )
+			{
+				laserEndPos = D3DXVECTOR3(laserEndPos.x, laserEndPos.y - 25.0f, 0.0f);
+			}
+
 			CreateLaser(laserEndPos, CLaser::DIRECTION_DOWN);
 			break;
 
 		case CBlock::BLOCKID_LASER_CONTROL_UP:
 
+			if (nLaserDir == CLaser::DIRECTION_RIGHT)
+			{
+				laserEndPos = D3DXVECTOR3(laserEndPos.x - 25.0f, laserEndPos.y + 25.0f, 0.0f);
+			}
+			else if (nLaserDir == CLaser::DIRECTION_LEFT)
+			{
+				laserEndPos = D3DXVECTOR3(laserEndPos.x, laserEndPos.y + 25.0f, 0.0f);
+			}
+
 			CreateLaser(laserEndPos, CLaser::DIRECTION_UP);
+
 			break;
 
 		case CBlock::BLOCKID_LASER_CONTROL_RIGHT:
+
+			if (nLaserDir == CLaser::DIRECTION_DOWN)
+			{
+				laserEndPos = D3DXVECTOR3(laserEndPos.x - 25.0f, laserEndPos.y - 25.0f, 0.0f);
+			}
+			else if (nLaserDir == CLaser::DIRECTION_UP)
+			{
+				laserEndPos = D3DXVECTOR3(laserEndPos.x - 25.0f, laserEndPos.y, 0.0f);
+			}
 
 			CreateLaser(laserEndPos, CLaser::DIRECTION_RIGHT);
 			break;
 
 		case CBlock::BLOCKID_LASER_CONTROL_LEFT:
+
+			if (nLaserDir == CLaser::DIRECTION_DOWN)
+			{
+				laserEndPos = D3DXVECTOR3(laserEndPos.x + 25.0f, laserEndPos.y - 35.0f, 0.0f);
+			}
+			else if (nLaserDir == CLaser::DIRECTION_UP)
+			{
+				laserEndPos = D3DXVECTOR3(laserEndPos.x + 25.0f, laserEndPos.y, 0.0f);
+			}
 
 			CreateLaser(laserEndPos, CLaser::DIRECTION_LEFT);
 			break;
@@ -213,14 +278,33 @@ void CLaserManager::Update()
 			break;
 		}
 	}
+
+	// レーザーとゴールの当たり判定
+	pBlock = CBlockManager::GetLaserGoal();
+	blockPos = pBlock->GetPosition() + blockSize;
+
+	if (laserEndPos.x + blockSize.x > blockPos.x - blockSize.x
+	 && laserEndPos.x + blockSize.x < blockPos.x + blockSize.x
+	 && laserEndPos.y + blockSize.y > blockPos.y - blockSize.y
+	 && laserEndPos.y + blockSize.y < blockPos.y + blockSize.y)
+	{
+		m_bLaserGoalFlag = true;
+	}
+
+	if (m_bLaserGoalFlag == true)
+	{
+		CDebugProcDX9::Print("終了\n");
+	}
 }
 
 //=============================================================================
 // レーザー生成処理
 //=============================================================================
-void CLaserManager::CreateLaser(const D3DXVECTOR3& start_pos, const int & direction)
+void CLaserManager::CreateLaser(const D3DXVECTOR3& start_pos, int direction)
 {
+	m_nCurrentLaser++;
 
+	m_pLaserArray[m_nCurrentLaser] = CLaser::Create( start_pos, ( CLaser::DIRECTION )direction );
 }
 
 // End of file
