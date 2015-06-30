@@ -175,6 +175,7 @@ void CLaserManager::Update()
 		  && m_bStopLaserFlag[ m_nCurrentLaser ] == false )
 		{
 			m_pLaserArray[m_nCurrentLaser]->MoveStop();
+			m_bStopLaserFlag[m_nCurrentLaser] = true;
 
 			bBlockHitCheck = true;
 		}
@@ -185,6 +186,7 @@ void CLaserManager::Update()
 		  && m_bStopLaserFlag[m_nCurrentLaser] == false )
 		{
 			m_pLaserArray[m_nCurrentLaser]->MoveStop();
+			m_bStopLaserFlag[m_nCurrentLaser] = true;
 
 			bBlockHitCheck = true;
 		}
@@ -195,6 +197,7 @@ void CLaserManager::Update()
 		  && m_bStopLaserFlag[m_nCurrentLaser] == false )
 		{
 			m_pLaserArray[m_nCurrentLaser]->MoveStop();
+			m_bStopLaserFlag[m_nCurrentLaser] = true;
 
 			bBlockHitCheck = true;
 		}
@@ -205,6 +208,7 @@ void CLaserManager::Update()
 		  && m_bStopLaserFlag[m_nCurrentLaser] == false )
 		{
 			m_pLaserArray[m_nCurrentLaser]->MoveStop();
+			m_bStopLaserFlag[m_nCurrentLaser] = true;
 
 			bBlockHitCheck = true;
 		}
