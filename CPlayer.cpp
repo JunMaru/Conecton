@@ -117,18 +117,27 @@ void CPlayer::Update(void)
 		m_pAnton->SetState(CAnton::STATE_NORMAL);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_NORMAL);
 		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_NONE);
+		
+		// testcode
+		m_pBeecon->SetAction(CBeecon::ACTION_WALK);
 	}
 	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_METTAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_METAL);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_METAL);
 		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_METAL);
+
+		// testcode
+		m_pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 	}
 	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_MINIMAMU))
 	{
 		m_pAnton->SetState(CAnton::STATE_MINIMUM);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_MINIMUM);
 		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_MINIMUM);
+
+		// testcode
+		m_pBeecon->SetAction(CBeecon::ACTION_WARP);
 	}
 
 	// ƒAƒ“ƒgƒ“‚ªd—Í—Ž‰ºŽž

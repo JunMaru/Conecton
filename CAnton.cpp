@@ -19,7 +19,7 @@
 
 static const float ANTON_SPEED_X = (0.01f);
 static const float ANTON_MOVE_THRESHOLD = (3.0f);
-static const int ANTON_ANIMATIONINFO_NUM = 13;
+static const int ANTON_ANIMATIONINFO_NUM = (13);
 
 													// 重さ		腕力	サイズ
 static const CAnton::PARAMETER PERAMETER_TABLE[] = { { 20,		0,		D3DXVECTOR2(100.0f, 120.0f) },			// NORMAL
@@ -140,7 +140,7 @@ void CAnton::CommandChangeMetal()
 void CAnton::TemporaryInit()
 {
 	SetState(STATE_NORMAL);
-	AnimationInit();
+	InitAnimation();
 
 	TexLoader::LoadTexSheetFromBin("data/texture_info/AntonTexInfo.bin", m_pTexInfoArray, &m_pTex);
 
@@ -304,7 +304,7 @@ void CAnton::TemporaryDraw()
 	device->DrawPrimitive( D3DPT_TRIANGLESTRIP,0,2 );
 }
 
-void CAnton::AnimationUpdate()
+void CAnton::UpdateAnimation()
 {
 
 }
@@ -316,7 +316,7 @@ void CAnton::SetState(const CAnton::STATE state)
 	ResetSelectAnimetionIndex();
 }
 
-void CAnton::AnimationInit(void)
+void CAnton::InitAnimation(void)
 {
 	// アニメーション設定テーブル
 	const int anTexIdArrayNumTable[] = { 4, 8, 1, 1, 8, 1, 1, 1, 6, 1, 1, 8, 6, };

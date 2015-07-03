@@ -27,6 +27,14 @@ class CBeecon : public CScene
 {
 	public:
 
+		enum ACTION
+		{
+			ACTION_WALK = 0,
+			ACTION_CONNECT,
+			ACTION_WARP,
+			ACTION_MAX,
+		};
+
 		CBeecon(const int Layer = 0) : m_pVtxBuff(NULL), m_pTex(NULL),
 			m_scl(D3DXVECTOR2(0, 0)), m_rot(D3DXVECTOR3(0, 0, 0)), m_pos(D3DXVECTOR2(0, 0)),
 			m_prevPos(D3DXVECTOR2(0, 0)), m_tarPos(D3DXVECTOR2(0, 0)), m_spd(0),
@@ -79,12 +87,18 @@ class CBeecon : public CScene
 
 		D3DXVECTOR2 GetPreviewPosition(void){ return m_prevPos; }
 
+		ACTION GetAction(void){ return m_action; }
+		void SetAction(ACTION action){ m_action = action; ResetSelectAnimetionIndex(); }
+
 	private:
 
 		void TemporaryInit();
 		void TemporaryUninit();
 		void TemporaryUpdate();
 		void TemporaryDraw();
+
+		void InitAnimaton(void);
+		void ResetSelectAnimetionIndex(void);
 
 		//Ç∆ÇËÇ†Ç¶Ç∏ïÅí Ç…ï`âÊ
 		LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;
@@ -138,5 +152,5 @@ class CBeecon : public CScene
 		}AnimationInfo;
 
 		AnimationInfo *m_animSet;
-
+		ACTION m_action;
 };

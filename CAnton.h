@@ -149,8 +149,8 @@ class CAnton : public CScene
 		void TemporaryDraw();
 
 		//test
-		void AnimationUpdate();
-		void AnimationInit();
+		void UpdateAnimation();
+		void InitAnimation();
 		void ResetSelectAnimetionIndex();
 
 		//Ç∆ÇËÇ†Ç¶Ç∏ïÅí Ç…ï`âÊ

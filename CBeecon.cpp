@@ -16,6 +16,8 @@
 #include "CScrollManager.h"
 #include < stdio.h >
 
+static const int BEECON_ANIMATIONINFO_NUM = (3);
+
 /*-----------------------------------------------------------------------------
 	初期化
 -----------------------------------------------------------------------------*/
@@ -102,23 +104,9 @@ void CBeecon::CommandDownMove()
 void CBeecon::TemporaryInit()
 {
 	TexLoader::LoadTexSheetFromBin("data/texture_info/BeeconTexInfo.bin", m_pTexInfoArray, &m_pTex);
+	m_action = ACTION_WALK;
 
-	// アニメーションテスト
-	m_animSet = new AnimationInfo;
-
-	// 歩行アニメーションの各種設定
-	m_animSet[ 0 ].animSum = 8;
-	m_animSet[ 0 ].animWait = 2;
-	m_animSet[ 0 ].texIdArray = new int[ 8 ];
-	m_animSet[ 0 ].bRoop = true;
-	m_animSet[ 0 ].texIdArray[ 0 ] = 0;
-	m_animSet[ 0 ].texIdArray[ 1 ] = 1;
-	m_animSet[ 0 ].texIdArray[ 2 ] = 2;
-	m_animSet[ 0 ].texIdArray[ 3 ] = 3;
-	m_animSet[ 0 ].texIdArray[ 4 ] = 4;
-	m_animSet[ 0 ].texIdArray[ 5 ] = 5;
-	m_animSet[ 0 ].texIdArray[ 6 ] = 6;
-	m_animSet[ 0 ].texIdArray[ 7 ] = 7;
+	InitAnimaton();
 
 	LPDIRECT3DDEVICE9 device = CManager::GetRenderer() -> GetDevice();
 
@@ -172,7 +160,7 @@ void CBeecon::TemporaryUninit()
 
 	delete[] m_pTexInfoArray;
 
-	for ( int nCnt = 0; nCnt < 1; nCnt++ )
+	for ( int nCnt = 0; nCnt < BEECON_ANIMATIONINFO_NUM; nCnt++ )
 	{
 		delete[] m_animSet[ nCnt ].texIdArray;
 	}
@@ -192,9 +180,25 @@ void CBeecon::TemporaryUpdate()
 
 	m_animCnt++;
 
-	if ( ( m_animCnt / m_animSum ) >= m_animSum )
+	if ((m_animCnt / m_animWait) >= m_animSum)
 	{
 		m_animCnt = 0;
+
+		switch (m_action)
+		{
+			case CBeecon::ACTION_WALK:
+				break;
+			case CBeecon::ACTION_CONNECT:
+				SetAction(ACTION_WALK);
+				break;
+			case CBeecon::ACTION_WARP:
+				SetAction(ACTION_WALK);
+				break;
+			case CBeecon::ACTION_MAX:
+				break;
+			default:
+				break;
+		}
 	}
 
 	//とりあえず
@@ -258,6 +262,38 @@ void CBeecon::TemporaryDraw()
 
 	device -> SetTexture( 0, m_pTex );
 	device -> DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, 2 );
+}
+
+void CBeecon::InitAnimaton(void)
+{
+	// アニメーション設定テーブル
+	const int anTexIdArrayNumTable[] = { 8, 8, 8, };
+	const bool abLoopTable[] = { true, false, false, };
+	const int anWaitTimeTable[] = { 3, 3, 3, };
+	int nTexIdCount = 0;
+
+	// アニメーション情報の設定
+	m_animSet = new AnimationInfo[BEECON_ANIMATIONINFO_NUM];
+
+	for (int nAnimSetIdx = 0; nAnimSetIdx < BEECON_ANIMATIONINFO_NUM; ++nAnimSetIdx)
+	{
+		m_animSet[nAnimSetIdx].animSum = anTexIdArrayNumTable[nAnimSetIdx];
+		m_animSet[nAnimSetIdx].animWait = anWaitTimeTable[nAnimSetIdx];
+		m_animSet[nAnimSetIdx].bRoop = abLoopTable[nAnimSetIdx];
+		m_animSet[nAnimSetIdx].texIdArray = new int[anTexIdArrayNumTable[nAnimSetIdx]];
+
+		for (int nTexIdArrayIdx = 0; nTexIdArrayIdx < anTexIdArrayNumTable[nAnimSetIdx]; ++nTexIdArrayIdx)
+		{
+			m_animSet[nAnimSetIdx].texIdArray[nTexIdArrayIdx] = nTexIdCount;
+			++nTexIdCount;
+		}
+	}
+}
+
+void CBeecon::ResetSelectAnimetionIndex(void)
+{
+	m_selectAnimIdx = m_action;
+	m_animCnt = 0;
 }
 
 // End of file
