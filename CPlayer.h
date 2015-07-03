@@ -51,7 +51,11 @@ public:
 	
 private:
 	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col);
-	void MoveCheck(void);
+	void CreateAnton(D3DXVECTOR3 pos);
+	void CreateBeecon(D3DXVECTOR3 pos);
+	void CheckMove(void);
+	void CheckFirstPosition(D3DXVECTOR3 *pos, const D3DXVECTOR2& scl);
+
 	CAnton *m_pAnton;
 	CBeecon *m_pBeecon;
 	CInputCommand *m_pInputCommand;

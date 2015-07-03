@@ -69,6 +69,20 @@ void CAnton::Update()
 
 	m_pos.y += m_parameter.nMass * 0.5f;
 
+	// ‰æ–ÊŠO”»’è
+	const bool bLeftDispOut = (m_pos.x < 0.0f + m_scl.x / 2);
+	const bool bRightDispOut = (m_pos.x > SCREEN_WIDTH - m_scl.x / 2);
+
+	if (bLeftDispOut)
+	{
+		m_pos.x = 0.0f + m_scl.x / 2;
+		m_tarPos.x = m_prevPos.x;
+	}
+	if (bRightDispOut)
+	{
+		m_pos.x = SCREEN_WIDTH - m_scl.x / 2;
+		m_tarPos.x = m_prevPos.x;
+	}
 
 	if (diff.x > ANTON_MOVE_THRESHOLD)
 	{
