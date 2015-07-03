@@ -98,24 +98,48 @@ void CAnton::Draw()
 
 void CAnton::CommandRightMove()
 {
-	if (m_action != ACTION_WALK)
-	{
-		m_bDirectionRight = true;
+	m_bDirectionRight = true;
 
-		m_action = ACTION_WALK;
-		ResetSelectAnimetionIndex();
+	const bool bWalk = (m_action == ACTION_WALK);
+	const bool bPowerfulPush = ((m_state == STATE_POWERFUL) && (m_action == ACTION_PUSH));
+
+	// 既に歩いていたら
+	if (bWalk)
+	{
+		return;
 	}
+
+	// パワフルで押している場合
+	if (bPowerfulPush)
+	{
+		return;
+	}
+
+	m_action = ACTION_WALK;
+	ResetSelectAnimetionIndex();
 }
 
 void CAnton::CommandLeftMove()
 {
-	if( m_action != ACTION_WALK )
-	{
-		m_bDirectionRight = false;
+	m_bDirectionRight = false;
 
-		m_action = ACTION_WALK;
-		ResetSelectAnimetionIndex();
+	const bool bWalk = (m_action == ACTION_WALK);
+	const bool bPowerfulPush = ((m_state == STATE_POWERFUL) && (m_action == ACTION_PUSH));
+
+	// 既に歩いていたら
+	if (bWalk)
+	{
+		return;
 	}
+
+	// パワフルで押している場合
+	if (bPowerfulPush)
+	{
+		return;
+	}
+
+	m_action = ACTION_WALK;
+	ResetSelectAnimetionIndex();
 }
 
 /*-----------------------------------------------------------------------------
@@ -210,30 +234,31 @@ void CAnton::TemporaryUninit()
 
 void CAnton::TemporaryUpdate()
 {
+	m_animSum = m_animSet[m_selectAnimIdx].animSum;
+	m_animWait = m_animSet[m_selectAnimIdx].animWait;
 
-	m_animSum = m_animSet[ m_selectAnimIdx ].animSum;
-	m_animWait = m_animSet[ m_selectAnimIdx ].animWait;
+	m_animIdx = (int)(m_animCnt / m_animWait) % m_animSum;
 
-	m_animIdx = (int)( m_animCnt/m_animWait ) % m_animSum;
-
-	m_texPos = m_pTexInfoArray[ m_animSet[ m_selectAnimIdx ].texIdArray[ m_animIdx ] ].uv;
-	m_texSize= m_pTexInfoArray[ m_animSet[ m_selectAnimIdx ].texIdArray[ m_animIdx ] ].size;
+	m_texPos = m_pTexInfoArray[m_animSet[m_selectAnimIdx].texIdArray[m_animIdx]].uv;
+	m_texSize = m_pTexInfoArray[m_animSet[m_selectAnimIdx].texIdArray[m_animIdx]].size;
 
 	m_animCnt++;
 
+	const bool bPowerfulPush = ((m_state == STATE_POWERFUL) && (m_action == ACTION_PUSH));
+	const bool bWaitRangeSpeed = fabs(m_prevPos.x - m_pos.x) < ANTON_MOVE_THRESHOLD;
 
-	if( (m_animCnt/m_animWait) >=m_animSum )
-	{
-		m_animCnt = 0;
-	}
-
-	if( (abs( m_prevPos.x - m_pos.x )< 1) && m_selectAnimIdx != 2)
+	// 待機になる速度かつ、パワフルで押すモーションに入っていない
+	if (bWaitRangeSpeed && !bPowerfulPush)
 	{
 		// 待機モーション
 		m_action = ACTION_WAIT;
 		ResetSelectAnimetionIndex();
 	}
 
+	if ((m_animCnt / m_animWait) >= m_animSum)
+	{
+		m_animCnt = 0;
+	}
 
 	VERTEX_2D *vtx;
 

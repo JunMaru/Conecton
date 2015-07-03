@@ -40,9 +40,11 @@ class CAnton : public CScene
 		enum ACTION
 		{
 			ACTION_WAIT = 0,
-			ACTION_WALK,
-			ACTION_FRONT,
-			ACTION_MAX,
+			ACTION_WALK = 1,
+			ACTION_FRONT = 2,
+			ACTION_PUSH = 2,
+			ACTION_METALPOSE = 3,
+			ACTION_MAX = 5,
 		};
 
 		struct PARAMETER
@@ -138,6 +140,8 @@ class CAnton : public CScene
 		
 		void SetState(const STATE state);
 		STATE GetState(void){ return m_state; }
+		void SetAction(const ACTION action){ m_action = action; ResetSelectAnimetionIndex();}
+		ACTION GetAction(void){ return m_action; }
 		PARAMETER GetParameter(void){ return m_parameter; }
 
 	private:

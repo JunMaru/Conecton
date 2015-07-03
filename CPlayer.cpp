@@ -112,7 +112,7 @@ void CPlayer::Update(void)
 	D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
 	m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
 
-	if (m_pInputCommand->IsPress(CInputCommand::COMMAND_NORMAL))
+	if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_NORMAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_NORMAL);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_NORMAL);
@@ -121,7 +121,7 @@ void CPlayer::Update(void)
 		// testcode
 		m_pBeecon->SetAction(CBeecon::ACTION_WALK);
 	}
-	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_METTAL))
+	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_METTAL))
 	{
 		m_pAnton->SetState(CAnton::STATE_METAL);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_METAL);
@@ -130,7 +130,7 @@ void CPlayer::Update(void)
 		// testcode
 		m_pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 	}
-	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_MINIMAMU))
+	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_MINIMAMU))
 	{
 		m_pAnton->SetState(CAnton::STATE_MINIMUM);
 		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_MINIMUM);
@@ -139,6 +139,25 @@ void CPlayer::Update(void)
 		// testcode
 		m_pBeecon->SetAction(CBeecon::ACTION_WARP);
 	}
+	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_POWERFULL))
+	{
+		m_pAnton->SetState(CAnton::STATE_POWERFUL);
+		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_POWERFUL);
+		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_POWERFUL);
+
+		if (m_pAnton->GetAction() == CAnton::ACTION_PUSH)
+		{
+			m_pAnton->SetAction(CAnton::ACTION_WALK);
+		}
+		else
+		{
+			m_pAnton->SetAction(CAnton::ACTION_PUSH);
+		}
+
+		// testcode
+		m_pBeecon->SetAction(CBeecon::ACTION_WARP);
+	}
+
 
 	// ƒAƒ“ƒgƒ“‚ªd—Í—Ž‰ºŽž
 	float fAntonDownSpeed = m_pAnton->GetSpd();
