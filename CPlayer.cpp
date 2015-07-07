@@ -162,21 +162,35 @@ void CPlayer::Update(void)
 -----------------------------------------------------------------------------*/
 void CPlayer::CheckMove(void)
 {
-	if (m_pInputCommand->IsPress(CInputCommand::COMMAND_RIGHT))
+	const bool bRight = m_pInputCommand->IsPress(CInputCommand::COMMAND_RIGHT);
+	const bool bLeft = m_pInputCommand->IsPress(CInputCommand::COMMAND_LEFT);
+	const bool bUp = m_pInputCommand->IsPress(CInputCommand::COMMAND_UP);
+	const bool bDown = m_pInputCommand->IsPress(CInputCommand::COMMAND_DOWN);
+
+	// ¶‰E”»’è
+	if (bRight)
 	{
 		m_pBeecon->CommandRightMove();
 	}
-	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_LEFT))
+	else if (bLeft)
 	{
 		m_pBeecon->CommandLeftMove();
 	}
-	if (m_pInputCommand->IsPress(CInputCommand::COMMAND_UP))
+
+	// ã‰º”»’è
+	if (bUp)
 	{
 		m_pBeecon->CommandUpMove();
 	}
-	else if (m_pInputCommand->IsPress(CInputCommand::COMMAND_DOWN))
+	else if (bDown)
 	{
 		m_pBeecon->CommandDownMove();
+	}
+
+	// ‰½‚à“ü—Í‚µ‚Ä‚¢‚È‚¢
+	if (!(bRight || bLeft || bUp || bDown))
+	{
+		m_pBeecon->CommandStopMove();
 	}
 }
 
@@ -206,10 +220,10 @@ void CPlayer::CreateBeecon(D3DXVECTOR3 pos)
 
 	m_pBeecon = new CBeecon(6);
 	m_pBeecon->Init();
-	m_pBeecon->SetPosition(100, 0, 0);
+	m_pBeecon->SetPosition(pos);
 	m_pBeecon->SetRotation(0, 0, 0);
 	m_pBeecon->SetScaling(100, 130);
-	m_pBeecon->SetTargetPosition(0, 0);
+	m_pBeecon->SetTargetPosition(pos.x, pos.y);
 	m_pBeecon->SetSpd(8);
 }
 

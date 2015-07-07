@@ -69,6 +69,7 @@ class CBeecon : public CScene
 		void CommandLeftMove();
 		void CommandUpMove();
 		void CommandDownMove();
+		void CommandStopMove(){ m_bMoveOperated = false; }
 
 
 		float GetSpd(){ return m_spd; }
@@ -99,6 +100,7 @@ class CBeecon : public CScene
 
 		void InitAnimaton(void);
 		void ResetSelectAnimetionIndex(void);
+		void UpdateEightMove(void);
 
 		//Ç∆ÇËÇ†Ç¶Ç∏ïÅí Ç…ï`âÊ
 		LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;
@@ -153,4 +155,9 @@ class CBeecon : public CScene
 
 		AnimationInfo *m_animSet;
 		ACTION m_action;
+
+		D3DXVECTOR2 m_eightMovePos;
+		float m_fEightMoveCount;
+		bool m_bEightMoveUpsideCircle;
+		bool m_bMoveOperated;
 };
