@@ -195,7 +195,6 @@ void CPlayer::CreateAnton(D3DXVECTOR3 pos)
 	m_pAnton->SetTargetPosition(pos.x,pos.y);
 	m_pAnton->SetSpd(8);
 	m_pAnton->CommandChangeNormal();
-
 }
 
 /*-----------------------------------------------------------------------------
@@ -214,6 +213,9 @@ void CPlayer::CreateBeecon(D3DXVECTOR3 pos)
 	m_pBeecon->SetSpd(8);
 }
 
+/*-----------------------------------------------------------------------------
+	‰ŠúÀ•WŒŸ¸ˆ—
+-----------------------------------------------------------------------------*/
 void CPlayer::CheckFirstPosition(D3DXVECTOR3 *pos_pointer,const D3DXVECTOR2& scl)
 {
 	// ‰æ–ÊŠO”»’è
