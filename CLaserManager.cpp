@@ -12,6 +12,7 @@
 #include "CLaser.h"
 #include "CBlockManager.h"
 #include "CBlock.h"
+#include "CDebugProcDX9.h"
 
 //=============================================================================
 // Ã“Iƒƒ“ƒo•Ï”

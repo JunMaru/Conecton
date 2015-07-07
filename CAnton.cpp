@@ -69,6 +69,20 @@ void CAnton::Update()
 
 	m_pos.y += m_parameter.nMass * 0.5f;
 
+	// 画面外判定
+	const bool bLeftDispOut = (m_pos.x < 0.0f + m_scl.x / 2);
+	const bool bRightDispOut = (m_pos.x > SCREEN_WIDTH - m_scl.x / 2);
+
+	if (bLeftDispOut)
+	{
+		m_pos.x = 0.0f + m_scl.x / 2;
+		m_tarPos.x = m_prevPos.x;
+	}
+	if (bRightDispOut)
+	{
+		m_pos.x = SCREEN_WIDTH - m_scl.x / 2;
+		m_tarPos.x = m_prevPos.x;
+	}
 
 	if (diff.x > ANTON_MOVE_THRESHOLD)
 	{
@@ -344,10 +358,10 @@ void CAnton::SetState(const CAnton::STATE state)
 void CAnton::InitAnimation(void)
 {
 	// アニメーション設定テーブル
-	const int anTexIdArrayNumTable[] = { 4, 8, 1, 1, 8, 1, 1, 1, 6, 1, 1, 8, 6, };
+	const int anTexIdArrayNumTable[] = { 4, 8, 1, 4, 8, 1, 1, 4, 6, 1, 4, 8, 6, };
 	const bool abLoopTable[] = { true, true, false, false, true, false,
 		false, false, true, false, false, true, true, };
-	const int anWaitTimeTable[] = { 3, 3, 1, 1, 3, 1, 1, 1, 3, 1, 1, 3, 3, };
+	const int anWaitTimeTable[] = { 3, 3, 1, 3, 3, 1, 1, 3, 3, 1, 3, 3, 3, };
 	int nTexIdCount = 0;
 
 	//アニメーション管理テスト！！！

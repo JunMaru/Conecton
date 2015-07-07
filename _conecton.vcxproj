@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\_exe\</OutDir>
-    <TargetName>conecton_D</TargetName>
+    <TargetName>こねくとん_D</TargetName>
     <IntDir>$(SolutionDir)\obj\$(Configuration)\</IntDir>
     <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
@@ -50,7 +50,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\_exe\</OutDir>
-    <TargetName>conecton</TargetName>
+    <TargetName>こねくとん</TargetName>
     <IntDir>$(SolutionDir)\obj\$(Configuration)\</IntDir>
     <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>

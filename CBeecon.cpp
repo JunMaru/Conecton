@@ -60,11 +60,26 @@ void CBeecon::Update()
 	m_pos.x += diff.x * 0.1f;
 	m_pos.y += diff.y * 0.1f;
 
+	// 画面外判定
+	const bool bLeftDispOut = (m_pos.x < 0.0f + m_scl.x / 2);
+	const bool bRightDispOut = (m_pos.x > SCREEN_WIDTH - m_scl.x / 2);
+
+	if (bLeftDispOut)
+	{
+		m_pos.x = 0.0f + m_scl.x / 2;
+		m_tarPos.x = m_prevPos.x;
+	}
+	if (bRightDispOut)
+	{
+		m_pos.x = SCREEN_WIDTH - m_scl.x / 2;
+		m_tarPos.x = m_prevPos.x;
+	}
+
 	//とりあえずスクロール
 
 	D3DXVECTOR2 sc;
 	sc.x = 0.0f;//-SCREEN_WIDTH/2+m_pos.x;//(m_pos.x - m_prevPos.x);
-	sc.y = -SCREEN_HEIGHT / 2 + m_pos.y;;
+	sc.y = -SCREEN_HEIGHT / 2 + m_pos.y;
 
 	CScrollManager::SetScrollWorld(sc);
 
