@@ -24,6 +24,8 @@ class CGauge;
 class CBackGround;
 class CScrollManager;
 class CLaserManager;
+class CInputCommand;
+
 class CGame : public CPhase
 {
 public:
@@ -52,9 +54,15 @@ public:
 		CBackGround *m_pBackGround;
 		CAntonLifeUI *m_pLifeUI;
 		CGauge *m_pGauge;
+		CInputCommand *m_pInputCommand;
 
 		void InitGauge(void);
 		void HitCheckMinimumAnton(void);
 		void HitCheckMetalAnton(void);
 		void HitCheckAnton(void);
+		void CheckConnectAction(void);
+		bool ConnectGimmickBlock(void);
+		bool ConnectChangeAntonBlock(void);
+		bool ConnectNormalBlock(void);
+		void CheckGimmickAction(void);
 };

@@ -21,11 +21,13 @@ since	20140713
 #include "CInstancingObject.h"
 #include "CBlock.h"
 #include "CAnton.h"
+#include "CBeecon.h"
 #include "CLaser.h"
 #include "CBackGround.h"
 #include "CAntonLifeUI.h"
 #include "CScrollManager.h"
 #include "CLaserManager.h"
+#include "CInputCommand.h"
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
@@ -48,6 +50,7 @@ CGame::CGame()
 	m_pGauge = nullptr;
 	m_pScrollManager = nullptr;
 	m_pBackGround = nullptr;
+	m_pInputCommand = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -75,6 +78,8 @@ void CGame::Init(void)
 	//CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), CLaser::DIRECTION_RIGHT);
 	m_pLaserManager = CLaserManager::Create();
 
+	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
+
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
 }
@@ -101,6 +106,9 @@ void CGame::Uninit(void)
 
 	m_pLaserManager->Uninit();
 	delete m_pLaserManager;
+
+	m_pInputCommand->Uninit();
+	delete m_pInputCommand;
 }
 
 /*-----------------------------------------------------------------------------
@@ -168,6 +176,10 @@ void CGame::Update(void)
 		fTestGaugeVal += 1.0f;
 		m_pGauge->SetGaugeVal(fTestGaugeVal);
 	}
+
+	// ブロックとビーコンとのコネクトチェック
+	CheckConnectAction();
+	CheckGimmickAction();
 }
 
 // ミニマム用のあたり判定。多分普通のと同じソースで実装できる
@@ -422,5 +434,215 @@ void CGame::InitGauge(void)
 	for (int nCnt = 0; nCnt < nLoadFileNum; ++nCnt)
 	{
 		m_pGauge->LoadTexture(nCnt, pFilePathTable[nCnt]);
+	}
+}
+
+/*-----------------------------------------------------------------------------
+ コネクトアクション
+-----------------------------------------------------------------------------*/
+void CGame::CheckConnectAction(void)
+{
+	const bool bConnect = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_CONNECT);
+
+	if (bConnect == false)
+	{
+		return;
+	}
+
+	CBeecon *pBeecon = m_pPlayer->GetBeecon();
+	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
+	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
+
+	// ここでブロックマネージャーからブロック情報を取得
+	//blockIDFromBlockManager = GetBlockID(beeconPos)
+
+	// コネクト先が何もなかった場合
+	if (blockIDFromBlockManager == CBlock::BLOCKID_NONE)
+	{
+		// コネクトなんてなかった
+		return;
+	}
+
+	// 取ってきたのは変身ブロックか？
+	if (ConnectChangeAntonBlock())
+	{
+		return;
+	}
+
+	// 取ってきたのはギミックブロックか？
+	if (ConnectGimmickBlock())
+	{
+		return;
+	}
+
+	// 取ってきたのはノーマルブロックか？
+	if (ConnectNormalBlock())
+	{
+		return;
+	}
+
+	// 変身でもギミックでもノーマルブロックでもないです
+	return;
+}
+
+bool CGame::ConnectChangeAntonBlock(void)
+{
+	CBeecon *pBeecon = m_pPlayer->GetBeecon();
+	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
+	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
+
+	// ここでブロックマネージャーからブロック情報を取得
+	//blockIDFromBlockManager = GetBlockID(beeconPos)
+
+	// 変身ブロック判定テーブル
+	const CBlock::BLOCKID aChangeAntonBlockTable[] = { CBlock::BLOCKID_METAL, CBlock::BLOCKID_MINIMUM, CBlock::BLOCKID_POWERFUL, };
+	const CAnton::STATE aAntonStateTable[] = { CAnton::STATE_METAL, CAnton::STATE_MINIMUM, CAnton::STATE_POWERFUL, };
+
+	// 取得してきたブロック情報がアントンを変身させるものか？
+	for (int nCnt = 0; nCnt < sizeof(aChangeAntonBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
+	{
+		// テーブル内検索
+		if (blockIDFromBlockManager != aChangeAntonBlockTable[nCnt])
+		{
+			continue;
+		}
+
+		// 変身ブロックだった場合
+		// アントンを変身させ、ブロックをノーマルにする
+		CAnton *pAnton = m_pPlayer->GetAnton();
+		pAnton->SetState(aAntonStateTable[nCnt]);
+
+		// ブロックマネージャーのブロックをノーマルに上書き
+		//SetBlockID(CBlock::BLOCKID_SOIL,beeconPos);
+
+		pBeecon->SetAction(CBeecon::ACTION_CONNECT);
+		return true;
+	}
+
+	return false;
+}
+
+bool CGame::ConnectGimmickBlock(void)
+{
+
+	CBeecon *pBeecon = m_pPlayer->GetBeecon();
+	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
+	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
+
+	// ここでブロックマネージャーからブロック情報を取得
+	//blockIDFromBlockManager = GetBlockID(beeconPos)
+
+	// ギミックブロック判定テーブル
+	const CBlock::BLOCKID aGimmickBlockTable[] = { CBlock::BLOCKID_LASER_CONTROL_DOWN, CBlock::BLOCKID_LASER_CONTROL_LEFT,
+													CBlock::BLOCKID_LASER_CONTROL_RIGHT, CBlock::BLOCKID_LASER_CONTROL_UP,
+													CBlock::BLOCKID_MAGNET, };
+
+	CBlock::BLOCKID blockIDFromBeecon = static_cast<CBlock::BLOCKID>(pBeecon->GetBlockID());
+
+	// 取得してきたブロック情報はギミックなのか？
+	for (int nCnt = 0; nCnt < sizeof(aGimmickBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
+	{
+		// テーブル内検索
+		if (blockIDFromBlockManager != aGimmickBlockTable[nCnt])
+		{
+			continue;
+		}
+
+		// ギミックブロックだった場合
+		// ビーコンがギミックブロックのストックを持っていない場合
+		if (blockIDFromBeecon == CBlock::BLOCKID_NONE)
+		{
+			// ビーコンにギミックブロックIDをセットし、ブロックマネージャーのブロックにはノーマルに上書き
+			pBeecon->SetBlockID(static_cast<CBeecon::BLOCKID>(blockIDFromBlockManager));
+			//SetBlockID(CBlock::BLOCKID_SOIL,beeconPos);
+
+			return true;
+		}
+
+		// ビーコンがなんかしらのブロックを持っていた場合
+		else
+		{
+			// ビーコンにギミックブロックIDをセットし、ブロックマネージャーのブロックにはビーコンが持っていたのを上書き
+			pBeecon->SetBlockID(static_cast<CBeecon::BLOCKID>(blockIDFromBlockManager));
+			//SetBlockID(blockIDFromBeecon,beeconPos);
+
+			pBeecon->SetAction(CBeecon::ACTION_CONNECT);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CGame::ConnectNormalBlock(void)
+{
+	CBeecon *pBeecon = m_pPlayer->GetBeecon();
+	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
+	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
+
+	// ギミックブロック判定テーブル
+	const CBlock::BLOCKID aGimmickBlockTable[] = { CBlock::BLOCKID_LASER_CONTROL_DOWN, CBlock::BLOCKID_LASER_CONTROL_LEFT,
+													CBlock::BLOCKID_LASER_CONTROL_RIGHT, CBlock::BLOCKID_LASER_CONTROL_UP,
+													CBlock::BLOCKID_MAGNET, };
+
+	CBlock::BLOCKID blockIDFromBeecon = static_cast<CBlock::BLOCKID>(pBeecon->GetBlockID());
+	bool bGimmick = false;
+
+	// ビーコンは何かしらのギミックブロックをもっているか？
+	for (int nCnt = 0; nCnt < sizeof(aGimmickBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
+	{
+		// テーブル内検索
+		if (blockIDFromBeecon != aGimmickBlockTable[nCnt])
+		{
+			continue;
+		}
+
+		bGimmick = true;
+		break;
+	}
+
+	// ビーコンがギミックを持っていない→ノーマルブロックに置けないのでさようなら
+	if (bGimmick == false)
+	{
+		return false;
+	}
+
+	// ここでブロックマネージャーからブロック情報を取得
+	//blockIDFromBlockManager = GetBlockID(beeconPos)
+
+	// ギミックブロック判定テーブル
+	const CBlock::BLOCKID aNormalBlockTable[] = { CBlock::BLOCKID_GRASS, CBlock::BLOCKID_SOIL, };
+
+
+	// 取得してきたブロック情報はノーマルなのか？
+	for (int nCnt = 0; nCnt < sizeof(aNormalBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
+	{
+		// テーブル内検索
+		if (blockIDFromBlockManager != aNormalBlockTable[nCnt])
+		{
+			continue;
+		}
+
+		// ノーマルだった場合
+		// ビーコンに入っていたギミックを、ブロックマネージャーのブロックに上書き。ビーコンのは空
+		pBeecon->SetBlockID(CBeecon::BLOCKID_NONE);
+		//SetBlockID(blockIDFromBeecon,beeconPos);
+		
+		return true;
+	}
+
+	return false;
+}
+
+/*-----------------------------------------------------------------------------
+ ギミックアクション
+-----------------------------------------------------------------------------*/
+void CGame::CheckGimmickAction(void)
+{
+	const bool bGimmickAction = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_GIMMICKACTION);
+
+	if (bGimmickAction == false)
+	{
+		return;
 	}
 }

@@ -11,7 +11,7 @@
 #include "CInputCommand.h"
 #include "CInput.h"
 
-//=============================================================================
+//==================================as===========================================
 // コンストラクタ
 //=============================================================================
 CInputCommand::CInputCommand(CInputKeyboard *keyboard, CInputJoypad *joypad)
@@ -46,14 +46,14 @@ HRESULT CInputCommand::Init(void)
 		{ DIK_D, COMMAND_RIGHT },
 		{ DIK_W, COMMAND_UP },
 		{ DIK_S, COMMAND_DOWN },
-		{ DIK_M, COMMAND_CHANGEANTON },
 		{ DIK_N, COMMAND_CONNECT },
-		{ DIK_4, COMMAND_CALLANTON },
+		{ DIK_J, COMMAND_GIMMICKACTION },
+		{ DIK_P, COMMAND_PAUSE },
 #if DEBUGMODE_INPUTCOMMAND
 		// デバッグ用
 		{ DIK_2, COMMAND_METTAL },
 		{ DIK_3, COMMAND_MINIMAMU },
-		{ DIK_5, COMMAND_POWERFULL },
+		{ DIK_4, COMMAND_POWERFULL },
 		{ DIK_1, COMMAND_NORMAL },
 #endif
 	};
@@ -62,22 +62,15 @@ HRESULT CInputCommand::Init(void)
 	// TODO::後でからファイル読み込み
 	const JOY2COM joyWork[COMMAND_MAX] =
 	{
-		{ CInputJoypad::GAMEPAD_1, COMMAND_ENTER },
-		{ CInputJoypad::GAMEPAD_2, COMMAND_CANCEL },
+		{ CInputJoypad::GAMEPAD_10, COMMAND_ENTER },
+		{ CInputJoypad::GAMEPAD_3, COMMAND_CANCEL },
 		{ CInputJoypad::GAMEPAD_LSTICK_LEFT, COMMAND_LEFT },
 		{ CInputJoypad::GAMEPAD_LSTICK_RIGHT, COMMAND_RIGHT },
 		{ CInputJoypad::GAMEPAD_LSTICK_UP, COMMAND_UP },
 		{ CInputJoypad::GAMEPAD_LSTICK_DOWN, COMMAND_DOWN },
-		{ CInputJoypad::GAMEPAD_1, COMMAND_CHANGEANTON },
-		{ CInputJoypad::GAMEPAD_2, COMMAND_CONNECT },
-		{ CInputJoypad::GAMEPAD_3, COMMAND_CALLANTON },
-#if DEBUGMODE_INPUTCOMMAND
-		// デバッグ用(ジョイパッドに関してはボタンが分からないので適当)
-		{ CInputJoypad::GAMEPAD_2, COMMAND_METTAL },
-		{ CInputJoypad::GAMEPAD_4, COMMAND_MINIMAMU },
-		{ CInputJoypad::GAMEPAD_5, COMMAND_POWERFULL },
-		{ CInputJoypad::GAMEPAD_1, COMMAND_NORMAL },
-#endif
+		{ CInputJoypad::GAMEPAD_1, COMMAND_CONNECT },
+		{ CInputJoypad::GAMEPAD_2, COMMAND_GIMMICKACTION },
+		{ CInputJoypad::GAMEPAD_10, COMMAND_PAUSE },
 	};
 	memcpy(m_joy2com, joyWork, sizeof(m_joy2com));
 
