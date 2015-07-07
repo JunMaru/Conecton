@@ -16,7 +16,12 @@
 #include "CScrollManager.h"
 #include < stdio.h >
 
+/*-----------------------------------------------------------------------------
+	定数定義
+-----------------------------------------------------------------------------*/
 static const int BEECON_ANIMATIONINFO_NUM = (3);
+static const float BEECON_EIGHTMOVE_RADIUS = (1.5f);
+static const float BEECON_EIGHTMOVE_SPEED = (0.1f);
 
 /*-----------------------------------------------------------------------------
 	初期化
@@ -44,6 +49,8 @@ void CBeecon::Uninit()
 -----------------------------------------------------------------------------*/
 void CBeecon::Update()
 {
+	UpdateEightMove();
+
 	m_prevPos = m_pos;
 
 	D3DXVECTOR2 diff;
@@ -98,12 +105,14 @@ void CBeecon::CommandRightMove()
 {
 	m_bDirectionRight = true;
 	m_tarPos.x += m_spd;
+	m_bMoveOperated = true;
 }
 
 void CBeecon::CommandLeftMove()
 {
 	m_bDirectionRight = false;
 	m_tarPos.x -= m_spd;
+	m_bMoveOperated = true;
 }
 
 void CBeecon::CommandUpMove()
@@ -157,6 +166,10 @@ void CBeecon::TemporaryInit()
 	m_animSum = 8;
 	m_selectAnimIdx = 0;
 	m_fPosRadius = 0.0f;
+	m_eightMovePos = VEC2_ZERO;
+	m_fEightMoveCount = -D3DX_PI;
+	m_bEightMoveUpsideCircle = true;
+	m_bMoveOperated = false;
 }
 
 void CBeecon::TemporaryUninit()
@@ -279,6 +292,9 @@ void CBeecon::TemporaryDraw()
 	device -> DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, 2 );
 }
 
+/*-----------------------------------------------------------------------------
+	アニメーション初期化処理
+-----------------------------------------------------------------------------*/
 void CBeecon::InitAnimaton(void)
 {
 	// アニメーション設定テーブル
@@ -305,10 +321,51 @@ void CBeecon::InitAnimaton(void)
 	}
 }
 
+/*-----------------------------------------------------------------------------
+	アニメーション参照値再設定処理
+-----------------------------------------------------------------------------*/
 void CBeecon::ResetSelectAnimetionIndex(void)
 {
 	m_selectAnimIdx = m_action;
 	m_animCnt = 0;
+}
+
+/*-----------------------------------------------------------------------------
+	8の字更新処理
+-----------------------------------------------------------------------------*/
+void CBeecon::UpdateEightMove(void)
+{
+	// ユーザーが移動を命令している場合
+	if (m_bMoveOperated)
+	{
+		return;
+	}
+
+	m_fEightMoveCount += BEECON_EIGHTMOVE_SPEED;
+
+	// 八の字の上側下側切替(floatなので%使うのが怖い為フラグで代用)
+	if (m_fEightMoveCount > D3DX_PI)
+	{
+		m_fEightMoveCount = -D3DX_PI;
+		m_bEightMoveUpsideCircle = !m_bEightMoveUpsideCircle;
+	}
+
+	// 上側時
+	if (m_bEightMoveUpsideCircle)
+	{
+		m_eightMovePos.x = sinf(m_fEightMoveCount) * BEECON_EIGHTMOVE_RADIUS;
+		m_eightMovePos.y = -cosf(m_fEightMoveCount) * BEECON_EIGHTMOVE_RADIUS;
+		m_pos += m_eightMovePos;
+		m_pos.y -= BEECON_EIGHTMOVE_RADIUS;
+
+		return;
+	}
+
+	// 下側時
+	m_eightMovePos.x = sinf(m_fEightMoveCount) * BEECON_EIGHTMOVE_RADIUS;
+	m_eightMovePos.y = cosf(m_fEightMoveCount) * BEECON_EIGHTMOVE_RADIUS;
+	m_pos += m_eightMovePos;
+	m_pos.y += BEECON_EIGHTMOVE_RADIUS;
 }
 
 // End of file
