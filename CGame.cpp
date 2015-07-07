@@ -417,9 +417,9 @@ void CGame::HitCheckAnton(void)
 	ant->SetPosition(setAntonPos);
 }
 
-/*-----------------------------------------------------------------------------
- ゲージの初期化
------------------------------------------------------------------------------*/
+//=============================================================================
+// ゲージ初期化処理
+//=============================================================================
 void CGame::InitGauge(void)
 {
 	m_pGauge = new CGauge(6);
@@ -437,9 +437,9 @@ void CGame::InitGauge(void)
 	}
 }
 
-/*-----------------------------------------------------------------------------
- コネクトアクション
------------------------------------------------------------------------------*/
+//=============================================================================
+// コネクトアクション処理
+//=============================================================================
 void CGame::CheckConnectAction(void)
 {
 	const bool bConnect = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_CONNECT);
@@ -485,6 +485,9 @@ void CGame::CheckConnectAction(void)
 	return;
 }
 
+//=============================================================================
+// コネクトアクション(変身ブロック)処理
+//=============================================================================
 bool CGame::ConnectChangeAntonBlock(void)
 {
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
@@ -496,7 +499,7 @@ bool CGame::ConnectChangeAntonBlock(void)
 
 	// 変身ブロック判定テーブル
 	const CBlock::BLOCKID aChangeAntonBlockTable[] = { CBlock::BLOCKID_METAL, CBlock::BLOCKID_MINIMUM, CBlock::BLOCKID_POWERFUL, };
-	const CAnton::STATE aAntonStateTable[] = { CAnton::STATE_METAL, CAnton::STATE_MINIMUM, CAnton::STATE_POWERFUL, };
+	const CPlayer::ANTON_STATE aAntonStateTable[] = { CPlayer::ANTON_STATE_METAL, CPlayer::ANTON_STATE_MINIMUM, CPlayer::ANTON_STATE_POWERFUL, };
 
 	// 取得してきたブロック情報がアントンを変身させるものか？
 	for (int nCnt = 0; nCnt < sizeof(aChangeAntonBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
@@ -509,8 +512,7 @@ bool CGame::ConnectChangeAntonBlock(void)
 
 		// 変身ブロックだった場合
 		// アントンを変身させ、ブロックをノーマルにする
-		CAnton *pAnton = m_pPlayer->GetAnton();
-		pAnton->SetState(aAntonStateTable[nCnt]);
+		m_pPlayer->SetAntonState(aAntonStateTable[nCnt]);
 
 		// ブロックマネージャーのブロックをノーマルに上書き
 		//SetBlockID(CBlock::BLOCKID_SOIL,beeconPos);
@@ -522,9 +524,11 @@ bool CGame::ConnectChangeAntonBlock(void)
 	return false;
 }
 
+//=============================================================================
+// コネクトアクション(ギミックブロック)処理
+//=============================================================================
 bool CGame::ConnectGimmickBlock(void)
 {
-
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
 	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
@@ -553,7 +557,7 @@ bool CGame::ConnectGimmickBlock(void)
 		if (blockIDFromBeecon == CBlock::BLOCKID_NONE)
 		{
 			// ビーコンにギミックブロックIDをセットし、ブロックマネージャーのブロックにはノーマルに上書き
-			pBeecon->SetBlockID(static_cast<CBeecon::BLOCKID>(blockIDFromBlockManager));
+			m_pPlayer->SetBeeconBlockID(static_cast<CPlayer::BEECON_BLOCKID>(blockIDFromBlockManager));
 			//SetBlockID(CBlock::BLOCKID_SOIL,beeconPos);
 
 			return true;
@@ -563,7 +567,7 @@ bool CGame::ConnectGimmickBlock(void)
 		else
 		{
 			// ビーコンにギミックブロックIDをセットし、ブロックマネージャーのブロックにはビーコンが持っていたのを上書き
-			pBeecon->SetBlockID(static_cast<CBeecon::BLOCKID>(blockIDFromBlockManager));
+			m_pPlayer->SetBeeconBlockID(static_cast<CPlayer::BEECON_BLOCKID>(blockIDFromBlockManager));
 			//SetBlockID(blockIDFromBeecon,beeconPos);
 
 			pBeecon->SetAction(CBeecon::ACTION_CONNECT);
@@ -574,6 +578,9 @@ bool CGame::ConnectGimmickBlock(void)
 	return false;
 }
 
+//=============================================================================
+// コネクトアクション(ノーマルブロック)処理
+//=============================================================================
 bool CGame::ConnectNormalBlock(void)
 {
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
@@ -613,7 +620,6 @@ bool CGame::ConnectNormalBlock(void)
 	// ギミックブロック判定テーブル
 	const CBlock::BLOCKID aNormalBlockTable[] = { CBlock::BLOCKID_GRASS, CBlock::BLOCKID_SOIL, };
 
-
 	// 取得してきたブロック情報はノーマルなのか？
 	for (int nCnt = 0; nCnt < sizeof(aNormalBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
 	{
@@ -625,7 +631,7 @@ bool CGame::ConnectNormalBlock(void)
 
 		// ノーマルだった場合
 		// ビーコンに入っていたギミックを、ブロックマネージャーのブロックに上書き。ビーコンのは空
-		pBeecon->SetBlockID(CBeecon::BLOCKID_NONE);
+		m_pPlayer->SetBeeconBlockID(CPlayer::BEECON_BLOCKID_NONE);
 		//SetBlockID(blockIDFromBeecon,beeconPos);
 		
 		return true;

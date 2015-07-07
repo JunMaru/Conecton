@@ -49,6 +49,7 @@ HRESULT CInputCommand::Init(void)
 		{ DIK_N, COMMAND_CONNECT },
 		{ DIK_J, COMMAND_GIMMICKACTION },
 		{ DIK_P, COMMAND_PAUSE },
+		{ DIK_C, COMMAND_CHANGENORMAL },
 #if DEBUGMODE_INPUTCOMMAND
 		// デバッグ用
 		{ DIK_2, COMMAND_METTAL },
@@ -71,6 +72,7 @@ HRESULT CInputCommand::Init(void)
 		{ CInputJoypad::GAMEPAD_1, COMMAND_CONNECT },
 		{ CInputJoypad::GAMEPAD_2, COMMAND_GIMMICKACTION },
 		{ CInputJoypad::GAMEPAD_10, COMMAND_PAUSE },
+		{ CInputJoypad::GAMEPAD_3, COMMAND_CHANGENORMAL },
 	};
 	memcpy(m_joy2com, joyWork, sizeof(m_joy2com));
 

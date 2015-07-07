@@ -94,6 +94,7 @@ void CPlayer::Update(void)
 	m_pInputCommand->Update();
 
 	CheckMove();
+	CheckChangeNormalAnton();
 
 	// アントンの自動移動
 	D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
@@ -101,8 +102,7 @@ void CPlayer::Update(void)
 
 	if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_NORMAL))
 	{
-		m_pAnton->SetState(CAnton::STATE_NORMAL);
-		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_NORMAL);
+		SetAntonState(ANTON_STATE_NORMAL);
 		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_NONE);
 		
 		// testcode
@@ -110,8 +110,7 @@ void CPlayer::Update(void)
 	}
 	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_METTAL))
 	{
-		m_pAnton->SetState(CAnton::STATE_METAL);
-		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_METAL);
+		SetAntonState(ANTON_STATE_METAL);
 		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_METAL);
 
 		// testcode
@@ -119,8 +118,7 @@ void CPlayer::Update(void)
 	}
 	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_MINIMAMU))
 	{
-		m_pAnton->SetState(CAnton::STATE_MINIMUM);
-		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_MINIMUM);
+		SetAntonState(ANTON_STATE_MINIMUM);
 		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_MINIMUM);
 
 		// testcode
@@ -128,8 +126,7 @@ void CPlayer::Update(void)
 	}
 	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_POWERFULL))
 	{
-		m_pAnton->SetState(CAnton::STATE_POWERFUL);
-		m_pAntonIconUI->SetIconType(CAntonIconUI::ICONTYPE_POWERFUL);
+		SetAntonState(ANTON_STATE_POWERFUL);
 		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_POWERFUL);
 
 		if (m_pAnton->GetAction() == CAnton::ACTION_PUSH)
@@ -244,4 +241,38 @@ void CPlayer::CheckFirstPosition(D3DXVECTOR3 *pos_pointer,const D3DXVECTOR2& scl
 	{
 		pos_pointer->x = SCREEN_WIDTH - scl.x / 2;
 	}
+}
+
+/*-----------------------------------------------------------------------------
+	アントン状態セット処理
+-----------------------------------------------------------------------------*/
+void CPlayer::SetAntonState(ANTON_STATE state)
+{
+	m_pAnton->SetState(static_cast<CAnton::STATE>(state));
+	m_pAntonIconUI->SetIconType(static_cast<CAntonIconUI::ICONTYPE>(state));
+}
+
+/*-----------------------------------------------------------------------------
+	ビーコンブロック情報セット処理
+-----------------------------------------------------------------------------*/
+void CPlayer::SetBeeconBlockID(BEECON_BLOCKID block_id)
+{
+	m_pBeecon->SetBlockID(static_cast<CBeecon::BLOCKID>(block_id));
+
+	// TODO::beeconのUI設定も変える
+}
+
+/*-----------------------------------------------------------------------------
+	ノーマルアントンに戻る処理
+-----------------------------------------------------------------------------*/
+void CPlayer::CheckChangeNormalAnton(void)
+{
+	const bool bChangeNormalAnton = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_CHANGENORMAL);
+
+	if (bChangeNormalAnton == false)
+	{
+		return;
+	}
+
+	SetAntonState(ANTON_STATE_NORMAL);
 }

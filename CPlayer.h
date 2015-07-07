@@ -28,6 +28,27 @@ class CBeeconIconUI;
 class CPlayer
 {
 public:
+
+	enum ANTON_STATE
+	{
+		ANTON_STATE_NORMAL = 0,
+		ANTON_STATE_METAL,
+		ANTON_STATE_MINIMUM,
+		ANTON_STATE_POWERFUL,
+		ANTON_STATE_MAX,
+	};
+
+	enum BEECON_BLOCKID
+	{
+		BEECON_BLOCKID_NONE = 0,					// なし
+		BEECON_BLOCKID_LASER_CONTROL_DOWN = 16,		// レーザー進行方向変更ブロック_下
+		BEECON_BLOCKID_LASER_CONTROL_UP,			// レーザー進行方向変更ブロック_上
+		BEECON_BLOCKID_LASER_CONTROL_RIGHT,			// レーザー進行方向変更ブロック_右
+		BEECON_BLOCKID_LASER_CONTROL_LEFT,			// レーザー進行方向変更ブロック_左
+		BEECON_BLOCKID_MAGNET,						// 磁石
+		BEECON_BLOCKID_MAX = 6,
+	};
+
 	CPlayer();
 	virtual ~CPlayer();
 
@@ -46,6 +67,9 @@ public:
 	void Uninit(void);
 	void Update(void);
 
+	void SetAntonState(ANTON_STATE state);
+	void SetBeeconBlockID(BEECON_BLOCKID block_id);
+
 	CAnton* GetAnton(void){ return m_pAnton; }
 	CBeecon* GetBeecon(void){ return m_pBeecon; }
 	
@@ -54,6 +78,7 @@ private:
 	void CreateAnton(D3DXVECTOR3 pos);
 	void CreateBeecon(D3DXVECTOR3 pos);
 	void CheckMove(void);
+	void CheckChangeNormalAnton(void);
 	void CheckFirstPosition(D3DXVECTOR3 *pos, const D3DXVECTOR2& scl);
 
 	CAnton *m_pAnton;
