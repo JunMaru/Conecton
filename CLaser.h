@@ -104,6 +104,7 @@ public:
 	// セッターは用意なし
 	//=============================================================================
 	D3DXVECTOR3 GetWorldEndPosition(void){ return m_worldEndPosition; }
+	void SetWorldEndPosition( D3DXVECTOR3 world_end_position ){ m_worldEndPosition = world_end_position; }
 
 	//=============================================================================
 	// 進行(中断/再開)
