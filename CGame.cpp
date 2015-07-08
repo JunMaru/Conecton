@@ -79,6 +79,7 @@ void CGame::Init(void)
 	m_pLaserManager = CLaserManager::Create();
 
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
+	m_pInputCommand->Init();
 
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
@@ -119,6 +120,8 @@ void CGame::Update(void)
 	// キーボード入力を取得
 	CInputKeyboard *pKeyboard = CManager::GetInputKeyboard();
 	CInputJoypad *pJoyPad = CManager::GetInputJoypad();
+
+	m_pInputCommand->Update();
 
 	// フェードしていなければ更新
 	if (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
