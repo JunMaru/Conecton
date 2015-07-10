@@ -44,10 +44,14 @@ public:
 	void Update();
 	void Draw();
 
+	void SetWarpFlag(bool b_warp_flag){ m_bWarpFlag = b_warp_flag; }
+	bool GetWarpFlag(){ return m_bWarpFlag; }
+
 	CGimmickBlock *GetWarpPoint(){ return m_pWarpPoint; }	// 転移先のアドレスゲッター
 
 private:
 	CGimmickBlock *m_pWarpPoint;	// このワープゾーンの転移先へのアドレス
+	bool m_bWarpFlag;				// ワープフラグ
 
 };
 
