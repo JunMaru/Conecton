@@ -649,6 +649,7 @@ bool CGame::ConnectNormalBlock(void)
 		m_pPlayer->SetBeeconBlockID(CPlayer::BEECON_BLOCKID_NONE);
 		m_pBlockManager->OverwriteGimmickBlock(blockIDFromBeecon, workPos);
 
+		pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 		return true;
 	}
 
