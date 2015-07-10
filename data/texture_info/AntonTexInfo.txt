@@ -1,7 +1,7 @@
 DATASUM
 56
 TEXPATH
-anton.png
+data/texture/anton/anton.png
 
 DATASTART
 FORX 4
