@@ -461,10 +461,11 @@ void CGame::CheckConnectAction(void)
 
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
+	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
 	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
 
 	// ここでブロックマネージャーからブロック情報を取得
-	//blockIDFromBlockManager = GetBlockID(beeconPos)
+	blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
 	// コネクト先が何もなかった場合
 	if (blockIDFromBlockManager == CBlock::BLOCKID_NONE)
@@ -502,10 +503,11 @@ bool CGame::ConnectChangeAntonBlock(void)
 {
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
+	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
 	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
 
 	// ここでブロックマネージャーからブロック情報を取得
-	//blockIDFromBlockManager = GetBlockID(beeconPos)
+	blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
 	// 変身ブロック判定テーブル
 	const CBlock::BLOCKID aChangeAntonBlockTable[] = { CBlock::BLOCKID_METAL, CBlock::BLOCKID_MINIMUM, CBlock::BLOCKID_POWERFUL, };
@@ -525,7 +527,7 @@ bool CGame::ConnectChangeAntonBlock(void)
 		m_pPlayer->SetAntonState(aAntonStateTable[nCnt]);
 
 		// ブロックマネージャーのブロックをノーマルに上書き
-		//SetBlockID(CBlock::BLOCKID_SOIL,beeconPos);
+		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_SOIL, workPos);
 
 		pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 		return true;
@@ -541,10 +543,11 @@ bool CGame::ConnectGimmickBlock(void)
 {
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
+	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
 	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
 
 	// ここでブロックマネージャーからブロック情報を取得
-	//blockIDFromBlockManager = GetBlockID(beeconPos)
+	blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
 	// ギミックブロック判定テーブル
 	const CBlock::BLOCKID aGimmickBlockTable[] = { CBlock::BLOCKID_LASER_CONTROL_DOWN, CBlock::BLOCKID_LASER_CONTROL_LEFT,
@@ -568,8 +571,9 @@ bool CGame::ConnectGimmickBlock(void)
 		{
 			// ビーコンにギミックブロックIDをセットし、ブロックマネージャーのブロックにはノーマルに上書き
 			m_pPlayer->SetBeeconBlockID(static_cast<CPlayer::BEECON_BLOCKID>(blockIDFromBlockManager));
-			//SetBlockID(CBlock::BLOCKID_SOIL,beeconPos);
+			m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_SOIL, workPos);
 
+			pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 			return true;
 		}
 
@@ -578,7 +582,7 @@ bool CGame::ConnectGimmickBlock(void)
 		{
 			// ビーコンにギミックブロックIDをセットし、ブロックマネージャーのブロックにはビーコンが持っていたのを上書き
 			m_pPlayer->SetBeeconBlockID(static_cast<CPlayer::BEECON_BLOCKID>(blockIDFromBlockManager));
-			//SetBlockID(blockIDFromBeecon,beeconPos);
+			m_pBlockManager->OverwriteGimmickBlock(blockIDFromBeecon, workPos);
 
 			pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 			return true;
@@ -595,6 +599,7 @@ bool CGame::ConnectNormalBlock(void)
 {
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
+	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
 	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
 
 	// ギミックブロック判定テーブル
@@ -625,7 +630,7 @@ bool CGame::ConnectNormalBlock(void)
 	}
 
 	// ここでブロックマネージャーからブロック情報を取得
-	//blockIDFromBlockManager = GetBlockID(beeconPos)
+	blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
 	// ギミックブロック判定テーブル
 	const CBlock::BLOCKID aNormalBlockTable[] = { CBlock::BLOCKID_GRASS, CBlock::BLOCKID_SOIL, };
@@ -642,8 +647,8 @@ bool CGame::ConnectNormalBlock(void)
 		// ノーマルだった場合
 		// ビーコンに入っていたギミックを、ブロックマネージャーのブロックに上書き。ビーコンのは空
 		m_pPlayer->SetBeeconBlockID(CPlayer::BEECON_BLOCKID_NONE);
-		//SetBlockID(blockIDFromBeecon,beeconPos);
-		
+		m_pBlockManager->OverwriteGimmickBlock(blockIDFromBeecon, workPos);
+
 		return true;
 	}
 

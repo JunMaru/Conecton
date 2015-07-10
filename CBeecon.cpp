@@ -170,6 +170,7 @@ void CBeecon::TemporaryInit()
 	m_fEightMoveCount = -D3DX_PI;
 	m_bEightMoveUpsideCircle = true;
 	m_bMoveOperated = false;
+	m_blockID = BLOCKID_NONE;
 }
 
 void CBeecon::TemporaryUninit()
