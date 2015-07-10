@@ -12,6 +12,7 @@
 // インクルード
 //=============================================================================
 #include "Main.h"
+#include "CBlock.h"
 #include < stdio.h >
 
 //=============================================================================
@@ -44,10 +45,21 @@ public:
 	bool CreateBlockMap(char *p_stagemap_filename);
 
 	// ブロックへのアドレスゲッター
+	// 全てのオブジェクトが左上基準なので、ゲットする際は一度中心座標にして
+	// ブロックの大きさで割ると正確な配列番号が取れる。
 	static CBlock* GetBlock(int n_block_idx_x, int n_block_idx_y);		// 配列番号指定
 	static void SetBlock(int n_block_idx_x, int n_block_idx_y, CBlock* p_block){ m_pBlockArray[n_block_idx_y * MAX_BLOCK_X + n_block_idx_x] = p_block; }
 	static CBlock* GetLaserStart(){ return m_pLaserStart; }
 	static CBlock* GetLaserGoal(){ return m_pLaserGoal; }
+
+	// ブロック配列番号算出関数
+	static void CalculateBlockArrayNum(D3DXVECTOR3 pos, int *p_array_x, int *p_array_y);
+
+	// ブロックIDゲッター
+	CBlock::BLOCKID GetBlockID( D3DXVECTOR3 pos );
+
+	// ギミックブロックへ上書きする関数
+	void OverwriteGimmickBlock( CBlock::BLOCKID block_type, D3DXVECTOR3 pos );
 
 private:
 	// ステージ上のブロックへのアドレス管理場所

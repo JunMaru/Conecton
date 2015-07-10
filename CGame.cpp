@@ -167,6 +167,13 @@ void CGame::Update(void)
 		HitCheckAnton();
 	}
 
+	if (pKeyboard->GetKeyTrigger(DIK_O))
+	{
+		CBlock *pBlock = CBlockManager::GetBlock(6, 5);
+
+		pBlock->ChangeTexture(CBlock::BLOCKID_NO_METAMOR);
+	}
+
 	// ゲージテスト
 	static float fTestGaugeVal = 50.0f;
 	if (pKeyboard->GetKeyTrigger(DIK_8))
