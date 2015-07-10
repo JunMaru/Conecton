@@ -118,11 +118,13 @@ void CBeecon::CommandLeftMove()
 void CBeecon::CommandUpMove()
 {
 	m_tarPos.y -= m_spd;
+	m_bMoveOperated = true;
 }
 
 void CBeecon::CommandDownMove()
 {
 	m_tarPos.y += m_spd;
+	m_bMoveOperated = true;
 }
 
 void CBeecon::TemporaryInit()

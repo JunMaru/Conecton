@@ -49,6 +49,18 @@ public:
 		BEECON_BLOCKID_MAX = 6,
 	};
 
+	enum BEECON_ICONTYPE
+	{
+		BEECON_ICONTYPE_NONE = 0,
+		BEECON_ICONTYPE_DOWNARROW,
+		BEECON_ICONTYPE_UPEERARROW,
+		BEECON_ICONTYPE_RIGHTARROW,
+		BEECON_ICONTYPE_LEFTARROW,
+		BEECON_ICONTYPE_MAGNET,
+		BEECON_ICONTYPE_MAX,
+	};
+
+
 	CPlayer();
 	virtual ~CPlayer();
 
@@ -69,6 +81,7 @@ public:
 
 	void SetAntonState(ANTON_STATE state);
 	void SetBeeconBlockID(BEECON_BLOCKID block_id);
+	void SetBeeconIconUIType(BEECON_ICONTYPE icon_type);
 
 	CAnton* GetAnton(void){ return m_pAnton; }
 	CBeecon* GetBeecon(void){ return m_pBeecon; }

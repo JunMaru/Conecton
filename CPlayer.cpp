@@ -111,7 +111,6 @@ void CPlayer::Update(void)
 	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_METTAL))
 	{
 		SetAntonState(ANTON_STATE_METAL);
-		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_METAL);
 
 		// testcode
 		m_pBeecon->SetAction(CBeecon::ACTION_CONNECT);
@@ -119,7 +118,6 @@ void CPlayer::Update(void)
 	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_MINIMAMU))
 	{
 		SetAntonState(ANTON_STATE_MINIMUM);
-		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_MINIMUM);
 
 		// testcode
 		m_pBeecon->SetAction(CBeecon::ACTION_WARP);
@@ -127,7 +125,6 @@ void CPlayer::Update(void)
 	else if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_POWERFULL))
 	{
 		SetAntonState(ANTON_STATE_POWERFUL);
-		m_pBeeconIconUI->SetIconType(CBeeconIconUI::ICONTYPE_POWERFUL);
 
 		if (m_pAnton->GetAction() == CAnton::ACTION_PUSH)
 		{
@@ -275,4 +272,9 @@ void CPlayer::CheckChangeNormalAnton(void)
 	}
 
 	SetAntonState(ANTON_STATE_NORMAL);
+}
+
+void CPlayer::SetBeeconIconUIType(BEECON_ICONTYPE icon_type)
+{
+	m_pBeeconIconUI->SetIconType(static_cast<CBeeconIconUI::ICONTYPE>(icon_type));
 }

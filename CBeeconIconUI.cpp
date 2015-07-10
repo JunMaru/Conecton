@@ -72,10 +72,10 @@ CBeeconIconUI* CBeeconIconUI::Create(D3DXVECTOR3 pos)
 //=============================================================================
 void CBeeconIconUI::ChangeTexture(void)
 {
-	D3DXVECTOR2 workUV[] = { D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.25f, 0.0f), D3DXVECTOR2(0.0f, 1.0f), D3DXVECTOR2(0.25f, 1.0f), };
+	D3DXVECTOR2 workUV[] = { D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.166f, 0.0f), D3DXVECTOR2(0.0f, 1.0f), D3DXVECTOR2(0.166f, 1.0f), };
 	for (int nCnt = 0; nCnt < 4; ++nCnt)
 	{
-		workUV[nCnt].x += (m_iconType) * 0.25f;
+		workUV[nCnt].x += (m_iconType)* 0.166f;
 	}
 
 	m_pBeeconIcon->SetTexcoord(workUV[0], workUV[1], workUV[2], workUV[3]);

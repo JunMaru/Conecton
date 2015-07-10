@@ -474,21 +474,31 @@ void CGame::CheckConnectAction(void)
 		return;
 	}
 
+	// ビーコンは今コネクトモーション中？
+	if (pBeecon->GetAction() == CBeecon::ACTION_CONNECT)
+	{
+		// コネクト中のコネクト。ダメゼッタイ
+		return;
+	}
+
 	// 取ってきたのは変身ブロックか？
 	if (ConnectChangeAntonBlock())
 	{
+		// 選ばれたのは変身ブロックでした
 		return;
 	}
 
 	// 取ってきたのはギミックブロックか？
 	if (ConnectGimmickBlock())
 	{
+		// 選ばれたのはギミックブロックでした
 		return;
 	}
 
 	// 取ってきたのはノーマルブロックか？
 	if (ConnectNormalBlock())
 	{
+		// 選ばれたのはノーマルブロックでした
 		return;
 	}
 
@@ -504,12 +514,8 @@ bool CGame::ConnectChangeAntonBlock(void)
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
 	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
-	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
+	CBlock::BLOCKID blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
-	// ここでブロックマネージャーからブロック情報を取得
-	blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
-
-	// 変身ブロック判定テーブル
 	const CBlock::BLOCKID aChangeAntonBlockTable[] = { CBlock::BLOCKID_METAL, CBlock::BLOCKID_MINIMUM, CBlock::BLOCKID_POWERFUL, };
 	const CPlayer::ANTON_STATE aAntonStateTable[] = { CPlayer::ANTON_STATE_METAL, CPlayer::ANTON_STATE_MINIMUM, CPlayer::ANTON_STATE_POWERFUL, };
 
@@ -544,15 +550,12 @@ bool CGame::ConnectGimmickBlock(void)
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
 	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
-	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
+	CBlock::BLOCKID blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
-	// ここでブロックマネージャーからブロック情報を取得
-	blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
-
-	// ギミックブロック判定テーブル
 	const CBlock::BLOCKID aGimmickBlockTable[] = { CBlock::BLOCKID_LASER_CONTROL_DOWN, CBlock::BLOCKID_LASER_CONTROL_LEFT,
 													CBlock::BLOCKID_LASER_CONTROL_RIGHT, CBlock::BLOCKID_LASER_CONTROL_UP,
 													CBlock::BLOCKID_MAGNET, };
+	const int nGimmickBlock2BeeconIconUIOffset = CBlock::BLOCKID_LASER_CONTROL_DOWN - 1;
 
 	CBlock::BLOCKID blockIDFromBeecon = static_cast<CBlock::BLOCKID>(pBeecon->GetBlockID());
 
@@ -565,6 +568,10 @@ bool CGame::ConnectGimmickBlock(void)
 			continue;
 		}
 
+		// ビーコンに対するアクション設定
+		pBeecon->SetAction(CBeecon::ACTION_CONNECT);
+		m_pPlayer->SetBeeconIconUIType(static_cast<CPlayer::BEECON_ICONTYPE>(aGimmickBlockTable[nCnt] - nGimmickBlock2BeeconIconUIOffset));
+
 		// ギミックブロックだった場合
 		// ビーコンがギミックブロックのストックを持っていない場合
 		if (blockIDFromBeecon == CBlock::BLOCKID_NONE)
@@ -573,7 +580,6 @@ bool CGame::ConnectGimmickBlock(void)
 			m_pPlayer->SetBeeconBlockID(static_cast<CPlayer::BEECON_BLOCKID>(blockIDFromBlockManager));
 			m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_SOIL, workPos);
 
-			pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 			return true;
 		}
 
@@ -584,7 +590,6 @@ bool CGame::ConnectGimmickBlock(void)
 			m_pPlayer->SetBeeconBlockID(static_cast<CPlayer::BEECON_BLOCKID>(blockIDFromBlockManager));
 			m_pBlockManager->OverwriteGimmickBlock(blockIDFromBeecon, workPos);
 
-			pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 			return true;
 		}
 	}
@@ -600,9 +605,8 @@ bool CGame::ConnectNormalBlock(void)
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
 	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
-	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
+	CBlock::BLOCKID blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
-	// ギミックブロック判定テーブル
 	const CBlock::BLOCKID aGimmickBlockTable[] = { CBlock::BLOCKID_LASER_CONTROL_DOWN, CBlock::BLOCKID_LASER_CONTROL_LEFT,
 													CBlock::BLOCKID_LASER_CONTROL_RIGHT, CBlock::BLOCKID_LASER_CONTROL_UP,
 													CBlock::BLOCKID_MAGNET, };
@@ -629,9 +633,6 @@ bool CGame::ConnectNormalBlock(void)
 		return false;
 	}
 
-	// ここでブロックマネージャーからブロック情報を取得
-	blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
-
 	// ギミックブロック判定テーブル
 	const CBlock::BLOCKID aNormalBlockTable[] = { CBlock::BLOCKID_GRASS, CBlock::BLOCKID_SOIL, };
 
@@ -650,6 +651,7 @@ bool CGame::ConnectNormalBlock(void)
 		m_pBlockManager->OverwriteGimmickBlock(blockIDFromBeecon, workPos);
 
 		pBeecon->SetAction(CBeecon::ACTION_CONNECT);
+		m_pPlayer->SetBeeconIconUIType(CPlayer::BEECON_ICONTYPE_NONE);
 		return true;
 	}
 
