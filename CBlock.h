@@ -59,6 +59,7 @@ class CBlock : public CScene
 			BLOCKID_WOODBOX,				// 木箱
 			BLOCKID_SWITCH,				// スイッチ
 			BLOCKID_WARP,					// ワープゾーン
+			BLOCKID_NO_METAMOR,				// 何もない変身ブロック
 			BLOCKID_ALL,
 		}BLOCKID;
 
@@ -102,7 +103,13 @@ class CBlock : public CScene
 		------------------------------------------------------------------------------*/
 		void SetSecondTexID( const int id_x, const int id_y ){ m_secondTexIdX = id_x; m_secondTexIdY = id_y; }
 
-	private:
+		//=============================================================================
+		// ブロックのテクスチャ入れ替え処理
+		// param 設定したいテクスチャのブロックID
+		//=============================================================================
+		void ChangeTexture(BLOCKID block_type);
+
+	protected:
 
 
 

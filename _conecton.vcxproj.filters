@@ -206,6 +206,9 @@
     <ClCompile Include="CBeeconIconUI.cpp">
       <Filter>ソース ファイル\application\CBeeconIconUI</Filter>
     </ClCompile>
+    <ClCompile Include="CGimickBlock.cpp">
+      <Filter>ソース ファイル\application\CBlock</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGame.h">
@@ -336,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="C2DLogo.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CGimickBlock.h">
+      <Filter>ソース ファイル\application\CBlock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
