@@ -407,111 +407,124 @@ void CBlockManager::OverwriteGimmickBlock(CBlock::BLOCKID block_type, D3DXVECTOR
 
 	switch (block_type)
 	{
-	case CBlock::BLOCKID_SOIL:
-		pBlock->SetBlockTexID(0, 0);
-		break;
+		case CBlock::BLOCKID_SOIL:
+			pBlock->SetBlockTexID(0, 0);
+			break;
 
-	case CBlock::BLOCKID_GRASS:
-		pBlock->SetBlockTexID(1, 0);
-		break;
+		case CBlock::BLOCKID_GRASS:
+			pBlock->SetBlockTexID(1, 0);
+			break;
 
-	case CBlock::BLOCKID_SOIL_CRACK:
-		pBlock->SetBlockTexID(2, 0);
-		break;
+		case CBlock::BLOCKID_SOIL_CRACK:
+			pBlock->SetBlockTexID(2, 0);
+			break;
 
-	case CBlock::BLOCKID_GRASS_CRACK:
-		pBlock->SetBlockTexID(3, 0);
-		break;
+		case CBlock::BLOCKID_GRASS_CRACK:
+			pBlock->SetBlockTexID(3, 0);
+			break;
 
-	case CBlock::BLOCKID_METAL:
-		pBlock->SetBlockTexID(0, 1);
-		break;
+		case CBlock::BLOCKID_METAL:
+			pBlock->SetBlockTexID(0, 1);
+			break;
 
-	case CBlock::BLOCKID_MINIMUM:
-		pBlock->SetBlockTexID(0, 2);
-		break;
+		case CBlock::BLOCKID_MINIMUM:
+			pBlock->SetBlockTexID(0, 2);
+			break;
 
-	case CBlock::BLOCKID_POWERFUL:
-		pBlock->SetBlockTexID(0, 3);
-		break;
+		case CBlock::BLOCKID_POWERFUL:
+			pBlock->SetBlockTexID(0, 3);
+			break;
 
-	case CBlock::BLOCKID_LASER_GOAL_TOP:
-		pBlock->SetBlockTexID(0, 8);
-		break;
+		case CBlock::BLOCKID_LASER_GOAL_TOP:
+			pBlock->SetBlockTexID(0, 8);
+			break;
 
-	case CBlock::BLOCKID_LASER_GOAL_BOTTOM:
-		pBlock->SetBlockTexID(1, 8);
-		break;
+		case CBlock::BLOCKID_LASER_GOAL_BOTTOM:
+			pBlock->SetBlockTexID(1, 8);
+			break;
 
-	case CBlock::BLOCKID_LASER_GOAL_LEFT:
-		pBlock->SetBlockTexID(2, 8);
-		break;
+		case CBlock::BLOCKID_LASER_GOAL_LEFT:
+			pBlock->SetBlockTexID(2, 8);
+			break;
 
-	case CBlock::BLOCKID_LASER_GOAL_RIGHT:
-		pBlock->SetBlockTexID(3, 8);
-		break;
+		case CBlock::BLOCKID_LASER_GOAL_RIGHT:
+			pBlock->SetBlockTexID(3, 8);
+			break;
 
-	case CBlock::BLOCKID_LASER_START_TOP:
-		pBlock->SetBlockTexID(4, 8);
-		break;
+		case CBlock::BLOCKID_LASER_START_TOP:
+			pBlock->SetBlockTexID(0, 9);
+			break;
 
-	case CBlock::BLOCKID_LASER_START_BOTTOM:
-		pBlock->SetBlockTexID(5, 8);
-		break;
+		case CBlock::BLOCKID_LASER_START_BOTTOM:
+			pBlock->SetBlockTexID(1, 9);
+			break;
 
-	case CBlock::BLOCKID_LASER_START_LEFT:
-		pBlock->SetBlockTexID(6, 8);
-		break;
+		case CBlock::BLOCKID_LASER_START_LEFT:
+			pBlock->SetBlockTexID(2, 9);
+			break;
 
-	case CBlock::BLOCKID_LASER_START_RIGHT:
-		pBlock->SetBlockTexID(7, 8);
-		break;
+		case CBlock::BLOCKID_LASER_START_RIGHT:
+			pBlock->SetBlockTexID(3, 9);
+			break;
 
-	case CBlock::BLOCKID_LASER_CONTROL_DOWN:
-		pBlock->SetBlockTexID(0, 10);
-		break;
+		case CBlock::BLOCKID_LASER_CONTROL_DOWN:
+			pBlock->SetBlockTexID(0, 11);
+			break;
 
-	case CBlock::BLOCKID_LASER_CONTROL_UP:
-		pBlock->SetBlockTexID(1, 10);
-		break;
+		case CBlock::BLOCKID_LASER_CONTROL_UP:
+			pBlock->SetBlockTexID(1, 11);
+			break;
 
-	case CBlock::BLOCKID_LASER_CONTROL_RIGHT:
-		pBlock->SetBlockTexID(2, 10);
-		break;
+		case CBlock::BLOCKID_LASER_CONTROL_RIGHT:
+			pBlock->SetBlockTexID(2, 11);
+			break;
 
-	case CBlock::BLOCKID_LASER_CONTROL_LEFT:
-		pBlock->SetBlockTexID(3, 10);
-		break;
+		case CBlock::BLOCKID_LASER_CONTROL_LEFT:
+			pBlock->SetBlockTexID(3, 11);
+			break;
 
-	case CBlock::BLOCKID_MAGNET:
-		pBlock->SetBlockTexID(0, 11);
-		break;
+		case CBlock::BLOCKID_MAGNET:
+			pBlock->SetBlockTexID(0, 12);
+			break;
 
-	case CBlock::BLOCKID_WOODBOX:
-		pBlock->SetBlockTexID(0, 12);
-		break;
+		case CBlock::BLOCKID_WOODBOX:
+			pBlock->SetBlockTexID(0, 13);
+			break;
 
-	case CBlock::BLOCKID_SWITCH:
-		pBlock->SetBlockTexID(0, 13);
-		break;
+		case CBlock::BLOCKID_SWITCH:
+			pBlock->SetBlockTexID(0, 14);
+			break;
 
-	case CBlock::BLOCKID_WARP_BLUE:
-		pBlock->SetBlockTexID(0, 14);
-		break;
+		case CBlock::BLOCKID_WARP_BLUE:
+			pBlock->SetBlockTexID(0, 15);
+			break;
 
-	case CBlock::BLOCKID_WARP_GREEN:
-		pBlock->SetBlockTexID(0, 15);
-		break;
+		case CBlock::BLOCKID_WARP_GREEN:
+			pBlock->SetBlockTexID(0, 16);
+			break;
 
-	case CBlock::BLOCKID_WARP_PINK:
-		pBlock->SetBlockTexID(0, 16);
-		break;
+		case CBlock::BLOCKID_WARP_PINK:
+			pBlock->SetBlockTexID(0, 17);
+			break;
 
-	case CBlock::BLOCKID_NO_METAMOR:
-		pBlock->SetBlockTexID(0, 5);
+		case CBlock::BLOCKID_NO_METAMOR:
+			pBlock->SetBlockTexID(0, 5);
+			break;
 
-	default:
-		break;
+		case CBlock::BLOCKID_FOOD_ACORN:
+			pBlock->SetBlockTexID(0, 18);
+			break;
+
+		case CBlock::BLOCKID_FOOD_APPLE:
+			pBlock->SetBlockTexID(1, 18);
+			break;
+
+		case CBlock::BLOCKID_FOOD_MUSHROOM:
+			pBlock->SetBlockTexID(2, 18);
+			break;
+
+		default:
+			break;
 	}
 
 	m_pBlockArray[nArrayY * MAX_BLOCK_X + nArrayX] = pBlock;
