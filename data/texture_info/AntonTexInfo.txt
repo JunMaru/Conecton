@@ -1,5 +1,5 @@
 DATASUM
-56
+60
 TEXPATH
 data/texture/anton/anton.png
 
@@ -8,7 +8,7 @@ FORX 4
 0.0,0.0,0.125,0.0833
 FORX 8
 0.0,0.08125,0.125,0.0833
-DATA
+FORX 5
 0.0,0.166,0.1625,0.086
 FORX 4
 0.0,0.25,0.125,0.0833

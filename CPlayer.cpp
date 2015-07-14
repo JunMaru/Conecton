@@ -98,8 +98,10 @@ void CPlayer::Update(void)
 
 	// アントンの自動移動
 	D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
-	//m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
+	m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
 
+#if 1
+	// test
 	if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_NORMAL))
 	{
 		SetAntonState(ANTON_STATE_NORMAL);
@@ -139,6 +141,11 @@ void CPlayer::Update(void)
 		m_pBeecon->SetAction(CBeecon::ACTION_WARP);
 	}
 
+	if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_NORMAL))
+	{
+		m_pAnton->SetAction(CAnton::ACTION_FRONT);
+	}
+#endif
 
 	// アントンが重力落下時
 	float fAntonDownSpeed = m_pAnton->GetSpd();

@@ -62,10 +62,13 @@ void CAnton::Update()
 	m_prevPos = m_pos;
 
 	D3DXVECTOR2 diff;
-
 	diff = m_tarPos - m_pos;
-	//Hack とりあえず重力
-	m_pos.x += diff.x * ANTON_SPEED_X;
+
+	// 手を振っているとき以外は動く
+	if (m_action != ACTION_FRONT)
+	{
+		m_pos.x += diff.x * ANTON_SPEED_X;
+	}
 
 	m_pos.y += m_parameter.nMass * 0.5f;
 
@@ -116,6 +119,7 @@ void CAnton::CommandRightMove()
 
 	const bool bWalk = (m_action == ACTION_WALK);
 	const bool bPowerfulPush = ((m_state == STATE_POWERFUL) && (m_action == ACTION_PUSH));
+	const bool bHandMove = ((m_state == STATE_NORMAL) && (m_action == ACTION_FRONT));
 
 	// 既に歩いていたら
 	if (bWalk)
@@ -125,6 +129,12 @@ void CAnton::CommandRightMove()
 
 	// パワフルで押している場合
 	if (bPowerfulPush)
+	{
+		return;
+	}
+
+	// 手を振っている場合場合
+	if (bHandMove)
 	{
 		return;
 	}
@@ -139,6 +149,7 @@ void CAnton::CommandLeftMove()
 
 	const bool bWalk = (m_action == ACTION_WALK);
 	const bool bPowerfulPush = ((m_state == STATE_POWERFUL) && (m_action == ACTION_PUSH));
+	const bool bHandMove = ((m_state == STATE_NORMAL) && (m_action == ACTION_FRONT));
 
 	// 既に歩いていたら
 	if (bWalk)
@@ -148,6 +159,12 @@ void CAnton::CommandLeftMove()
 
 	// パワフルで押している場合
 	if (bPowerfulPush)
+	{
+		return;
+	}
+
+	// 手を振っている場合場合
+	if (bHandMove)
 	{
 		return;
 	}
@@ -259,10 +276,12 @@ void CAnton::TemporaryUpdate()
 	m_animCnt++;
 
 	const bool bPowerfulPush = ((m_state == STATE_POWERFUL) && (m_action == ACTION_PUSH));
+	const bool bHandMove = ((m_state == STATE_NORMAL) && (m_action == ACTION_FRONT));
 	const bool bWaitRangeSpeed = fabs(m_prevPos.x - m_pos.x) < ANTON_MOVE_THRESHOLD;
+	const bool bRewriteMotion = ((!bPowerfulPush) && (!bHandMove));
 
-	// 待機になる速度かつ、パワフルで押すモーションに入っていない
-	if (bWaitRangeSpeed && !bPowerfulPush)
+	// 待機になる速度かつ、上書きしてほしくないモーションではない
+	if (bWaitRangeSpeed && bRewriteMotion)
 	{
 		// 待機モーション
 		m_action = ACTION_WAIT;
@@ -358,10 +377,10 @@ void CAnton::SetState(const CAnton::STATE state)
 void CAnton::InitAnimation(void)
 {
 	// アニメーション設定テーブル
-	const int anTexIdArrayNumTable[] = { 4, 8, 1, 4, 8, 1, 1, 4, 6, 1, 4, 8, 6, };
-	const bool abLoopTable[] = { true, true, false, false, true, false,
+	const int anTexIdArrayNumTable[] = { 4, 8, 5, 4, 8, 1, 1, 4, 6, 1, 4, 8, 6, };
+	const bool abLoopTable[] = { true, true, true, false, true, false,
 		false, false, true, false, false, true, true, };
-	const int anWaitTimeTable[] = { 3, 3, 1, 3, 3, 1, 1, 3, 3, 1, 3, 3, 3, };
+	const int anWaitTimeTable[] = { 3, 3, 3, 3, 3, 1, 1, 3, 3, 1, 3, 3, 3, };
 	int nTexIdCount = 0;
 
 	//アニメーション管理テスト！！！
