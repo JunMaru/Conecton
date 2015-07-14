@@ -25,6 +25,7 @@ class CBackGround;
 class CScrollManager;
 class CLaserManager;
 class CInputCommand;
+class CPseudoLight;
 
 class CGame : public CPhase
 {
@@ -55,6 +56,7 @@ public:
 		CAntonLifeUI *m_pLifeUI;
 		CGauge *m_pGauge;
 		CInputCommand *m_pInputCommand;
+		CPseudoLight *m_pPseudoLight;
 
 		void InitGauge(void);
 		void HitCheckMinimumAnton(void);

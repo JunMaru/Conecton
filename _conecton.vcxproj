@@ -118,6 +118,7 @@
     <ClCompile Include="collisionDetection.cpp" />
     <ClCompile Include="CPhase.cpp" />
     <ClCompile Include="CPlayer.cpp" />
+    <ClCompile Include="CPseudoLight.cpp" />
     <ClCompile Include="CRenderer.cpp" />
     <ClCompile Include="CResult.cpp" />
     <ClCompile Include="CScene.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="collisionDetection.h" />
     <ClInclude Include="CPhase.h" />
     <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="CPseudoLight.h" />
     <ClInclude Include="CRenderer.h" />
     <ClInclude Include="CResult.h" />
     <ClInclude Include="CScene.h" />

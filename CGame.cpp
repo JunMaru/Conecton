@@ -28,6 +28,7 @@ since	20140713
 #include "CScrollManager.h"
 #include "CLaserManager.h"
 #include "CInputCommand.h"
+#include "CPseudoLight.h"
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
@@ -51,6 +52,7 @@ CGame::CGame()
 	m_pScrollManager = nullptr;
 	m_pBackGround = nullptr;
 	m_pInputCommand = nullptr;
+	m_pPseudoLight = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -77,6 +79,8 @@ void CGame::Init(void)
 	// レーザー動作テスト
 	//CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), CLaser::DIRECTION_RIGHT);
 	m_pLaserManager = CLaserManager::Create();
+
+	m_pPseudoLight = CPseudoLight::Create("data/texture/pseudo_light/pseudo_light.png");
 
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
 	m_pInputCommand->Init();
