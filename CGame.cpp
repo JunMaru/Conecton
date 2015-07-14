@@ -74,7 +74,7 @@ void CGame::Init(void)
 	InitGauge();
 	m_pBackGround = CBackGround::Create("data/texture/game_bg/game_bg.jpg");
 	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
-
+	
 	m_pScrollManager = new CScrollManager();
 	m_pScrollManager->Init();
 
