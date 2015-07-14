@@ -31,7 +31,20 @@ CPseudoLight::~CPseudoLight(void)
 -----------------------------------------------------------------------------*/
 void CPseudoLight::Draw(void)
 {
-	CScene2D::Draw();
+	// デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+
+	// 頂点バッファのデータストリームにバインド
+	pDevice->SetStreamSource(0, m_pD3DVtxBuff, 0, sizeof(VERTEX_2D));
+
+	// 頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_2D);
+
+	// テクスチャの設定
+	pDevice->SetTexture(0, m_pD3DTexture);
+
+	// ポリゴンの描画
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 }
 
 /*-----------------------------------------------------------------------------

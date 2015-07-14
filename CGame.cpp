@@ -67,6 +67,8 @@ CGame::~CGame()
 -----------------------------------------------------------------------------*/
 void CGame::Init(void)
 {
+	m_pPseudoLight = CPseudoLight::Create("data/texture/pseudo_light/pseudo_light.png");
+
 	m_pBlockManager = CBlockManager::Create( "data/stage_info/stage1.csv" );
 	m_pPlayer = CPlayer::Create(VEC3_ZERO, VEC3_ZERO);
 	InitGauge();
@@ -79,8 +81,6 @@ void CGame::Init(void)
 	// レーザー動作テスト
 	//CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), CLaser::DIRECTION_RIGHT);
 	m_pLaserManager = CLaserManager::Create();
-
-	m_pPseudoLight = CPseudoLight::Create("data/texture/pseudo_light/pseudo_light.png");
 
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
 	m_pInputCommand->Init();

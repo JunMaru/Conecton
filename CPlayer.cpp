@@ -202,7 +202,7 @@ void CPlayer::CreateAnton(D3DXVECTOR3 pos)
 {
 	CheckFirstPosition(&pos, D3DXVECTOR2(100.0f, 130.0f));
 
-	m_pAnton = new CAnton(6);
+	m_pAnton = new CAnton(4);
 	m_pAnton->Init();
 	m_pAnton->SetPosition(pos);
 	m_pAnton->SetRotation(0, 0, 0);
@@ -219,7 +219,7 @@ void CPlayer::CreateBeecon(D3DXVECTOR3 pos)
 {
 	CheckFirstPosition(&pos, D3DXVECTOR2(100.0f, 130.0f));
 
-	m_pBeecon = new CBeecon(6);
+	m_pBeecon = new CBeecon(4);
 	m_pBeecon->Init();
 	m_pBeecon->SetPosition(pos);
 	m_pBeecon->SetRotation(0, 0, 0);
