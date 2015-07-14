@@ -61,6 +61,7 @@ class CBlock : public CScene
 			BLOCKID_WARP_BLUE,				// ワープゾーン青
 			BLOCKID_WARP_GREEN,				// ワープゾーン緑
 			BLOCKID_WARP_PINK,				// ワープゾーン桃
+			BLOCKID_FOOD_ACORN,				// どんぐり
 			BLOCKID_NO_METAMOR,				// 何もない変身ブロック
 			BLOCKID_ALL,
 		}BLOCKID;
