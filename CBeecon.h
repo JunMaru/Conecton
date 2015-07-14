@@ -110,6 +110,10 @@ class CBeecon : public CScene
 		void SetRotation(D3DXVECTOR3 rot){ m_rot = rot; }
 		void SetRotation(float x, float y, float z){ m_rot = D3DXVECTOR3(x, y, z); }
 
+		D3DXVECTOR3 GetPositionOld(){ return D3DXVECTOR3(m_prevPos.x, m_prevPos.y, 0); }
+		void SetPositionOld(D3DXVECTOR3 pos){ m_prevPos.x = pos.x; m_prevPos.y = pos.y; }
+		void SetPositionOld(float x, float y, float z){ m_prevPos.x = x; m_prevPos.y = y; }
+
 		void SetScaling(const float x, const float y){ m_scl.x = x; m_scl.y = y; }
 		D3DXVECTOR3 GetTargetPosition(){ return D3DXVECTOR3(m_tarPos.x, m_tarPos.y, 0); }
 		void SetTargetPosition(const float x, const float y){ m_tarPos.x = x; m_tarPos.y = y; }

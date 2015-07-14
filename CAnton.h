@@ -86,6 +86,8 @@ class CAnton : public CScene
 		void SetPosition( float x,float y,float z ){ m_pos.x = x; m_pos.y = y; }
 
 		D3DXVECTOR3 GetPositionOld(){ return D3DXVECTOR3( m_prevPos.x, m_prevPos.y, 0.0f ); }
+		void SetPositionOld(D3DXVECTOR3 pos){ m_prevPos.x = pos.x; m_prevPos.y = pos.y; }
+		void SetPositionOld(float x, float y, float z){ m_prevPos.x = x; m_prevPos.y = y; }
 
 		D3DXVECTOR3 GetRotation(){return m_rot;}
 		void SetRotation( D3DXVECTOR3 rot ){ m_rot = rot; }
