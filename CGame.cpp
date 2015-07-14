@@ -51,6 +51,7 @@ CGame::CGame()
 	m_pScrollManager = nullptr;
 	m_pBackGround = nullptr;
 	m_pInputCommand = nullptr;
+	m_fScore = 0.0f;
 }
 
 /*-----------------------------------------------------------------------------
@@ -167,22 +168,9 @@ void CGame::Update(void)
 		HitCheckAnton();
 	}
 
-	// ゲージテスト
-	static float fTestGaugeVal = 50.0f;
-	if (pKeyboard->GetKeyTrigger(DIK_8))
-	{
-		fTestGaugeVal -= 1.0f;
-		m_pGauge->SetGaugeVal(fTestGaugeVal);
-	}
-	if (pKeyboard->GetKeyTrigger(DIK_9))
-	{
-		fTestGaugeVal += 1.0f;
-		m_pGauge->SetGaugeVal(fTestGaugeVal);
-	}
-
 	// ブロックとビーコンとのコネクトチェック
 	CheckConnectAction();
-	CheckGimmickAction();
+	HitCheckItem();
 }
 
 // ミニマム用のあたり判定。多分普通のと同じソースで実装できる
@@ -436,7 +424,7 @@ void CGame::InitGauge(void)
 	m_pGauge->SetPosition(D3DXVECTOR3(1200.0f, 100.0f, 0.0f));
 	m_pGauge->SetScling(D3DXVECTOR2(116.0f, 116.0f));
 	m_pGauge->SetGaugeBaseVal(100.0f);
-	m_pGauge->SetGaugeVal(50.0f);
+	m_pGauge->SetGaugeVal(0.0f);
 
 	const char *pFilePathTable[] = { "data/texture/ui/gauge_base.png", "data/texture/ui/gauge.png", "data/texture/ui/gauge_frame.png", };
 	const int nLoadFileNum = 3;
@@ -658,14 +646,39 @@ bool CGame::ConnectNormalBlock(void)
 }
 
 /*-----------------------------------------------------------------------------
- ギミックアクション
+ アイテムとのあたり判定
 -----------------------------------------------------------------------------*/
-void CGame::CheckGimmickAction(void)
+void CGame::HitCheckItem(void)
 {
-	const bool bGimmickAction = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_GIMMICKACTION);
+	const float fAntonOffsetX = 50.0f;
+	const float fAntonOffsetY = 50.0f;
 
-	if (bGimmickAction == false)
+	D3DXVECTOR3 antonPos = m_pPlayer->GetAnton()->GetPosition();
+	antonPos.x += fAntonOffsetX;
+	antonPos.y += fAntonOffsetY;
+
+	CBlock::BLOCKID blockIDFromBlockManager = m_pBlockManager->GetBlockID(antonPos);
+
+	// 何かしらのブロックか？
+	if (blockIDFromBlockManager == CBlock::BLOCKID_NONE)
 	{
 		return;
+	}
+
+	const CBlock::BLOCKID aItemBlockTable[] = { CBlock::BLOCKID_FOOD_ACORN, CBlock::BLOCKID_FOOD_APPLE, CBlock::BLOCKID_FOOD_MUSHROOM, };
+	const float aItemScoreTable[] = { 10.0f, 20.0f, 30.0f, };
+
+	// アイテムチェック
+	for (int nCnt = 0; nCnt < sizeof(aItemBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
+	{
+		if (blockIDFromBlockManager != aItemBlockTable[nCnt])
+		{
+			continue;
+		}
+
+		m_fScore += aItemScoreTable[nCnt];
+		m_pGauge->SetGaugeVal(m_fScore);
+
+		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_NONE, antonPos);
 	}
 }

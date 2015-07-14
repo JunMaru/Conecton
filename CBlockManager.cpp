@@ -93,7 +93,7 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 	Utility::LoadCsv(p_stagemap_filename, ppCreateBlockMapArray, &m_nMaxArrayNumX, &m_nMaxArrayNumY);
 
 	ins = new CInstancingObject(6);
-	ins->LoadTexture("data/texture/block/block.jpg", D3DXVECTOR2(1000.0f, 1700.0f), D3DXVECTOR2(100.0f, 100.0f));
+	ins->LoadTexture("data/texture/block/block.png", D3DXVECTOR2(1000.0f, 1900.0f), D3DXVECTOR2(100.0f, 100.0f));
 	ins->Init();
 
 	D3DXVECTOR3 laserStartPos = D3DXVECTOR3(0.0f,0.0f,0.0f);
@@ -171,82 +171,97 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 
 				case CBlock::BLOCKID_LASER_START_TOP:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(4, 8);
+					pBlock->SetBlockTexID(0, 9);
 					m_pLaserStart = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_START_BOTTOM:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(5, 8);
+					pBlock->SetBlockTexID(1, 9);
 					m_pLaserStart = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_START_LEFT:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(6, 8);
+					pBlock->SetBlockTexID(2, 9);
 					m_pLaserStart = pBlock;
 					laserStartPos = D3DXVECTOR3(nCntX * BLOCK_WIDTH + 25.0f, nCntY * BLOCK_HEIGHT, 0.0f);
 					break;
 
 				case CBlock::BLOCKID_LASER_START_RIGHT:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(7, 8);
+					pBlock->SetBlockTexID(3, 9);
 					m_pLaserStart = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_CONTROL_DOWN:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(0, 10);
+					pBlock->SetBlockTexID(0, 11);
 					break;
 
 				case CBlock::BLOCKID_LASER_CONTROL_UP:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(1, 10);
+					pBlock->SetBlockTexID(1, 11);
 					break;
 
 				case CBlock::BLOCKID_LASER_CONTROL_RIGHT:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(2, 10);
+					pBlock->SetBlockTexID(2, 11);
 					break;
 
 				case CBlock::BLOCKID_LASER_CONTROL_LEFT:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(3, 10);
+					pBlock->SetBlockTexID(3, 11);
 					break;
 
 				case CBlock::BLOCKID_MAGNET:
 					pBlock = (CBlock*)new CGimmickBlock;
-					pBlock->SetBlockTexID(0, 11);
+					pBlock->SetBlockTexID(0, 12);
 					break;
 
 				case CBlock::BLOCKID_WOODBOX:
 					pBlock = (CBlock*)new CGimmickBlock;
-					pBlock->SetBlockTexID(0, 12);
+					pBlock->SetBlockTexID(0, 13);
 					break;
 
 				case CBlock::BLOCKID_SWITCH:
 					pBlock = (CBlock*)new CGimmickBlock;
-					pBlock->SetBlockTexID(0, 13);
+					pBlock->SetBlockTexID(0, 14);
 					break;
 
 				case CBlock::BLOCKID_WARP_BLUE:
 					pBlock = (CBlock*)new CGimmickBlock;
-					pBlock->SetBlockTexID(0, 14);
+					pBlock->SetBlockTexID(0, 15);
 					break;
 
 				case CBlock::BLOCKID_WARP_GREEN:
 					pBlock = (CBlock*)new CGimmickBlock;
-					pBlock->SetBlockTexID(0, 15);
+					pBlock->SetBlockTexID(0, 16);
 					break;
 
 				case CBlock::BLOCKID_WARP_PINK:
 					pBlock = (CBlock*)new CGimmickBlock;
-					pBlock->SetBlockTexID(0, 16);
+					pBlock->SetBlockTexID(0, 17);
 					break;
 
 				case CBlock::BLOCKID_NO_METAMOR:
 					pBlock = (CBlock*)new CGimmickBlock;
 					pBlock->SetBlockTexID(0, 5);
+					break;
+
+				case CBlock::BLOCKID_FOOD_ACORN:
+					pBlock = new CGimmickBlock;
+					pBlock->SetBlockTexID(0, 18);
+					break;
+
+				case CBlock::BLOCKID_FOOD_APPLE:
+					pBlock = new CGimmickBlock;
+					pBlock->SetBlockTexID(1, 18);
+					break;
+
+				case CBlock::BLOCKID_FOOD_MUSHROOM:
+					pBlock = new CGimmickBlock;
+					pBlock->SetBlockTexID(2, 18);
 					break;
 
 				default:
@@ -372,6 +387,13 @@ void CBlockManager::OverwriteGimmickBlock(CBlock::BLOCKID block_type, D3DXVECTOR
 		// 前のアドレスのところを破棄
 		pBlock->Uninit();
 		pBlock = nullptr;
+	}
+
+	// 上書きタイプがBLOCK_NONEだった場合
+	if (block_type == CBlock::BLOCKID_NONE)
+	{
+		m_pBlockArray[nArrayY * MAX_BLOCK_X + nArrayX] = nullptr;
+		return;
 	}
 
 	// ギミックブロックを生成し、配列に登録する

@@ -55,6 +55,7 @@ public:
 		CAntonLifeUI *m_pLifeUI;
 		CGauge *m_pGauge;
 		CInputCommand *m_pInputCommand;
+		float m_fScore;
 
 		void InitGauge(void);
 		void HitCheckMinimumAnton(void);
@@ -64,5 +65,5 @@ public:
 		bool ConnectGimmickBlock(void);
 		bool ConnectChangeAntonBlock(void);
 		bool ConnectNormalBlock(void);
-		void CheckGimmickAction(void);
+		void HitCheckItem(void);
 };
