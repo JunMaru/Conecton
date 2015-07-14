@@ -93,7 +93,7 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 	Utility::LoadCsv(p_stagemap_filename, ppCreateBlockMapArray, &m_nMaxArrayNumX, &m_nMaxArrayNumY);
 
 	ins = new CInstancingObject(6);
-	ins->LoadTexture("data/texture/block/block.jpg", D3DXVECTOR2(1000.0f, 1500.0f), D3DXVECTOR2(100.0f, 100.0f));
+	ins->LoadTexture("data/texture/block/block.jpg", D3DXVECTOR2(1000.0f, 1700.0f), D3DXVECTOR2(100.0f, 100.0f));
 	ins->Init();
 
 	for (int nCntY = 0; nCntY < m_nMaxArrayNumY; nCntY++)
@@ -227,9 +227,24 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 					pBlock->SetBlockTexID(0, 13);
 					break;
 
-				case CBlock::BLOCKID_WARP:
+				case CBlock::BLOCKID_WARP_BLUE:
 					pBlock = (CBlock*)new CGimmickBlock;
 					pBlock->SetBlockTexID(0, 14);
+					break;
+
+				case CBlock::BLOCKID_WARP_GREEN:
+					pBlock = (CBlock*)new CGimmickBlock;
+					pBlock->SetBlockTexID(0, 15);
+					break;
+
+				case CBlock::BLOCKID_WARP_PINK:
+					pBlock = (CBlock*)new CGimmickBlock;
+					pBlock->SetBlockTexID(0, 16);
+					break;
+
+				case CBlock::BLOCKID_NO_METAMOR:
+					pBlock = (CBlock*)new CGimmickBlock;
+					pBlock->SetBlockTexID(0, 5);
 					break;
 
 				default:
@@ -268,7 +283,11 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 		}
 	}
 
+	// CSVファイルの後始末
 	Utility::Delete2DArrayInt(ppCreateBlockMapArray, m_nMaxArrayNumY);
+
+	// ワープポイントをリンクさせる関数
+	SetWarpPoint();
 
 	return true;
 }
@@ -450,8 +469,16 @@ void CBlockManager::OverwriteGimmickBlock(CBlock::BLOCKID block_type, D3DXVECTOR
 		pBlock->SetBlockTexID(0, 13);
 		break;
 
-	case CBlock::BLOCKID_WARP:
+	case CBlock::BLOCKID_WARP_BLUE:
 		pBlock->SetBlockTexID(0, 14);
+		break;
+
+	case CBlock::BLOCKID_WARP_GREEN:
+		pBlock->SetBlockTexID(0, 15);
+		break;
+
+	case CBlock::BLOCKID_WARP_PINK:
+		pBlock->SetBlockTexID(0, 16);
 		break;
 
 	case CBlock::BLOCKID_NO_METAMOR:
@@ -462,6 +489,84 @@ void CBlockManager::OverwriteGimmickBlock(CBlock::BLOCKID block_type, D3DXVECTOR
 	}
 
 	m_pBlockArray[nArrayY * MAX_BLOCK_X + nArrayX] = pBlock;
+}
+
+//=============================================================================
+// ワープブロック転移先設定関数
+//=============================================================================
+void CBlockManager::SetWarpPoint()
+{
+	CGimmickBlock *pWarpBlue1 = nullptr, *pWarpBlue2 = nullptr,
+				  *pWarpGreen1 = nullptr, *pWarpGreen2 = nullptr,
+				  *pWarpPink1 = nullptr, *pWarpPink2 = nullptr;
+
+	// ワープブロック検索
+	for (int nCntY = 0; nCntY < MAX_BLOCK_Y; nCntY++)
+	{
+		for (int nCntX = 0; nCntX < MAX_BLOCK_X; nCntX++)
+		{
+			if (m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX] != nullptr)
+			{
+				// ブロックの種類がワープ青だった場合
+				if (m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX]->GetBlockId() == CBlock::BLOCKID_WARP_BLUE)
+				{
+					// １つ目のアドレスが設定されていなかったら１つ目に。
+					// 設定済みなら２つ目に設定する。
+					if (pWarpBlue1 == nullptr)
+					{
+						pWarpBlue1 = ( CGimmickBlock* )m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX];
+					}
+					else
+					{
+						pWarpBlue2 = ( CGimmickBlock* )m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX];
+					}
+				}
+				// ブロックの種類がワープ緑だった場合
+				else if (m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX]->GetBlockId() == CBlock::BLOCKID_WARP_GREEN)
+				{
+					if (pWarpGreen1 == nullptr)
+					{
+						pWarpGreen1 = (CGimmickBlock*)m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX];
+					}
+					else
+					{
+						pWarpGreen2 = (CGimmickBlock*)m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX];
+					}
+				}
+				// ブロックの種類がワープ桃だった場合
+				else if (m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX]->GetBlockId() == CBlock::BLOCKID_WARP_PINK)
+				{
+					if (pWarpPink1 == nullptr)
+					{
+						pWarpPink1 = (CGimmickBlock*)m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX];
+					}
+					else
+					{
+						pWarpPink2 = (CGimmickBlock*)m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX];
+					}
+				}
+			}
+		}
+	}
+
+	// それぞれペアで見つかったら、互いのワープポイント先を登録する
+	if (pWarpBlue1 != nullptr && pWarpBlue2 != nullptr)
+	{
+		pWarpBlue1 -> SetWarpPoint( pWarpBlue2 );
+		pWarpBlue2 -> SetWarpPoint( pWarpBlue1 );
+	}
+
+	if (pWarpGreen1 != nullptr && pWarpGreen2 != nullptr)
+	{
+		pWarpGreen1->SetWarpPoint(pWarpGreen2);
+		pWarpGreen2->SetWarpPoint(pWarpGreen1);
+	}
+
+	if (pWarpPink1 != nullptr && pWarpPink2 != nullptr)
+	{
+		pWarpPink1->SetWarpPoint(pWarpPink2);
+		pWarpPink2->SetWarpPoint(pWarpPink1);
+	}
 }
 
 // End of file

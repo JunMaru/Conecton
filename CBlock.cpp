@@ -211,8 +211,16 @@ void CBlock::ChangeTexture(BLOCKID block_type)
 		SetBlockTexID(0, 13);
 		break;
 
-	case BLOCKID_WARP:
+	case BLOCKID_WARP_BLUE:
 		SetBlockTexID(0, 14);
+		break;
+
+	case BLOCKID_WARP_GREEN:
+		SetBlockTexID(0, 15);
+		break;
+
+	case BLOCKID_WARP_PINK:
+		SetBlockTexID(0, 16);
 		break;
 
 	case BLOCKID_NO_METAMOR:
