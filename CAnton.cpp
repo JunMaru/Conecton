@@ -64,8 +64,9 @@ void CAnton::Update()
 	D3DXVECTOR2 diff;
 	diff = m_tarPos - m_pos;
 
+	const bool bHandMove = ((m_state == STATE_NORMAL) && (m_action == ACTION_FRONT));
 	// è‚ğU‚Á‚Ä‚¢‚é‚Æ‚«ˆÈŠO‚Í“®‚­
-	if (m_action != ACTION_FRONT)
+	if (!bHandMove)
 	{
 		m_pos.x += diff.x * ANTON_SPEED_X;
 	}
