@@ -19,7 +19,6 @@
 //=============================================================================
 // 静的メンバ
 //=============================================================================
-bool CGimmickBlock::m_bWarpFlag = false;
 int CGimmickBlock::m_nRetryWarpWaitTime = WARP_WAIT_TIME;
 
 //=============================================================================
@@ -28,6 +27,7 @@ int CGimmickBlock::m_nRetryWarpWaitTime = WARP_WAIT_TIME;
 HRESULT CGimmickBlock::Init()
 {
 	m_pWarpPoint = nullptr;
+	m_bWarpFlag = false;
 
 	return S_OK;
 }
@@ -80,13 +80,20 @@ void CGimmickBlock::Update()
 
 			// ワープ終了
 			m_bWarpFlag = false;
+			m_pWarpPoint -> SetWarpFlag( false );
 			m_nRetryWarpWaitTime = WARP_WAIT_TIME;
 		}
 		else if ( m_nRetryWarpWaitTime == 0 )
 		{
 			// 前回と今回の座標の距離が一定の距離内だったら転移する
-			if (sqrtf(workPos.x * workPos.x + workPos.y * workPos.y) <= 5.0f
+			if (sqrtf(workPos.x * workPos.x + workPos.y * workPos.y) <= 1.0f
 			 && m_pos.x < antonPos.x && m_pos.x + BLOCK_WIDTH > antonPos.x )
+			{
+				m_bWarpFlag = true;
+			}
+			// 転送元がワープ状態になっていたら、転送先であるこちらも
+			// ワープフラグを立てる
+			else if (m_pWarpPoint->GetWarpFlag() == true)
 			{
 				m_bWarpFlag = true;
 			}

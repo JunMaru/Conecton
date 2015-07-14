@@ -98,7 +98,7 @@ void CPlayer::Update(void)
 
 	// ƒAƒ“ƒgƒ“‚ÌŽ©“®ˆÚ“®
 	D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
-	//m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
+	m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
 
 	if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_NORMAL))
 	{

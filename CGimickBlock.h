@@ -45,8 +45,8 @@ public:
 	void Update();
 	void Draw();
 
-	static void SetWarpFlag(bool b_warp_flag){ m_bWarpFlag = b_warp_flag; }
-	static bool GetWarpFlag(){ return m_bWarpFlag; }
+	void SetWarpFlag(bool b_warp_flag){ m_bWarpFlag = b_warp_flag; }
+	bool GetWarpFlag(){ return m_bWarpFlag; }
 
 	static void SetRetryWarpWaitTime(int n_retry_warp_wait_time){ m_nRetryWarpWaitTime = n_retry_warp_wait_time; }
 
@@ -55,7 +55,7 @@ public:
 
 private:
 	CGimmickBlock *m_pWarpPoint;	// このワープゾーンの転移先へのアドレス
-	static bool m_bWarpFlag;				// ワープフラグ
+	bool m_bWarpFlag;				// ワープフラグ
 	static int m_nRetryWarpWaitTime;		// 再びワープ判定を取るまでの待ち時間
 
 };

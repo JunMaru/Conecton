@@ -551,25 +551,35 @@ void CBlockManager::SetWarpPoint()
 				}
 			}
 		}
-	}
 
-	// それぞれペアで見つかったら、互いのワープポイント先を登録する
-	if (pWarpBlue1 != nullptr && pWarpBlue2 != nullptr)
-	{
-		pWarpBlue1 -> SetWarpPoint( pWarpBlue2 );
-		pWarpBlue2 -> SetWarpPoint( pWarpBlue1 );
-	}
+		// 対応する２つのワープにアドレスが登録されていたら、その２つで
+		// つなげ、nullで初期化する。
+		if (pWarpBlue1 != nullptr && pWarpBlue2 != nullptr)
+		{
+			pWarpBlue1->SetWarpPoint(pWarpBlue2);
+			pWarpBlue2->SetWarpPoint(pWarpBlue1);
 
-	if (pWarpGreen1 != nullptr && pWarpGreen2 != nullptr)
-	{
-		pWarpGreen1->SetWarpPoint(pWarpGreen2);
-		pWarpGreen2->SetWarpPoint(pWarpGreen1);
-	}
+			pWarpBlue1 = nullptr;
+			pWarpBlue2 = nullptr;
+		}
 
-	if (pWarpPink1 != nullptr && pWarpPink2 != nullptr)
-	{
-		pWarpPink1->SetWarpPoint(pWarpPink2);
-		pWarpPink2->SetWarpPoint(pWarpPink1);
+		if (pWarpGreen1 != nullptr && pWarpGreen2 != nullptr)
+		{
+			pWarpGreen1->SetWarpPoint(pWarpGreen2);
+			pWarpGreen2->SetWarpPoint(pWarpGreen1);
+
+			pWarpGreen1 = nullptr;
+			pWarpGreen2 = nullptr;
+		}
+
+		if (pWarpPink1 != nullptr && pWarpPink2 != nullptr)
+		{
+			pWarpPink1->SetWarpPoint(pWarpPink2);
+			pWarpPink2->SetWarpPoint(pWarpPink1);
+
+			pWarpPink1 = nullptr;
+			pWarpPink2 = nullptr;
+		}
 	}
 }
 
