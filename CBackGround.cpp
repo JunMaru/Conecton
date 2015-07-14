@@ -55,7 +55,7 @@ CBackGround* CBackGround::Create(const char *file_name, int priority)
 	CBackGround* pBackGround = new CBackGround(priority, CScene::OBJTYPE_2D);
 	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
 
-	pBackGround->Init(file_name,pos,VEC3_ZERO,COL_WHITE,SCREEN_WIDTH * 2,SCREEN_HEIGHT);
+	pBackGround->Init(file_name,pos,VEC3_ZERO,COL_WHITE,SCREEN_WIDTH,SCREEN_HEIGHT * 2);
 
 	return pBackGround;
 }
