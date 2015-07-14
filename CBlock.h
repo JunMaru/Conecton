@@ -37,28 +37,30 @@ class CBlock : public CScene
 		{
 			BLOCKID_NONE = 0,				// なし
 			BLOCKID_SOIL,					// 土ブロック
-			BLOCKID_GRASS,				// 草ブロック
-			BLOCKID_SOIL_CRACK,			// ひび割れ土ブロック
+			BLOCKID_GRASS,					// 草ブロック
+			BLOCKID_SOIL_CRACK,				// ひび割れ土ブロック
 			BLOCKID_GRASS_CRACK,			// ひび割れ草ブロック
-			BLOCKID_METAL,				// メタル変身ブロック
+			BLOCKID_METAL,					// メタル変身ブロック
 			BLOCKID_MINIMUM,				// ミニマム変身ブロック
 			BLOCKID_POWERFUL,				// パワフル変身ブロック
-			BLOCKID_LASER_GOAL_TOP,		// レーザーのゴール_上
-			BLOCKID_LASER_GOAL_BOTTOM,	// レーザーのゴール_下
+			BLOCKID_LASER_GOAL_TOP,			// レーザーのゴール_上
+			BLOCKID_LASER_GOAL_BOTTOM,		// レーザーのゴール_下
 			BLOCKID_LASER_GOAL_LEFT,		// レーザーのゴール_左
 			BLOCKID_LASER_GOAL_RIGHT,		// レーザーのゴール_右
 			BLOCKID_LASER_START_TOP,		// レーザーのスタート_上
-			BLOCKID_LASER_START_BOTTOM,	// レーザーのスタート_下
+			BLOCKID_LASER_START_BOTTOM,		// レーザーのスタート_下
 			BLOCKID_LASER_START_LEFT,		// レーザーのスタート_左
-			BLOCKID_LASER_START_RIGHT,	// レーザーのスタート_右
-			BLOCKID_LASER_CONTROL_DOWN,	// レーザー進行方向変更ブロック_下
+			BLOCKID_LASER_START_RIGHT,		// レーザーのスタート_右
+			BLOCKID_LASER_CONTROL_DOWN,		// レーザー進行方向変更ブロック_下
 			BLOCKID_LASER_CONTROL_UP,		// レーザー進行方向変更ブロック_上
 			BLOCKID_LASER_CONTROL_RIGHT,	// レーザー進行方向変更ブロック_右
-			BLOCKID_LASER_CONTROL_LEFT,	// レーザー進行方向変更ブロック_左
-			BLOCKID_MAGNET,				// 磁石
+			BLOCKID_LASER_CONTROL_LEFT,		// レーザー進行方向変更ブロック_左
+			BLOCKID_MAGNET,					// 磁石
 			BLOCKID_WOODBOX,				// 木箱
-			BLOCKID_SWITCH,				// スイッチ
-			BLOCKID_WARP,					// ワープゾーン
+			BLOCKID_SWITCH,					// スイッチ
+			BLOCKID_WARP_BLUE,				// ワープゾーン青
+			BLOCKID_WARP_GREEN,				// ワープゾーン緑
+			BLOCKID_WARP_PINK,				// ワープゾーン桃
 			BLOCKID_NO_METAMOR,				// 何もない変身ブロック
 			BLOCKID_ALL,
 		}BLOCKID;

@@ -167,13 +167,6 @@ void CGame::Update(void)
 		HitCheckAnton();
 	}
 
-	if (pKeyboard->GetKeyTrigger(DIK_O))
-	{
-		CBlock *pBlock = CBlockManager::GetBlock(6, 5);
-
-		pBlock->ChangeTexture(CBlock::BLOCKID_NO_METAMOR);
-	}
-
 	// ゲージテスト
 	static float fTestGaugeVal = 50.0f;
 	if (pKeyboard->GetKeyTrigger(DIK_8))
@@ -219,7 +212,8 @@ void CGame::HitCheckMinimumAnton(void)
 	{
 		pBlock = CBlockManager::GetBlock(nBlockIdxX + nCntX, nBlockIdxY + 2);
 
-		if (pBlock != nullptr)
+		if (pBlock != nullptr
+		 && pBlock ->GetBlockId() < CBlock::BLOCKID_WARP_BLUE)
 		{
 			// 座標を中心に変更
 			blockPos = pBlock->GetPosition() + blockSize;
@@ -243,7 +237,8 @@ void CGame::HitCheckMinimumAnton(void)
 	{
 		pBlock = CBlockManager::GetBlock(nBlockIdxX + (nCnt * 2) - 1, nBlockIdxY + 1);
 
-		if (pBlock != nullptr)
+		if (pBlock != nullptr
+		 && pBlock->GetBlockId() < CBlock::BLOCKID_WARP_BLUE)
 		{
 			blockPos = pBlock->GetPosition() + blockSize;
 
@@ -293,7 +288,8 @@ void CGame::HitCheckMetalAnton(void)
 	{
 		pBlock = CBlockManager::GetBlock(nBlockIdxX + nCntX, nBlockIdxY + 2);
 
-		if (pBlock != nullptr)
+		if (pBlock != nullptr
+		 && pBlock->GetBlockId() < CBlock::BLOCKID_WARP_BLUE)
 		{
 			// 座標を中心に変更
 			blockPos = pBlock->GetPosition() + blockSize;
@@ -328,7 +324,8 @@ void CGame::HitCheckMetalAnton(void)
 	{
 		pBlock = CBlockManager::GetBlock(nBlockIdxX + (nCnt * 3) - 1, nBlockIdxY + nCnt);
 
-		if (pBlock != nullptr)
+		if (pBlock != nullptr
+		 && pBlock->GetBlockId() < CBlock::BLOCKID_WARP_BLUE)
 		{
 			blockPos = pBlock->GetPosition() + blockSize;
 
@@ -378,7 +375,8 @@ void CGame::HitCheckAnton(void)
 	{
 		pBlock = CBlockManager::GetBlock(nBlockIdxX + nCntX, nBlockIdxY + 2);
 
-		if (pBlock != nullptr)
+		if (pBlock != nullptr
+		 && pBlock->GetBlockId() < CBlock::BLOCKID_WARP_BLUE)
 		{
 			// 座標を中心に変更
 			blockPos = pBlock->GetPosition() + blockSize;
@@ -402,7 +400,8 @@ void CGame::HitCheckAnton(void)
 	{
 		pBlock = CBlockManager::GetBlock(nBlockIdxX + (nCnt * 3) - 1, nBlockIdxY + nCnt);
 
-		if (pBlock != nullptr)
+		if (pBlock != nullptr
+		 && pBlock->GetBlockId() < CBlock::BLOCKID_WARP_BLUE)
 		{
 			blockPos = pBlock->GetPosition() + blockSize;
 

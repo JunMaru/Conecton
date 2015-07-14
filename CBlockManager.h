@@ -61,6 +61,9 @@ public:
 	// ギミックブロックへ上書きする関数
 	void OverwriteGimmickBlock( CBlock::BLOCKID block_type, D3DXVECTOR3 pos );
 
+	// ワープブロック転移先設定関数( CreateBlockMap終了時に呼ぶ )
+	void SetWarpPoint();
+
 private:
 	// ステージ上のブロックへのアドレス管理場所
 	static CBlock *m_pBlockArray[MAX_BLOCK_Y * MAX_BLOCK_X];
