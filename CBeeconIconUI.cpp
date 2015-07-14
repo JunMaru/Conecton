@@ -5,7 +5,7 @@
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CBeeconIconUI::CBeeconIconUI()
+CBeeconIconUI::CBeeconIconUI(int priority, OBJTYPE object_type) : CScene(priority, object_type)
 {
 	m_iconType = ICONTYPE_NONE;
 	m_pBeeconIcon = nullptr;

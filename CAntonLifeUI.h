@@ -8,7 +8,7 @@ public:
 
 	static const int LIFE_MAX = 5;
 
-	CAntonLifeUI();
+	CAntonLifeUI(int priority = 6, OBJTYPE object_type = OBJTYPE_2D);
 	~CAntonLifeUI();
 
 	void Uninit(void);

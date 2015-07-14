@@ -92,7 +92,7 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 	// ‚±‚ÌŠÖ”‚Ìà–¾B
 	Utility::LoadCsv(p_stagemap_filename, ppCreateBlockMapArray, &m_nMaxArrayNumX, &m_nMaxArrayNumY);
 
-	ins = new CInstancingObject(6);
+	ins = new CInstancingObject(3);
 	ins->LoadTexture("data/texture/block/block.png", D3DXVECTOR2(1000.0f, 1900.0f), D3DXVECTOR2(100.0f, 100.0f));
 	ins->Init();
 

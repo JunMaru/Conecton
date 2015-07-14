@@ -28,6 +28,7 @@ since	20140713
 #include "CScrollManager.h"
 #include "CLaserManager.h"
 #include "CInputCommand.h"
+#include "CPseudoLight.h"
 
 /*-----------------------------------------------------------------------------
 Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
@@ -52,6 +53,7 @@ CGame::CGame()
 	m_pBackGround = nullptr;
 	m_pInputCommand = nullptr;
 	m_fScore = 0.0f;
+	m_pPseudoLight = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -66,12 +68,14 @@ CGame::~CGame()
 -----------------------------------------------------------------------------*/
 void CGame::Init(void)
 {
+	m_pPseudoLight = CPseudoLight::Create("data/texture/pseudo_light/pseudo_light.png");
+
 	m_pBlockManager = CBlockManager::Create( "data/stage_info/stage1.csv" );
 	m_pPlayer = CPlayer::Create(VEC3_ZERO, VEC3_ZERO);
 	InitGauge();
 	m_pBackGround = CBackGround::Create("data/texture/game_bg/game_bg.jpg");
 	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
-
+	
 	m_pScrollManager = new CScrollManager();
 	m_pScrollManager->Init();
 

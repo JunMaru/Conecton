@@ -22,7 +22,7 @@ static const float HEART_Y_OFFSET = (15.0f);
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CAntonLifeUI::CAntonLifeUI()
+CAntonLifeUI::CAntonLifeUI(int priority, OBJTYPE object_type) : CScene(priority, object_type)
 {
 	for (int nCnt = 0; nCnt < LIFE_MAX; ++nCnt)
 	{
