@@ -199,3 +199,20 @@ bool CInputCommand::IsRepeat(COMMAND command)
 	return false;
 }
 
+//=============================================================================
+// ‚È‚ñ‚Å‚à‚¢‚¢‚Ì‚Å‰Ÿ‚³‚ê‚½‚©
+//=============================================================================
+bool CInputCommand::IsAnyPress(void)
+{
+	for (int nCnt = 0; nCnt < COMMAND_MAX; ++nCnt)
+	{
+		int nCommand = 1 << nCnt;
+
+		if (m_controller & nCommand)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}

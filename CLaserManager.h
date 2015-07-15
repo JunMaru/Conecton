@@ -47,6 +47,8 @@ public:
 	bool GetLaserGoalFlag(void){ return m_bLaserGoalFlag; }
 
 private:
+	void SetLaserGoalTexture(void);
+
 	static CLaser *m_pLaserArray[MAX_LASER_NUM];
 
 	bool m_bStopLaserFlag[MAX_LASER_NUM];

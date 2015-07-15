@@ -262,8 +262,6 @@ void CPlayer::SetAntonState(ANTON_STATE state)
 void CPlayer::SetBeeconBlockID(BEECON_BLOCKID block_id)
 {
 	m_pBeecon->SetBlockID(static_cast<CBeecon::BLOCKID>(block_id));
-
-	// TODO::beeconのUI設定も変える
 }
 
 /*-----------------------------------------------------------------------------
@@ -281,7 +279,34 @@ void CPlayer::CheckChangeNormalAnton(void)
 	SetAntonState(ANTON_STATE_NORMAL);
 }
 
+//=============================================================================
+// ビーコンUI設定
+//=============================================================================
 void CPlayer::SetBeeconIconUIType(BEECON_ICONTYPE icon_type)
 {
 	m_pBeeconIconUI->SetIconType(static_cast<CBeeconIconUI::ICONTYPE>(icon_type));
+}
+
+//=============================================================================
+// アントンアクション設定
+//=============================================================================
+void CPlayer::SetAntonAction(ANTON_ACTION action)
+{
+	m_pAnton->SetAction(static_cast<CAnton::ACTION>(action));
+}
+
+//=============================================================================
+// アントンアクション取得
+//=============================================================================
+CPlayer::ANTON_ACTION  CPlayer::GetAntonAction(void)
+{ 
+	return static_cast<ANTON_ACTION>(m_pAnton->GetAction());
+}
+
+//=============================================================================
+// アントン状態取得
+//=============================================================================
+CPlayer::ANTON_STATE CPlayer::GetAntonState(void)
+{ 
+	return static_cast<ANTON_STATE>(m_pAnton->GetState());
 }

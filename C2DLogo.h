@@ -26,7 +26,7 @@
 class C2DLogo : public CScene
 {
 	public:
-		C2DLogo() : CScene(7),m_pVtxBuff(NULL),m_pTex(NULL),m_bAnim(false),
+		C2DLogo() : CScene(6),m_pVtxBuff(NULL),m_pTex(NULL),m_bAnim(false),
 					m_bAnimRoop(false),m_animMoveScl(D3DXVECTOR2(0,0)),m_animStartScl(D3DXVECTOR2(0,0)),m_animIdx(-1),
 					m_animSpd(0),m_animNow(0){}
 		~C2DLogo(){}

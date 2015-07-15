@@ -147,25 +147,25 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 
 				case CBlock::BLOCKID_LASER_GOAL_TOP:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(0, 8);
+					pBlock->SetBlockTexID(4, 8);
 					m_pLaserGoal = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_GOAL_BOTTOM:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(1, 8);
+					pBlock->SetBlockTexID(5, 8);
 					m_pLaserGoal = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_GOAL_LEFT:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(2, 8);
+					pBlock->SetBlockTexID(6, 8);
 					m_pLaserGoal = pBlock;
 					break;
 
 				case CBlock::BLOCKID_LASER_GOAL_RIGHT:
 					pBlock = new CBlock;
-					pBlock->SetBlockTexID(3, 8);
+					pBlock->SetBlockTexID(7, 8);
 					m_pLaserGoal = pBlock;
 					break;
 

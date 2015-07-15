@@ -29,6 +29,7 @@ since	20140713
 #include "CLaserManager.h"
 #include "CInputCommand.h"
 #include "CPseudoLight.h"
+#include "C2DLogo.h"
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
@@ -54,6 +55,7 @@ CGame::CGame()
 	m_pInputCommand = nullptr;
 	m_fScore = 0.0f;
 	m_pPseudoLight = nullptr;
+	m_pEndLogo = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -79,8 +81,6 @@ void CGame::Init(void)
 	m_pScrollManager = new CScrollManager();
 	m_pScrollManager->Init();
 
-	// レーザー動作テスト
-	//CLaser::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), CLaser::DIRECTION_RIGHT);
 	m_pLaserManager = CLaserManager::Create();
 
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
@@ -106,9 +106,6 @@ void CGame::Uninit(void)
 
 	m_pBlockManager->Uninit();
 	delete m_pBlockManager;
-
-	m_pGauge->Uninit();
-	delete m_pGauge;
 
 	m_pLaserManager->Uninit();
 	delete m_pLaserManager;
@@ -156,7 +153,7 @@ void CGame::Update(void)
 	m_pPlayer->Update();
 
 	m_pLaserManager->Update();
-
+	
 	CAnton *ant = m_pPlayer->GetAnton();
 
 	if (ant->GetState() == CAnton::STATE_MINIMUM)
@@ -649,9 +646,9 @@ bool CGame::ConnectNormalBlock(void)
 	return false;
 }
 
-/*-----------------------------------------------------------------------------
- アイテムとのあたり判定
------------------------------------------------------------------------------*/
+//=============================================================================
+// アイテムとの当たり判定
+//=============================================================================
 void CGame::HitCheckItem(void)
 {
 	const float fAntonOffsetX = 50.0f;
@@ -687,19 +684,48 @@ void CGame::HitCheckItem(void)
 	}
 }
 
+//=============================================================================
+// ゲーム終了チェック処理
+//=============================================================================
 void CGame::CheckGameEnd(void)
 {
+	const bool bFadeNone = (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE);
 
-	const bool bFade = (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE);
-
-	if (bFade)
+	if (bFadeNone == false)
 	{
 		return;
 	}
 
 	const bool bEnd = m_pLaserManager->GetLaserGoalFlag();
 
-	if (bEnd)
+	if (bEnd == false)
+	{
+		return;
+	}
+
+	const bool bMoveHand = (m_pPlayer->GetAntonAction() == CPlayer::ANTON_ACTION_FRONT) && (m_pPlayer->GetAntonState() == CPlayer::ANTON_STATE_NORMAL);
+
+	if (bMoveHand == false)
+	{
+		m_pPlayer->SetAntonState(CPlayer::ANTON_STATE_NORMAL);
+		m_pPlayer->SetAntonAction(CPlayer::ANTON_ACTION_FRONT);
+	}
+
+	if (m_pEndLogo == nullptr)
+	{
+		D3DXVECTOR2 texSize = D3DXVECTOR2(1076.0f, 237.0f);
+		const float fLogoOffsetY = -200.0f;
+		m_pEndLogo = new C2DLogo();
+		m_pEndLogo->LoadTexture("data/texture/ui/clear.png");
+		m_pEndLogo->Init();
+		m_pEndLogo->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X,SCREEN_CENTER_Y + fLogoOffsetY,0.0f));
+		m_pEndLogo->SetScling(texSize / 2);
+		m_pEndLogo->StartSclAnimation(true, texSize / 4, texSize / 2, 0.01f);
+	}
+
+	const bool bEnter = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_ENTER);
+
+	if (bEnter == true)
 	{
 		CManager::GetPhaseFade()->Start(
 			CFade::FADETYPE_OUT,

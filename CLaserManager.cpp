@@ -184,7 +184,6 @@ void CLaserManager::Update()
 		}
 	}
 
-
 	D3DXVECTOR3 blockSize = D3DXVECTOR3(BLOCK_WIDTH / 2.0f, BLOCK_HEIGHT / 2.0f, 0.0f);
 	D3DXVECTOR3 blockPos = pBlock -> GetPosition() + blockSize;
 
@@ -313,6 +312,7 @@ void CLaserManager::Update()
 	 && laserEndPos.y + blockSize.y < blockPos.y + blockSize.y)
 	{
 		m_bLaserGoalFlag = true;
+		SetLaserGoalTexture();
 	}
 
 	if (m_bLaserGoalFlag == true)
@@ -329,6 +329,48 @@ void CLaserManager::CreateLaser(const D3DXVECTOR3& start_pos, int direction)
 	m_nCurrentLaser++;
 
 	m_pLaserArray[m_nCurrentLaser] = CLaser::Create( start_pos, ( CLaser::DIRECTION )direction );
+}
+
+//=============================================================================
+// ゴール時のテクスチャに切り替え
+//=============================================================================
+void CLaserManager::SetLaserGoalTexture(void)
+{
+	CBlock *pBlock = CBlockManager::GetLaserGoal();
+	CBlock::BLOCKID blockType = pBlock->GetBlockId();
+
+	switch (blockType)
+	{
+		case CBlock::BLOCKID_LASER_GOAL_TOP:
+		{
+			pBlock->SetBlockTexID(0, 8);
+			break;
+		}
+
+		case CBlock::BLOCKID_LASER_GOAL_BOTTOM:
+		{
+			pBlock->SetBlockTexID(1, 8);
+			break;
+		}
+
+		case CBlock::BLOCKID_LASER_GOAL_LEFT:
+		{
+			pBlock->SetBlockTexID(2, 8);
+			break;
+		}
+
+		case CBlock::BLOCKID_LASER_GOAL_RIGHT:
+		{
+			pBlock->SetBlockTexID(3, 8);
+			break;
+		}
+
+		default:
+		{
+			break;
+		}
+	}
+
 }
 
 // End of file

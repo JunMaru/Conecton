@@ -26,6 +26,7 @@ class CScrollManager;
 class CLaserManager;
 class CInputCommand;
 class CPseudoLight;
+class C2DLogo;
 
 class CGame : public CPhase
 {
@@ -58,6 +59,7 @@ public:
 		CInputCommand *m_pInputCommand;
 		float m_fScore;
 		CPseudoLight *m_pPseudoLight;
+		C2DLogo *m_pEndLogo;
 
 		void InitGauge(void);
 		void HitCheckMinimumAnton(void);

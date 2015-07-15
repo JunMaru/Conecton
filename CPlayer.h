@@ -38,6 +38,16 @@ public:
 		ANTON_STATE_MAX,
 	};
 
+	enum ANTON_ACTION
+	{
+		ANTON_ACTION_WAIT = 0,
+		ANTON_ACTION_WALK = 1,
+		ANTON_ACTION_FRONT = 2,
+		ANTON_ACTION_PUSH = 2,
+		ANTON_ACTION_METALPOSE = 3,
+		ANTON_ACTION_MAX = 5,
+	};
+
 	enum BEECON_BLOCKID
 	{
 		BEECON_BLOCKID_NONE = 0,					// ‚È‚µ
@@ -80,11 +90,14 @@ public:
 	void Update(void);
 
 	void SetAntonState(ANTON_STATE state);
+	void SetAntonAction(ANTON_ACTION action);
 	void SetBeeconBlockID(BEECON_BLOCKID block_id);
 	void SetBeeconIconUIType(BEECON_ICONTYPE icon_type);
 
 	CAnton* GetAnton(void){ return m_pAnton; }
 	CBeecon* GetBeecon(void){ return m_pBeecon; }
+	ANTON_ACTION GetAntonAction(void);
+	ANTON_STATE GetAntonState(void);
 	
 private:
 	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col);
