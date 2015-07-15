@@ -68,4 +68,5 @@ public:
 		bool ConnectChangeAntonBlock(void);
 		bool ConnectNormalBlock(void);
 		void HitCheckItem(void);
+		void CheckGameEnd(void);
 };

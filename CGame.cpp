@@ -172,9 +172,9 @@ void CGame::Update(void)
 		HitCheckAnton();
 	}
 
-	// ブロックとビーコンとのコネクトチェック
 	CheckConnectAction();
 	HitCheckItem();
+	CheckGameEnd();
 }
 
 // ミニマム用のあたり判定。多分普通のと同じソースで実装できる
@@ -684,5 +684,26 @@ void CGame::HitCheckItem(void)
 		m_pGauge->SetGaugeVal(m_fScore);
 
 		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_NONE, antonPos);
+	}
+}
+
+void CGame::CheckGameEnd(void)
+{
+
+	const bool bFade = (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE);
+
+	if (bFade)
+	{
+		return;
+	}
+
+	const bool bEnd = m_pLaserManager->GetLaserGoalFlag();
+
+	if (bEnd)
+	{
+		CManager::GetPhaseFade()->Start(
+			CFade::FADETYPE_OUT,
+			60.0f,
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 }

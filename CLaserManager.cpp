@@ -166,6 +166,25 @@ void CLaserManager::Update()
 		}
 	}
 
+	// H‚×•¨‚Í“Ë‚«”²‚¯‚Ä‚à‚ç‚¤
+	const bool bFood = (pBlock->GetBlockId() >= CBlock::BLOCKID_FOOD_ACORN) && (pBlock->GetBlockId() <= CBlock::BLOCKID_FOOD_MUSHROOM);
+	if (bFood)
+	{
+		if (m_bStopLaserFlag[m_nCurrentLaser] == true)
+		{
+			m_bStopLaserFlag[m_nCurrentLaser] = false;
+
+			m_pLaserArray[m_nCurrentLaser]->MoveRestart();
+
+			return;
+		}
+		else
+		{
+			return;
+		}
+	}
+
+
 	D3DXVECTOR3 blockSize = D3DXVECTOR3(BLOCK_WIDTH / 2.0f, BLOCK_HEIGHT / 2.0f, 0.0f);
 	D3DXVECTOR3 blockPos = pBlock -> GetPosition() + blockSize;
 
