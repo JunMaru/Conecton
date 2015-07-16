@@ -21,7 +21,7 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
-_exe/
+exe/
 
 # Visual Studo 2015 cache/options directory
 .vs/
@@ -63,6 +63,7 @@ dlldata.c
 *.pidb
 *.svclog
 *.scc
+*.exe
 
 # Chutzpah Test files
 _Chutzpah*
