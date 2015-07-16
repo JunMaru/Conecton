@@ -238,6 +238,8 @@ void CLaserManager::Update()
 	{
 		CBlock::BLOCKID blockId = pBlock -> GetBlockId();
 
+		pBlock->SetHitLaserNo(m_nCurrentLaser);
+
 		switch (blockId)
 		{
 		case CBlock::BLOCKID_LASER_CONTROL_DOWN:
@@ -371,6 +373,20 @@ void CLaserManager::SetLaserGoalTexture(void)
 		}
 	}
 
+}
+
+void CLaserManager::ReplaceLaser(int nNo)
+{
+	m_pLaserArray[nNo]->MoveRestart();
+
+	for (int nCnt = MAX_LASER_NUM - 1; nCnt > nNo; --nCnt)
+	{
+		if (m_pLaserArray[nCnt] == nullptr)
+		{
+			continue;
+		}
+		m_pLaserArray[nCnt]->Uninit();
+	}
 }
 
 // End of file

@@ -46,6 +46,8 @@ public:
 
 	bool GetLaserGoalFlag(void){ return m_bLaserGoalFlag; }
 
+	void ReplaceLaser(int nNo);
+
 private:
 	void SetLaserGoalTexture(void);
 

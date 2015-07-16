@@ -367,6 +367,25 @@ CBlock::BLOCKID CBlockManager::GetBlockID(D3DXVECTOR3 pos)
 	}
 }
 
+int CBlockManager::GetBlockHitLaserNo(D3DXVECTOR3 pos)
+{
+	int nArrayX = 0, nArrayY = 0;
+
+	// 現在位置のブロックアドレスを求め
+	CalculateBlockArrayNum(pos, &nArrayX, &nArrayY);
+	CBlock *pBlock = GetBlock(nArrayX, nArrayY);
+
+	// ブロックの種類を返す
+	if (pBlock != nullptr)
+	{
+		return pBlock->GetHitLaserNo();
+	}
+	else
+	{
+		return -1;
+	}
+}
+
 //=============================================================================
 // ギミックブロックへ上書きする関数
 // 引数の説明

@@ -57,6 +57,7 @@ public:
 
 	// ブロックIDゲッター
 	CBlock::BLOCKID GetBlockID( D3DXVECTOR3 pos );
+	int CBlockManager::GetBlockHitLaserNo(D3DXVECTOR3 pos);
 
 	// ギミックブロックへ上書きする関数
 	void OverwriteGimmickBlock( CBlock::BLOCKID block_type, D3DXVECTOR3 pos );

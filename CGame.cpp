@@ -564,6 +564,10 @@ bool CGame::ConnectGimmickBlock(void)
 		// ビーコンがギミックブロックのストックを持っていない場合
 		if (blockIDFromBeecon == CBlock::BLOCKID_NONE)
 		{
+
+			int nLaserNo = m_pBlockManager->GetBlockHitLaserNo(workPos);
+			m_pLaserManager->ReplaceLaser(nLaserNo);
+
 			// ビーコンにギミックブロックIDをセットし、ブロックマネージャーのブロックにはノーマルに上書き
 			m_pPlayer->SetBeeconBlockID(static_cast<CPlayer::BEECON_BLOCKID>(blockIDFromBlockManager));
 			m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_SOIL, workPos);

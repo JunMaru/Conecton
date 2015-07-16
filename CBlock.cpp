@@ -20,6 +20,7 @@
 
 HRESULT CBlock::Init()
 {
+	m_nHitLaserNo = -1;
 	return S_OK;
 }
 

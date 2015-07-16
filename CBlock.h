@@ -96,6 +96,9 @@ class CBlock : public CScene
 		void SetBlockId(BLOCKID blockType){ m_blockType = blockType; }
 		BLOCKID GetBlockId(void){ return m_blockType; }
 
+		void SetHitLaserNo(int No){ m_nHitLaserNo = No; }
+		int GetHitLaserNo(void){ return m_nHitLaserNo; }
+
 		/*------------------------------------------------------------------------------
 			ブロックのテクスチャIDをセットする
 			param テクスチャへのID
@@ -134,4 +137,6 @@ class CBlock : public CScene
 
 		// 読み込んだテクスチャID保存場所
 		BLOCKID m_blockType;
+
+		int m_nHitLaserNo;
 };
