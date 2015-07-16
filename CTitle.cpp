@@ -8,7 +8,6 @@
 	インクルードファイル
 -----------------------------------------------------------------------------*/
 #include "CTitle.h"
-#include <string>
 #include "Define.h"
 #include "CManager.h"
 #include "CInput.h"
@@ -17,34 +16,39 @@
 #include "CCamera.h"
 
 /*-----------------------------------------------------------------------------
-	マクロ定義
+	テクスチャの読み込み先のパス設定
 -----------------------------------------------------------------------------*/
-using std::string;
+static const char* TEXTUREPATH_GROUPLOGO = "data/texture/logo_group/group_logo.png";
+static const D3DXVECTOR3 POS_GROUPLOGO	= D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
+static const float WIDTH_GROUPLOGO		= 400.0f;
+static const float HEIGHT_GROUPLOGO		= 335.0f;
 
-// タイトル背景情報
-static const string FILENAME_BG = "data/texture/gui_title/title_bg.jpg";
-static const D3DXVECTOR3 POS_TITLE_BG	= D3DXVECTOR3(400.0f, 300.0f, 0.0f);
-static const float WIDTH_TITLE_BG		= 800;
-static const float HEIGHT_TITLE_BG		= 600;
+static const char* TEXTUREPATH_TITLEBG = "data/texture/game_bg/game_bg.jpg";
+static const D3DXVECTOR3 POS_TITLEBG	= D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
+static const float WIDTH_TITLEBG		= 1280.0f;
+static const float HEIGHT_TITLEBG		= 720.0f;
 
-// タイトルロゴ情報
-static const string FILENAME_TITLE_LOGO = "data/texture/gui_title/title_logo.png";
-static const D3DXVECTOR3 POS_TITLE_LOGO = D3DXVECTOR3(400.0f, 150.0f, 0.0f);
-static const float WIDTH_TITLE_LOGO		= 500.0f;
-static const float HEIGHT_TITLE_LOGO	= 100.0f;
+static const char* TEXTUREPATH_TITLE_LOGO = "data/texture/logo_title/title_logo.png";
+static const D3DXVECTOR3 POS_TITLE_LOGO = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, (SCREEN_HEIGHT * 0.5f) * 0.5f, 0.0f);
+static const float WIDTH_TITLE_LOGO		= 600.0f;
+static const float HEIGHT_TITLE_LOGO	= 200.0f;
 
-// プレスキー情報
-static const string FILENAME_PRESSKEY = "data/texture/gui_title/press_enterkey.png";
-static const D3DXVECTOR3 POS_PRESSKEY	= D3DXVECTOR3(400.0f, 450.0f, 0.0f);
-static const float WIDTH_PRESSKEY		= 500.0f;
-static const float HEIGHT_PRESSKEY		= 100.0f;
+static const char* TEXTUREPATH_PRESSGAMESTART= "data/texture/font/gamestart.png";
+static const D3DXVECTOR3 POS_PRESSGAMESTART	= D3DXVECTOR3(SCREEN_WIDTH * 0.5f, (SCREEN_HEIGHT * 0.5f) + 150.0f, 0.0f);
+static const float WIDTH_PRESSGAMESTART		= 512.0f;
+static const float HEIGHT_PRESSGAMESTART	= 64.0f;
+
+/*-----------------------------------------------------------------------------
+	点滅情報
+-----------------------------------------------------------------------------*/
+static const float BLINK_TIME = 15.0f;
+static const float BLINK_TIME_DEICIDE = 3.0f;
 
 /*-----------------------------------------------------------------------------
 	コンストラクタ
 -----------------------------------------------------------------------------*/
 CTitle::CTitle()
 {
-	m_pressKey = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -59,34 +63,62 @@ CTitle::~CTitle()
 -----------------------------------------------------------------------------*/
 void CTitle::Init(void)
 {
+	m_logoPhaseBg = CScene2D::Create(
+										NULL,
+										D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f),
+										VEC3_ZERO,
+										1280.0f,
+										720.0f);
+
+	// グループロゴ生成
+	m_groupLogo = CScene2D::Create(
+									TEXTUREPATH_GROUPLOGO,
+									POS_GROUPLOGO,
+									VEC3_ZERO,
+									WIDTH_GROUPLOGO,
+									HEIGHT_GROUPLOGO);
+
+	// ロゴ表示後のフェード作成
+	m_logoPhaseFade = CFade::Create(
+									D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f),
+									VEC3_ZERO);
+
 	// タイトル背景の生成
-	CScene2D::Create(
-						FILENAME_BG.c_str(),
-						POS_TITLE_BG,
-						VEC3_ZERO,
-						WIDTH_TITLE_BG,
-						HEIGHT_TITLE_BG);
+	m_titleBg = CScene2D::Create(
+									TEXTUREPATH_TITLEBG,
+									POS_TITLEBG,
+									VEC3_ZERO,
+									WIDTH_TITLEBG,
+									HEIGHT_TITLEBG);
 
 	// タイトルロゴの生成
-	CScene2D::Create(
-						FILENAME_TITLE_LOGO.c_str(),
-						POS_TITLE_LOGO,
-						VEC3_ZERO,
-						WIDTH_TITLE_LOGO,
-						HEIGHT_TITLE_LOGO);
-
-	// プレスキーの生成
-	m_pressKey = CScene2D::Create(
-									FILENAME_PRESSKEY.c_str(),
-									POS_PRESSKEY,
+	m_titleLogo = CScene2D::Create(
+									TEXTUREPATH_TITLE_LOGO,
+									POS_TITLE_LOGO,
 									VEC3_ZERO,
-									WIDTH_PRESSKEY,
-									HEIGHT_PRESSKEY);
+									WIDTH_TITLE_LOGO,
+									HEIGHT_TITLE_LOGO);
+	// プレスゲームスタートの生成
+	m_pressGameStartText = CScene2D::Create(
+											TEXTUREPATH_PRESSGAMESTART,
+											POS_PRESSGAMESTART,
+											VEC3_ZERO,
+											WIDTH_PRESSGAMESTART,
+											HEIGHT_PRESSGAMESTART);
 
-	m_countBlink = 0.0f;
-	m_countDecided = 0.0f;
+
+	// ロゴ背景は白にしないと見えない
+	m_logoPhaseBg->SetDiffuse(COL_WHITE);
+
+	// ロゴ表示中は非表示にしたいため描画OFF
+	m_titleBg->SetDraw(false);
+	m_titleLogo->SetDraw(false);
+	m_pressGameStartText->SetDraw(false);
 
 	m_bDecide = false;
+
+	m_countDecided = 0.0f;
+	m_countLogoDisp = 0.0f;
 
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
@@ -115,15 +147,11 @@ void CTitle::Update(void)
 		{
 			m_bDecide = true;
 		}
-
-		// プレスキーの決定前点滅
-		Blink(m_pressKey, 30.0f);
 	}
 
 	// プレスキーの決定後点滅
 	if(m_bDecide)
 	{
-		Blink(m_pressKey, 3.0f);
 		m_countDecided++;
 
 		// 決定後の画面遷移タイミングでフェード移行
@@ -147,27 +175,4 @@ void CTitle::Update(void)
 	CDebugProcDX9::Print("[CTitle.cpp]\n");
 	CDebugProcDX9::Print("[ENTER]:フェーズ遷移\n");
 #endif
-}
-
-/*-----------------------------------------------------------------------------
-	2Dオブジェクトの点滅
------------------------------------------------------------------------------*/
-void CTitle::Blink(CScene2D* pTarget, float flashTime)
-{
-	m_countBlink++;
-	
-	// 明るい文字色に切り替え
-	if(m_countBlink > flashTime * 2)
-	{
-		pTarget->SetDiffuse(COL_WHITE);
-		m_countBlink = 0.0f;
-		return; // 処理後はとばす
-	}
-
-	// 暗い文字色に切り替え
-	if(m_countBlink > flashTime)
-	{
-		// 初期のアルファ値が１．０ならばうまく作用する
-		pTarget->SetDiffuse(COL_WHITE_ALPHA(0.3f));
-	}
 }

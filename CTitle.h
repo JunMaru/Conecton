@@ -17,6 +17,7 @@
 	タイトル画面フェーズクラス
 -----------------------------------------------------------------------------*/
 class CScene2D;
+class CFade;
 class CTitle : public CPhase
 {
 	public:
@@ -28,18 +29,20 @@ class CTitle : public CPhase
 		void Update(void);
 
 	private:
-		// 2Dオブジェクトの点滅
-		void Blink(CScene2D* pTarget, float flashTime);
-
-		// プレスキー表示のインスタンス保存
-		CScene2D* m_pressKey;
-
-		// プレスキー点滅カウンター
-		float m_countBlink;
+		// インスタンス保存用
+		CScene2D *m_logoPhaseBg;
+		CScene2D *m_groupLogo;
+		CScene2D *m_titleLogo;
+		CScene2D *m_titleBg;
+		CScene2D *m_pressGameStartText;
+		CFade *m_logoPhaseFade;
 
 		// プレスキー押下
 		bool m_bDecide;
 
 		// プレスキー押下後のカウンター
 		float m_countDecided;
+
+		// ロゴ表示カウンター
+		float m_countLogoDisp;
 };
