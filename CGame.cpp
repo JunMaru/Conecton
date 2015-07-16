@@ -32,6 +32,11 @@ since	20140713
 #include "C2DLogo.h"
 
 /*-----------------------------------------------------------------------------
+	テクスチャ読み込み先のパス設定
+-----------------------------------------------------------------------------*/
+static const char* TEXTUREPATH_FONT_CLEAR = "data/texture/font/clear.png";
+
+/*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
 -----------------------------------------------------------------------------*/
 CPlayer *CGame::m_pPlayer = nullptr;
@@ -716,7 +721,7 @@ void CGame::CheckGameEnd(void)
 		D3DXVECTOR2 texSize = D3DXVECTOR2(1076.0f, 237.0f);
 		const float fLogoOffsetY = -200.0f;
 		m_pEndLogo = new C2DLogo();
-		m_pEndLogo->LoadTexture("data/texture/ui/clear.png");
+		m_pEndLogo->LoadTexture(TEXTUREPATH_FONT_CLEAR);
 		m_pEndLogo->Init();
 		m_pEndLogo->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X,SCREEN_CENTER_Y + fLogoOffsetY,0.0f));
 		m_pEndLogo->SetScling(texSize / 2);
