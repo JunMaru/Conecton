@@ -111,6 +111,9 @@ public:
 	void MoveStop(void);
 	void MoveRestart(void);
 
+	void SetReplace(bool bFlg){ m_bReplace = bFlg; }
+	bool GetReplace(void){ return m_bReplace; }
+
 private:
 
 	//=============================================================================
@@ -155,5 +158,6 @@ private:
 	DIRECTION m_direction;							// 射出方向
 	D3DXVECTOR3 m_rotation;							// 回転角度
 	float m_fMoveSpeed;								// 進行スピード
+	bool m_bReplace;
 };
 

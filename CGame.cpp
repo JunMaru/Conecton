@@ -578,6 +578,10 @@ bool CGame::ConnectGimmickBlock(void)
 		// ビーコンがなんかしらのブロックを持っていた場合
 		else
 		{
+
+			int nLaserNo = m_pBlockManager->GetBlockHitLaserNo(workPos);
+			m_pLaserManager->ReplaceLaser(nLaserNo);
+
 			// ビーコンにギミックブロックIDをセットし、ブロックマネージャーのブロックにはビーコンが持っていたのを上書き
 			m_pPlayer->SetBeeconBlockID(static_cast<CPlayer::BEECON_BLOCKID>(blockIDFromBlockManager));
 			m_pBlockManager->OverwriteGimmickBlock(blockIDFromBeecon, workPos);
@@ -636,6 +640,9 @@ bool CGame::ConnectNormalBlock(void)
 		{
 			continue;
 		}
+
+		int nLaserNo = m_pBlockManager->GetBlockHitLaserNo(workPos);
+		m_pLaserManager->ReplaceLaser(nLaserNo);
 
 		// ノーマルだった場合
 		// ビーコンに入っていたギミックを、ブロックマネージャーのブロックに上書き。ビーコンのは空

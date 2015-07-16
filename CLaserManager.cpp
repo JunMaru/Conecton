@@ -378,6 +378,8 @@ void CLaserManager::SetLaserGoalTexture(void)
 void CLaserManager::ReplaceLaser(int nNo)
 {
 	m_pLaserArray[nNo]->MoveRestart();
+	m_nCurrentLaser = nNo;
+	m_bStopLaserFlag[m_nCurrentLaser] = false;
 
 	for (int nCnt = MAX_LASER_NUM - 1; nCnt > nNo; --nCnt)
 	{
@@ -385,7 +387,9 @@ void CLaserManager::ReplaceLaser(int nNo)
 		{
 			continue;
 		}
+		m_pLaserArray[nCnt]->SetReplace(true);
 		m_pLaserArray[nCnt]->Uninit();
+		m_pLaserArray[nCnt] = nullptr;
 	}
 }
 

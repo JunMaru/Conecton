@@ -33,6 +33,7 @@ CLaser::CLaser(const int layer) : CScene(layer)
 	m_fMoveSpeed = LASER_MOVE_SPEED;
 	m_pVertexBuffer = nullptr;
 	m_pTexture = nullptr;
+	m_bReplace = false;
 }
 
 //=============================================================================
@@ -81,6 +82,11 @@ void CLaser::Uninit(void)
 //=============================================================================
 void CLaser::Update(void)
 {
+	if (m_bReplace)
+	{
+		return;
+	}
+
 	// MoveStopŠÖ”‚ğŒÄ‚ñ‚¾ê‡Am_fMoveSpeed‚Í0.0f‚É‚È‚Á‚Äi‚Ü‚È‚¢
 	m_endPosition.x += m_fMoveSpeed;
 
