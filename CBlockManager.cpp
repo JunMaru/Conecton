@@ -520,7 +520,7 @@ void CBlockManager::SetWarpPoint()
 					{
 						pWarpBlue1 = ( CGimmickBlock* )m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX];
 					}
-					else
+					else if ( pWarpBlue1 != nullptr && pWarpBlue2 == nullptr )
 					{
 						pWarpBlue2 = ( CGimmickBlock* )m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX];
 					}
@@ -550,35 +550,35 @@ void CBlockManager::SetWarpPoint()
 					}
 				}
 			}
-		}
 
-		// ‘Î‰ž‚·‚é‚Q‚Â‚Ìƒ[ƒv‚ÉƒAƒhƒŒƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚½‚çA‚»‚Ì‚Q‚Â‚Å
-		// ‚Â‚È‚°Anull‚Å‰Šú‰»‚·‚éB
-		if (pWarpBlue1 != nullptr && pWarpBlue2 != nullptr)
-		{
-			pWarpBlue1->SetWarpPoint(pWarpBlue2);
-			pWarpBlue2->SetWarpPoint(pWarpBlue1);
+			// ‘Î‰ž‚·‚é‚Q‚Â‚Ìƒ[ƒv‚ÉƒAƒhƒŒƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚½‚çA‚»‚Ì‚Q‚Â‚Å
+			// ‚Â‚È‚°Anull‚Å‰Šú‰»‚·‚éB
+			if (pWarpBlue1 != nullptr && pWarpBlue2 != nullptr)
+			{
+				pWarpBlue1->SetWarpPoint(pWarpBlue2);
+				pWarpBlue2->SetWarpPoint(pWarpBlue1);
 
-			pWarpBlue1 = nullptr;
-			pWarpBlue2 = nullptr;
-		}
+				pWarpBlue1 = nullptr;
+				pWarpBlue2 = nullptr;
+			}
 
-		if (pWarpGreen1 != nullptr && pWarpGreen2 != nullptr)
-		{
-			pWarpGreen1->SetWarpPoint(pWarpGreen2);
-			pWarpGreen2->SetWarpPoint(pWarpGreen1);
+			if (pWarpGreen1 != nullptr && pWarpGreen2 != nullptr)
+			{
+				pWarpGreen1->SetWarpPoint(pWarpGreen2);
+				pWarpGreen2->SetWarpPoint(pWarpGreen1);
 
-			pWarpGreen1 = nullptr;
-			pWarpGreen2 = nullptr;
-		}
+				pWarpGreen1 = nullptr;
+				pWarpGreen2 = nullptr;
+			}
 
-		if (pWarpPink1 != nullptr && pWarpPink2 != nullptr)
-		{
-			pWarpPink1->SetWarpPoint(pWarpPink2);
-			pWarpPink2->SetWarpPoint(pWarpPink1);
+			if (pWarpPink1 != nullptr && pWarpPink2 != nullptr)
+			{
+				pWarpPink1->SetWarpPoint(pWarpPink2);
+				pWarpPink2->SetWarpPoint(pWarpPink1);
 
-			pWarpPink1 = nullptr;
-			pWarpPink2 = nullptr;
+				pWarpPink1 = nullptr;
+				pWarpPink2 = nullptr;
+			}
 		}
 	}
 }
