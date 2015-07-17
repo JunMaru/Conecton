@@ -81,11 +81,22 @@ void CTitle::Init(void)
 											WIDTH_PRESSGAMESTART,
 											HEIGHT_PRESSGAMESTART);
 
-	m_bDecide = false;
-	m_bAnimSkip = false;
+	m_pressGameStartText->SetDiffuse(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
+	m_pressGameStartText->SetDraw(false);
 
-	m_countDecided = 0.0f;
-	m_countLogoDisp = 0.0f;
+	/*
+	D3DXVECTOR3 pos = POS_PRESSGAMESTART;
+	pos.x -= 10.0f;
+	pos.y -= 10.0f;
+	CScene2D::Create(
+						TEXTUREPATH_PRESSGAMESTART,
+						pos,
+						VEC3_ZERO,
+						WIDTH_PRESSGAMESTART,
+						HEIGHT_PRESSGAMESTART);
+	*/
+
+	m_bDecide = false;
 
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
@@ -116,33 +127,13 @@ void CTitle::Update(void)
 		}
 	}
 
-	if(m_bAnimSkip)
-	{
-		if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_IN)
-		{
-			CManager::GetPhaseFade()->Reset();
-		}
-	}
-	else
-	{
-		if(pKeyboard->GetKeyTrigger(DIK_RETURN))
-		{
-			m_bAnimSkip = true;
-		}
-	}
-
 	if(m_bDecide)
 	{
-		m_countDecided++;
-
-		if(m_countDecided > 60.0f)
-		{
-			CManager::GetPhaseFade()->Start(
-												CFade::FADETYPE_OUT,
-												60.0f,
-												D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-			m_bDecide = false; // 無限フェード防止
-		}
+		CManager::GetPhaseFade()->Start(
+											CFade::FADETYPE_OUT,
+											60.0f,
+											D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		m_bDecide = false; // 無限フェード防止
 	}
 
 	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_UNOUT)

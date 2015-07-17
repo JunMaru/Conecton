@@ -32,16 +32,8 @@ class CTitle : public CPhase
 		CScene2D *m_titleLogo;
 		CScene2D *m_titleBg;
 		CScene2D *m_pressGameStartText;
+		CScene2D *m_beeconCursor;
 
 		// プレスキー押下
 		bool m_bDecide;
-
-		// タイトルアニメーションのスキップ
-		bool m_bAnimSkip;
-
-		// プレスキー押下後のカウンター
-		float m_countDecided;
-
-		// ロゴ表示カウンター
-		float m_countLogoDisp;
 };
