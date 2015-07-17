@@ -17,7 +17,6 @@
 	タイトル画面フェーズクラス
 -----------------------------------------------------------------------------*/
 class CScene2D;
-class CFade;
 class CTitle : public CPhase
 {
 	public:
@@ -30,12 +29,9 @@ class CTitle : public CPhase
 
 	private:
 		// インスタンス保存用
-		CScene2D *m_logoPhaseBg;
-		CScene2D *m_groupLogo;
 		CScene2D *m_titleLogo;
 		CScene2D *m_titleBg;
 		CScene2D *m_pressGameStartText;
-		CFade *m_logoPhaseFade;
 
 		// プレスキー押下
 		bool m_bDecide;

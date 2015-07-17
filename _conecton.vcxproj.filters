@@ -212,6 +212,9 @@
     <ClCompile Include="CPseudoLight.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="CGroupLogo.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGame.h">
@@ -347,6 +350,9 @@
       <Filter>ソース ファイル\application\CBlock</Filter>
     </ClInclude>
     <ClInclude Include="CPseudoLight.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CGroupLogo.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

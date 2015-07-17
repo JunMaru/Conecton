@@ -106,6 +106,7 @@
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CGauge.cpp" />
     <ClCompile Include="CGimickBlock.cpp" />
+    <ClCompile Include="CGroupLogo.cpp" />
     <ClCompile Include="CInput.cpp" />
     <ClCompile Include="CInputCommand.cpp" />
     <ClCompile Include="CInstancingObject.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CGauge.h" />
     <ClInclude Include="CGimickBlock.h" />
+    <ClInclude Include="CGroupLogo.h" />
     <ClInclude Include="CInput.h" />
     <ClInclude Include="CInputCommand.h" />
     <ClInclude Include="CInstancingObject.h" />

@@ -13,6 +13,7 @@
 #include "CCamera.h"
 #include "CLight.h"
 #include "CSoundXAudio2.h"
+#include "CGroupLogo.h"
 #include "CTitle.h"
 #include "CGame.h"
 #include "CResult.h"
@@ -35,8 +36,8 @@ CDebugProcDX9* CManager::m_pDebugProcDX9		= nullptr;
 #endif
 // フェーズの初期設定 その1
 #ifdef _DEBUG
-CManager::PHASE CManager::m_Phase = PHASE_TITLE;
-CManager::PHASE CManager::m_OldPhase = PHASE_TITLE;
+CManager::PHASE CManager::m_Phase = PHASE_GAME;
+CManager::PHASE CManager::m_OldPhase = PHASE_GAME;
 #else
 CManager::PHASE CManager::m_Phase = PHASE_TITLE;
 CManager::PHASE CManager::m_OldPhase = PHASE_TITLE;
@@ -110,7 +111,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	// フェーズの初期設定 その2
 #ifdef _DEBUG
-	m_pPhase = new CTitle();
+	m_pPhase = new CGroupLogo();
 	m_pPhase->Init();
 #else
 	m_pPhase = new CTitle();
@@ -322,6 +323,11 @@ void CManager::ChangePhase(void)
 		// 次のフェーズの生成
 		switch(m_Phase)
 		{
+			case PHASE_GROUPLOGO:
+			{
+				m_pPhase = new CGroupLogo();
+			}
+
 			case PHASE_TITLE:
 			{
 				m_pPhase = new CTitle();

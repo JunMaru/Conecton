@@ -18,11 +18,6 @@
 /*-----------------------------------------------------------------------------
 	テクスチャの読み込み先のパス設定
 -----------------------------------------------------------------------------*/
-static const char* TEXTUREPATH_GROUPLOGO = "data/texture/logo_group/group_logo.png";
-static const D3DXVECTOR3 POS_GROUPLOGO	= D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
-static const float WIDTH_GROUPLOGO		= 400.0f;
-static const float HEIGHT_GROUPLOGO		= 335.0f;
-
 static const char* TEXTUREPATH_TITLEBG = "data/texture/game_bg/game_bg.jpg";
 static const D3DXVECTOR3 POS_TITLEBG	= D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 static const float WIDTH_TITLEBG		= 1280.0f;
@@ -63,26 +58,6 @@ CTitle::~CTitle()
 -----------------------------------------------------------------------------*/
 void CTitle::Init(void)
 {
-	m_logoPhaseBg = CScene2D::Create(
-										NULL,
-										D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f),
-										VEC3_ZERO,
-										1280.0f,
-										720.0f);
-
-	// グループロゴ生成
-	m_groupLogo = CScene2D::Create(
-									TEXTUREPATH_GROUPLOGO,
-									POS_GROUPLOGO,
-									VEC3_ZERO,
-									WIDTH_GROUPLOGO,
-									HEIGHT_GROUPLOGO);
-
-	// ロゴ表示後のフェード作成
-	m_logoPhaseFade = CFade::Create(
-									D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f),
-									VEC3_ZERO);
-
 	// タイトル背景の生成
 	m_titleBg = CScene2D::Create(
 									TEXTUREPATH_TITLEBG,
@@ -105,15 +80,6 @@ void CTitle::Init(void)
 											VEC3_ZERO,
 											WIDTH_PRESSGAMESTART,
 											HEIGHT_PRESSGAMESTART);
-
-
-	// ロゴ背景は白にしないと見えない
-	m_logoPhaseBg->SetDiffuse(COL_WHITE);
-
-	// ロゴ表示中は非表示にしたいため描画OFF
-	m_titleBg->SetDraw(false);
-	m_titleLogo->SetDraw(false);
-	m_pressGameStartText->SetDraw(false);
 
 	m_bDecide = false;
 
@@ -149,12 +115,10 @@ void CTitle::Update(void)
 		}
 	}
 
-	// プレスキーの決定後点滅
 	if(m_bDecide)
 	{
 		m_countDecided++;
 
-		// 決定後の画面遷移タイミングでフェード移行
 		if(m_countDecided > 60.0f)
 		{
 			CManager::GetPhaseFade()->Start(

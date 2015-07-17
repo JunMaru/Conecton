@@ -45,7 +45,8 @@ class CManager
 		// フェーズ種類
 		enum PHASE
 		{
-			PHASE_TITLE = 0,
+			PHASE_GROUPLOGO = 0,
+			PHASE_TITLE,
 			PHASE_GAME,
 			PHASE_RESULT,
 			PHASE_MAX
