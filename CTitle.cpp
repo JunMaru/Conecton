@@ -82,6 +82,7 @@ void CTitle::Init(void)
 											HEIGHT_PRESSGAMESTART);
 
 	m_bDecide = false;
+	m_bAnimSkip = false;
 
 	m_countDecided = 0.0f;
 	m_countLogoDisp = 0.0f;
@@ -112,6 +113,21 @@ void CTitle::Update(void)
 		if(pKeyboard->GetKeyTrigger(DIK_RETURN))
 		{
 			m_bDecide = true;
+		}
+	}
+
+	if(m_bAnimSkip)
+	{
+		if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_IN)
+		{
+			CManager::GetPhaseFade()->Reset();
+		}
+	}
+	else
+	{
+		if(pKeyboard->GetKeyTrigger(DIK_RETURN))
+		{
+			m_bAnimSkip = true;
 		}
 	}
 

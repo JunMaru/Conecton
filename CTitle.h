@@ -36,6 +36,9 @@ class CTitle : public CPhase
 		// プレスキー押下
 		bool m_bDecide;
 
+		// タイトルアニメーションのスキップ
+		bool m_bAnimSkip;
+
 		// プレスキー押下後のカウンター
 		float m_countDecided;
 

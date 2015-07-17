@@ -60,6 +60,9 @@ class CFade : public CScene2D
 		-----------------------------------------------------------------------------*/
 		void Start(FADETYPE type, float time_frame, D3DXCOLOR color);
 
+		// フェードを初期状態に戻す（フェードなし, FADETYPE_NONE）
+		void Reset(void);
+
 		/*-----------------------------------------------------------------------------
 			フェード種別の取得
 			return	FADETYPE		現在のフェード種別
