@@ -24,14 +24,14 @@ static const float HEIGHT_GROUPLOGO		= 335.0f;
 /*-----------------------------------------------------------------------------
 	ÉçÉSï\é¶É^ÉCÉÄ
 -----------------------------------------------------------------------------*/
-static const float TIME_LOGODISP = 30.0f * 3.0f;
+static const float TIME_LOGODISP = 30.0f * 2.0f;
 
 /*-----------------------------------------------------------------------------
 	èâä˙âª
 -----------------------------------------------------------------------------*/
 void CGroupLogo::Init(void)
 {
-	m_logoBg = CScene2D::Create(
+	m_pLogoBg = CScene2D::Create(
 									NULL,
 									D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f),
 									VEC3_ZERO,
@@ -39,7 +39,7 @@ void CGroupLogo::Init(void)
 									720.0f);
 
 	// ÉOÉãÅ[ÉvÉçÉSê∂ê¨
-	m_groupLogo = CScene2D::Create(
+	m_pGroupLogo = CScene2D::Create(
 									TEXTUREPATH_GROUPLOGO,
 									POS_GROUPLOGO,
 									VEC3_ZERO,
@@ -47,7 +47,7 @@ void CGroupLogo::Init(void)
 									HEIGHT_GROUPLOGO);
 
 	// ÉçÉSîwåiÇÕîíÇ…ÇµÇ»Ç¢Ç∆å©Ç¶Ç»Ç¢
-	m_logoBg->SetDiffuse(COL_WHITE);
+	m_pLogoBg->SetDiffuse(COL_WHITE);
 
 	m_bSkip = false;
 	m_countDisp = 0.0f;
@@ -76,7 +76,10 @@ void CGroupLogo::Update(void)
 		m_countDisp++;
 
 		UpdateInputEvent();
+
+#ifdef _DEBUG
 		UpdateInputEventDebug();
+#endif
 
 		Skip();
 	}
@@ -96,6 +99,11 @@ void CGroupLogo::Update(void)
 		CManager::SetPhase(CManager::PHASE_TITLE);
 	}
 
+#ifdef _DEBUG
+	CDebugProcDX9::Print("[CGroupLogo.cpp]\n");
+	CDebugProcDX9::Print("[ENTER]:ÉtÉFÅ[ÉYëJà⁄\n");
+	CDebugProcDX9::Print("ÉçÉSï\é¶(%f)\n", m_countDisp);
+#endif
 }
 
 /*-----------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 	タイトル画面フェーズクラス
 -----------------------------------------------------------------------------*/
 class CScene2D;
+class CInputCommand;
 class CTitle : public CPhase
 {
 	public:
@@ -28,12 +29,26 @@ class CTitle : public CPhase
 		void Update(void);
 
 	private:
+		void AnimationTitleLogo(void);
+		void UpdateInputEvent(void);
+		void MoveBeeconCursor(void);
+		void CommandLeft(void);
+		void CommandRight(void);
+		void CommandUp(void);
+		void CommandDown(void);
+
+		CInputCommand *m_pInputCommand;
+
 		// インスタンス保存用
-		CScene2D *m_titleLogo;
-		CScene2D *m_titleBg;
-		CScene2D *m_pressGameStartText;
-		CScene2D *m_beeconCursor;
+		CScene2D *m_pTitleLogo;
+		CScene2D *m_pTitleBg;
+		CScene2D *m_pPressGameStartText;
+		CScene2D *m_pPressGameStartTextF;
+		CScene2D *m_pBeeconCursor;
 
 		// プレスキー押下
 		bool m_bDecide;
+
+		float m_speed;
+		D3DXVECTOR2 m_velocity;
 };

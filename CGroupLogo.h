@@ -43,8 +43,8 @@ class CGroupLogo : public CPhase
 		void UpdateInputEventDebug(void);
 		void Skip(void);
 
-		CScene2D *m_logoBg;
-		CScene2D *m_groupLogo;
+		CScene2D *m_pLogoBg;
+		CScene2D *m_pGroupLogo;
 
 		float m_countDisp;
 

@@ -188,7 +188,7 @@ void CDebugProcDX9::Draw(void)
 								-1,
 								&rect,
 								DT_LEFT,
-								D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+								COL_BLACK);
 
 		// デバッグ情報のバッファクリア
 		memset(m_aStr, 0, sizeof m_aStr);
