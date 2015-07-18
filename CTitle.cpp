@@ -53,15 +53,14 @@ static const float HEIGHT_PRESSGAMESTART_F = 64.0f;
 	カーソル（ビーコン）の生成設定
 -----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_BEECON = "data/texture/beecon/beecon.png";
-static const D3DXVECTOR3 POS_BEECON = D3DXVECTOR3(350.0f, 470.0f, 0.0f);
+static const D3DXVECTOR3 POS_BEECON = D3DXVECTOR3(370.0f, 460.0f, 0.0f);
 static const float WIDTH_BEECON = 100.0f;
 static const float HEIGHT_BEECON = 130.0f;
 
 /*-----------------------------------------------------------------------------
-	点滅情報
+	決定後の待ち時間
 -----------------------------------------------------------------------------*/
-static const float BLINK_TIME = 15.0f;
-static const float BLINK_TIME_DEICIDE = 3.0f;
+static const float DECIDE_TIME = 15.0f;
 
 /*-----------------------------------------------------------------------------
 	コンストラクタ
@@ -132,10 +131,13 @@ void CTitle::Init(void)
 								D3DXVECTOR2(0.0f, 0.375f),
 								D3DXVECTOR2(0.125f, 0.375f));
 
+	InitAnimationBeeconCursor();
+
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
 	m_pInputCommand->Init();
 
 	m_bDecide = false;
+	m_countDecide = 0.0f;
 
 	m_speed = 1.0f;
 	m_velocity = VEC2_ZERO;
@@ -166,24 +168,30 @@ void CTitle::Update(void)
 	// フェードしていなければ更新
 	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
 	{
-		AnimationTitleLogo();
-
 		UpdateInputEvent();
 
 		MoveBeeconCursor();
 	}
+
+	UpdateAnimationTitleLogo();
+	UpdateAnimationBeeconCursor();
 
 	if(m_bDecide)
 	{
 		m_pPressGameStartText->SetDiffuse(D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 		m_pPressGameStartTextF->SetDiffuse(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
 
-		CManager::GetPhaseFade()->Start(
-											CFade::FADETYPE_OUT,
-											30.0f,
-											D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		// 無限フェード防止
-		m_bDecide = false;
+		m_countDecide++;
+
+		if(m_countDecide >= DECIDE_TIME)
+		{
+			CManager::GetPhaseFade()->Start(
+												CFade::FADETYPE_OUT,
+												30.0f,
+												D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			// 無限フェード防止
+			m_bDecide = false;
+		}
 	}
 
 	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_UNOUT)
@@ -200,7 +208,7 @@ void CTitle::Update(void)
 #endif
 }
 
-void CTitle::AnimationTitleLogo(void)
+void CTitle::UpdateAnimationTitleLogo(void)
 {
 
 }
@@ -219,8 +227,11 @@ void CTitle::UpdateInputEvent(void)
 	{
 		m_pPressGameStartTextF->SetDraw(true);
 
+		// 重なっている時に選択すれば遷移条件ＯＫ
 		if(bDecide)
 		{
+			m_selectAnim = AnimList::AL_CONNECT;
+
 			m_bDecide = true;
 		}
 	}
@@ -290,4 +301,90 @@ void CTitle::CommandUp(void)
 void CTitle::CommandDown(void)
 {
 	m_velocity.y += m_speed;
+}
+
+void CTitle::InitAnimationBeeconCursor(void)
+{
+	m_selectAnim = AnimList::AL_WAIT;
+
+	for(int i = 0; i < 8; i++)
+	{
+		m_beeconAnimWait[i].wait = 3;
+
+		float offset = i * 0.125f;
+		m_beeconAnimWait[i].uv[0] = D3DXVECTOR2(0.0f + offset, 0.0f);
+		m_beeconAnimWait[i].uv[1] = D3DXVECTOR2(0.125f + offset, 0.0f);
+		m_beeconAnimWait[i].uv[2] = D3DXVECTOR2(0.0f + offset, 0.325f);
+		m_beeconAnimWait[i].uv[3] = D3DXVECTOR2(0.125f + offset, 0.325f);
+	}
+
+	for(int i = 0; i < 8; i++)
+	{
+		m_beeconAnimConnect[i].wait = 3;
+
+		float offset = i * 0.125f;
+		m_beeconAnimConnect[i].uv[0] = D3DXVECTOR2(0.0f + offset, 0.325f);
+		m_beeconAnimConnect[i].uv[1] = D3DXVECTOR2(0.125f + offset, 0.325f);
+		m_beeconAnimConnect[i].uv[2] = D3DXVECTOR2(0.0f + offset, 0.625f);
+		m_beeconAnimConnect[i].uv[3] = D3DXVECTOR2(0.125f + offset, 0.625f);
+	}
+
+	m_bRoopStop = false;
+	m_countAnim = 0.0f;
+	m_idxAnim = 0;
+}
+
+void CTitle::UpdateAnimationBeeconCursor(void)
+{
+	switch(m_selectAnim)
+	{
+		case AnimList::AL_WAIT:
+		{
+			m_idxAnim = (int)(m_countAnim / m_beeconAnimWait[m_idxAnim].wait) % 8;
+
+			m_pBeeconCursor->SetTexcoord(
+											m_beeconAnimWait[m_idxAnim].uv[0],
+											m_beeconAnimWait[m_idxAnim].uv[1],
+											m_beeconAnimWait[m_idxAnim].uv[2],
+											m_beeconAnimWait[m_idxAnim].uv[3]);
+
+			if(m_idxAnim >= 7)
+			{
+				m_idxAnim = 0;
+				m_countAnim = 0.0f;
+			}
+
+			break;
+		}
+
+		case AnimList::AL_CONNECT:
+		{
+			if(m_bRoopStop == true)
+			{
+				return;
+			}
+
+			m_idxAnim = (int)(m_countAnim / m_beeconAnimConnect[m_idxAnim].wait) % 8;
+
+			m_pBeeconCursor->SetTexcoord(
+											m_beeconAnimConnect[m_idxAnim].uv[0],
+											m_beeconAnimConnect[m_idxAnim].uv[1],
+											m_beeconAnimConnect[m_idxAnim].uv[2],
+											m_beeconAnimConnect[m_idxAnim].uv[3]);
+
+			if(m_idxAnim >= 7)
+			{
+				m_idxAnim = 0;
+				m_countAnim = 0.0f;
+				m_bRoopStop = true;
+			}
+
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	m_countAnim++;
 }

@@ -12,6 +12,7 @@
 -----------------------------------------------------------------------------*/
 #include "Main.h"
 #include "CPhase.h"
+#include "TextureLoader.h"
 
 /*-----------------------------------------------------------------------------
 	タイトル画面フェーズクラス
@@ -29,13 +30,15 @@ class CTitle : public CPhase
 		void Update(void);
 
 	private:
-		void AnimationTitleLogo(void);
 		void UpdateInputEvent(void);
 		void MoveBeeconCursor(void);
 		void CommandLeft(void);
 		void CommandRight(void);
 		void CommandUp(void);
 		void CommandDown(void);
+		void UpdateAnimationTitleLogo(void);
+		void InitAnimationBeeconCursor(void);
+		void UpdateAnimationBeeconCursor(void);
 
 		CInputCommand *m_pInputCommand;
 
@@ -48,8 +51,30 @@ class CTitle : public CPhase
 
 		// プレスキー押下
 		bool m_bDecide;
+		float m_countDecide;
 
 		// カーソル動作情報
 		float m_speed;
 		D3DXVECTOR2 m_velocity;
+
+		// アニメーション情報（簡易版）
+		enum AnimList
+		{
+			AL_WAIT = 0,
+			AL_CONNECT,
+			AL_MAX
+		};
+		AnimList m_selectAnim;
+
+		struct AnimInfoSimple
+		{
+			int wait;
+			D3DXVECTOR2 uv[4];
+		};
+		AnimInfoSimple m_beeconAnimWait[8];
+		AnimInfoSimple m_beeconAnimConnect[8];
+
+		bool m_bRoopStop;
+		float m_countAnim;
+		int m_idxAnim;
 };
