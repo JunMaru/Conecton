@@ -39,7 +39,7 @@ class CTitle : public CPhase
 
 		CInputCommand *m_pInputCommand;
 
-		// インスタンス保存用
+		// タイトル画面表示物のインスタンス保存用
 		CScene2D *m_pTitleLogo;
 		CScene2D *m_pTitleBg;
 		CScene2D *m_pPressGameStartText;
@@ -49,6 +49,7 @@ class CTitle : public CPhase
 		// プレスキー押下
 		bool m_bDecide;
 
+		// カーソル動作情報
 		float m_speed;
 		D3DXVECTOR2 m_velocity;
 };

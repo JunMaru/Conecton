@@ -15,32 +15,45 @@
 #include "CFade.h"
 #include "CScene2D.h"
 #include "CCamera.h"
+#include "collisionDetection.h"
 
 /*-----------------------------------------------------------------------------
-	テクスチャの読み込み先のパス設定
+	タイトル背景の生成設定
 -----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_TITLEBG = "data/texture/game_bg/game_bg.jpg";
 static const D3DXVECTOR3 POS_TITLEBG = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 static const float WIDTH_TITLEBG = 1280.0f;
 static const float HEIGHT_TITLEBG = 720.0f;
 
+/*-----------------------------------------------------------------------------
+	タイトルロゴの生成設定
+-----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_TITLE_LOGO = "data/texture/logo_title/title_logo.png";
 static const D3DXVECTOR3 POS_TITLE_LOGO = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, (SCREEN_HEIGHT * 0.5f) * 0.5f, 0.0f);
 static const float WIDTH_TITLE_LOGO = 800.0f;
 static const float HEIGHT_TITLE_LOGO = 300.0f;
 
+/*-----------------------------------------------------------------------------
+	GAMESTARTテキスト表示の生成設定
+-----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_PRESSGAMESTART = "data/texture/font/gamestart.png";
 static const D3DXVECTOR3 POS_PRESSGAMESTART = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, (SCREEN_HEIGHT * 0.5f) + 150.0f, 0.0f);
 static const float WIDTH_PRESSGAMESTART = 512.0f;
 static const float HEIGHT_PRESSGAMESTART = 64.0f;
 
+/*-----------------------------------------------------------------------------
+	GAMESTARTテキスト表示（浮き上がり）の生成設定
+-----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_PRESSGAMESTART_F = "data/texture/font/gamestart.png";
 static const D3DXVECTOR3 POS_PRESSGAMESTART_F = D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 10.0f, ((SCREEN_HEIGHT * 0.5f) + 150.0f) - 10.0f, 0.0f);
 static const float WIDTH_PRESSGAMESTART_F = 512.0f;
 static const float HEIGHT_PRESSGAMESTART_F = 64.0f;
 
+/*-----------------------------------------------------------------------------
+	カーソル（ビーコン）の生成設定
+-----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_BEECON = "data/texture/beecon/beecon.png";
-static const D3DXVECTOR3 POS_BEECON = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f) + 150.0f, 0.0f);
+static const D3DXVECTOR3 POS_BEECON = D3DXVECTOR3(350.0f, 470.0f, 0.0f);
 static const float WIDTH_BEECON = 100.0f;
 static const float HEIGHT_BEECON = 130.0f;
 
@@ -108,7 +121,7 @@ void CTitle::Init(void)
 										WIDTH_BEECON,
 										HEIGHT_BEECON);
 
-	m_pPressGameStartText->SetDiffuse(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
+	m_pPressGameStartText->SetDiffuse(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
 
 	// 頂点情報をいれるときにひしゃげるための対応措置（SetVertexが問題点）
 	m_pBeeconCursor->SetScale(D3DXVECTOR2(130.0f, 100.0f));
@@ -162,6 +175,9 @@ void CTitle::Update(void)
 
 	if(m_bDecide)
 	{
+		m_pPressGameStartText->SetDiffuse(D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
+		m_pPressGameStartTextF->SetDiffuse(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
+
 		CManager::GetPhaseFade()->Start(
 											CFade::FADETYPE_OUT,
 											30.0f,
@@ -179,6 +195,8 @@ void CTitle::Update(void)
 #ifdef _DEBUG
 	CDebugProcDX9::Print("[CTitle.cpp]\n");
 	CDebugProcDX9::Print("[ENTER]:フェーズ遷移\n");
+
+	CDebugProcDX9::Print("%f %f\n", m_pBeeconCursor->GetPosition().x, m_pBeeconCursor->GetPosition().y);
 #endif
 }
 
@@ -191,9 +209,24 @@ void CTitle::UpdateInputEvent(void)
 {
 	const bool bDecide = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_ENTER)
 						|| m_pInputCommand->IsTrigger(CInputCommand::COMMAND_CONNECT);
-	if(bDecide)
+	
+	// タイトルのテキスト表示とカーソル（ビーコン）がかさなっているか
+	if(CheckCollisionCircleVsRect(
+									m_pBeeconCursor->GetPosition(),
+									m_pBeeconCursor->GetSizeHalf().y,
+									m_pPressGameStartText->GetPosition(),
+									m_pPressGameStartText->GetSizeHalf()))
 	{
-		m_bDecide = true;
+		m_pPressGameStartTextF->SetDraw(true);
+
+		if(bDecide)
+		{
+			m_bDecide = true;
+		}
+	}
+	else
+	{
+		m_pPressGameStartTextF->SetDraw(false);
 	}
 
 	const bool bRight = m_pInputCommand->IsPress(CInputCommand::COMMAND_RIGHT);

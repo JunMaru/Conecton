@@ -14,7 +14,7 @@
 #include "CFade.h"
 
 /*-----------------------------------------------------------------------------
-	テクスチャの読み込み先のパス設定
+	グループロゴの生成設定
 -----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_GROUPLOGO = "data/texture/logo_group/group_logo.png";
 static const D3DXVECTOR3 POS_GROUPLOGO	= D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
