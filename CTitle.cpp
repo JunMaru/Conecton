@@ -82,7 +82,6 @@ void CTitle::Init(void)
 											HEIGHT_PRESSGAMESTART);
 
 	m_pressGameStartText->SetDiffuse(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
-	m_pressGameStartText->SetDraw(false);
 
 	/*
 	D3DXVECTOR3 pos = POS_PRESSGAMESTART;
@@ -99,7 +98,7 @@ void CTitle::Init(void)
 	m_bDecide = false;
 
 	// フェードイン
-	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
+	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
 
 /*-----------------------------------------------------------------------------
@@ -131,7 +130,7 @@ void CTitle::Update(void)
 	{
 		CManager::GetPhaseFade()->Start(
 											CFade::FADETYPE_OUT,
-											60.0f,
+											30.0f,
 											D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		m_bDecide = false; // 無限フェード防止
 	}

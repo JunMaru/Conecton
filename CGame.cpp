@@ -92,7 +92,7 @@ void CGame::Init(void)
 	m_pInputCommand->Init();
 
 	// 1秒間のフェードイン
-	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
+	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
 
 /*-----------------------------------------------------------------------------
@@ -138,7 +138,7 @@ void CGame::Update(void)
 		{
 			CManager::GetPhaseFade()->Start(
 				CFade::FADETYPE_OUT,
-				60.0f,
+				30.0f,
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 #endif

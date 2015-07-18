@@ -53,7 +53,7 @@ void CGroupLogo::Init(void)
 	m_countDisp = 0.0f;
 
 	// フェードイン
-	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 60.0f, COL_WHITE);
+	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
 
 /*-----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ void CGroupLogo::Update(void)
 
 	if(m_countDisp > TIME_LOGODISP)
 	{
-		CManager::GetPhaseFade()->Start(CFade::FADETYPE_OUT, 60.0f, COL_WHITE);
+		CManager::GetPhaseFade()->Start(CFade::FADETYPE_OUT, 30.0f, COL_WHITE);
 
 		// 無限フェード防止
 		m_bSkip = false;
