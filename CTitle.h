@@ -36,9 +36,10 @@ class CTitle : public CPhase
 		void CommandRight(void);
 		void CommandUp(void);
 		void CommandDown(void);
-		void UpdateAnimationTitleLogo(void);
 		void InitAnimationBeeconCursor(void);
 		void UpdateAnimationBeeconCursor(void);
+		void UpdateAnimationTitleLogo(void);
+		void UpdateAnimationTitleBg(void);
 
 		CInputCommand *m_pInputCommand;
 
@@ -77,4 +78,12 @@ class CTitle : public CPhase
 		bool m_bRoopStop;
 		float m_countAnim;
 		int m_idxAnim;
+
+		float scrollBg;
+
+		float m_scaling;
+		float m_scaleMin;
+		float m_scaleMax;
+		float m_curve;
+		bool m_bScaling;
 };

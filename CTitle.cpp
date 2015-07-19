@@ -20,7 +20,7 @@
 /*-----------------------------------------------------------------------------
 	タイトル背景の生成設定
 -----------------------------------------------------------------------------*/
-static const char* TEXTUREPATH_TITLEBG = "data/texture/game_bg/game_bg.jpg";
+static const char* TEXTUREPATH_TITLEBG = "data/texture/title_bg/title_bg.jpg";
 static const D3DXVECTOR3 POS_TITLEBG = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 static const float WIDTH_TITLEBG = 1280.0f;
 static const float HEIGHT_TITLEBG = 720.0f;
@@ -31,7 +31,7 @@ static const float HEIGHT_TITLEBG = 720.0f;
 static const char* TEXTUREPATH_TITLE_LOGO = "data/texture/logo_title/title_logo.png";
 static const D3DXVECTOR3 POS_TITLE_LOGO = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, (SCREEN_HEIGHT * 0.5f) * 0.5f, 0.0f);
 static const float WIDTH_TITLE_LOGO = 800.0f;
-static const float HEIGHT_TITLE_LOGO = 300.0f;
+static const float HEIGHT_TITLE_LOGO = 250.0f;
 
 /*-----------------------------------------------------------------------------
 	GAMESTARTテキスト表示の生成設定
@@ -61,6 +61,11 @@ static const float HEIGHT_BEECON = 130.0f;
 	決定後の待ち時間
 -----------------------------------------------------------------------------*/
 static const float DECIDE_TIME = 15.0f;
+
+/*-----------------------------------------------------------------------------
+	タイトルロゴの拡縮値
+-----------------------------------------------------------------------------*/
+static const float SCALING_SPEED = 1.0f;
 
 /*-----------------------------------------------------------------------------
 	コンストラクタ
@@ -142,6 +147,12 @@ void CTitle::Init(void)
 	m_speed = 1.0f;
 	m_velocity = VEC2_ZERO;
 
+	scrollBg = 0.0f;
+
+	m_curve = 0.0f;
+	m_scaling = 0.0f;
+	m_bScaling = false;
+
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
@@ -174,6 +185,8 @@ void CTitle::Update(void)
 	}
 
 	UpdateAnimationTitleLogo();
+	UpdateAnimationTitleBg();
+
 	UpdateAnimationBeeconCursor();
 
 	if(m_bDecide)
@@ -203,14 +216,50 @@ void CTitle::Update(void)
 #ifdef _DEBUG
 	CDebugProcDX9::Print("[CTitle.cpp]\n");
 	CDebugProcDX9::Print("[ENTER]:フェーズ遷移\n");
-
-	CDebugProcDX9::Print("%f %f\n", m_pBeeconCursor->GetPosition().x, m_pBeeconCursor->GetPosition().y);
 #endif
 }
 
 void CTitle::UpdateAnimationTitleLogo(void)
 {
+	D3DXVECTOR3 scl = m_pTitleLogo->GetSize();
 
+	m_curve += D3DX_PI * 0.01f;
+
+	if(m_curve > D3DX_PI)
+	{
+		m_curve -= D3DX_PI * 2.0f;
+	}
+
+	if(m_bScaling)
+	{
+		scl.x += SCALING_SPEED;
+		scl.y += SCALING_SPEED;
+
+		if(scl.x > m_scaleMax)
+		{
+			m_bScaling = false;
+		}
+	}else
+	{
+		scl.x -= SCALING_SPEED;
+		scl.y -= SCALING_SPEED;
+
+		if(scl.x < m_scaleMin)
+		{
+			m_bScaling = true;
+		}
+	}
+}
+
+void CTitle::UpdateAnimationTitleBg(void)
+{
+	scrollBg += 0.001f;
+
+	m_pTitleBg->SetTexcoord(
+								D3DXVECTOR2(0.0f, 0.0f + scrollBg),
+								D3DXVECTOR2(1.0f, 0.0f + scrollBg),
+								D3DXVECTOR2(0.0f, 0.5f + scrollBg),
+								D3DXVECTOR2(1.0f, 0.5f + scrollBg));
 }
 
 void CTitle::UpdateInputEvent(void)
