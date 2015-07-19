@@ -38,6 +38,7 @@ class CTitle : public CPhase
 		void CommandDown(void);
 		void InitAnimationBeeconCursor(void);
 		void UpdateAnimationBeeconCursor(void);
+		void InitAnimationTitleLogo(void);
 		void UpdateAnimationTitleLogo(void);
 		void UpdateAnimationTitleBg(void);
 
@@ -81,9 +82,17 @@ class CTitle : public CPhase
 
 		float scrollBg;
 
-		float m_scaling;
-		float m_scaleMin;
-		float m_scaleMax;
-		float m_curve;
+		struct SclaeAttribute
+		{
+			D3DXVECTOR2 scale;
+			float countLimit;
+			D3DXVECTOR2 scaleLimit;
+			SclaeAttribute *next;
+		};
+
+		SclaeAttribute m_scaleAttribute[5];
+		SclaeAttribute *m_currentScaleAnim;
+		D3DXVECTOR2 m_basicScale;
+		float m_countScale;
 		bool m_bScaling;
 };

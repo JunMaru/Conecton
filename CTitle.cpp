@@ -65,7 +65,8 @@ static const float DECIDE_TIME = 15.0f;
 /*-----------------------------------------------------------------------------
 	タイトルロゴの拡縮値
 -----------------------------------------------------------------------------*/
-static const float SCALING_SPEED = 1.0f;
+static const float SCALING_X_SPEED = 5.0f;
+static const float SCALING_Y_SPEED = 2.0f;
 
 /*-----------------------------------------------------------------------------
 	コンストラクタ
@@ -125,6 +126,13 @@ void CTitle::Init(void)
 										WIDTH_BEECON,
 										HEIGHT_BEECON);
 
+	// 表示物の設定
+	m_pTitleBg->SetTexcoord(
+								D3DXVECTOR2(0.0f, 0.0f),
+								D3DXVECTOR2(1.0f, 0.0f),
+								D3DXVECTOR2(0.0f, 0.5f),
+								D3DXVECTOR2(1.0f, 0.5f));
+
 	m_pPressGameStartText->SetDiffuse(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
 
 	// 頂点情報をいれるときにひしゃげるための対応措置（SetVertexが問題点）
@@ -133,13 +141,10 @@ void CTitle::Init(void)
 	m_pBeeconCursor->SetTexcoord(
 								D3DXVECTOR2(0.0f, 0.0f),
 								D3DXVECTOR2(0.125f, 0.0f),
-								D3DXVECTOR2(0.0f, 0.375f),
-								D3DXVECTOR2(0.125f, 0.375f));
+								D3DXVECTOR2(0.0f, 0.325f),
+								D3DXVECTOR2(0.125f, 0.325f));
 
 	InitAnimationBeeconCursor();
-
-	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
-	m_pInputCommand->Init();
 
 	m_bDecide = false;
 	m_countDecide = 0.0f;
@@ -149,9 +154,14 @@ void CTitle::Init(void)
 
 	scrollBg = 0.0f;
 
-	m_curve = 0.0f;
-	m_scaling = 0.0f;
-	m_bScaling = false;
+	InitAnimationTitleLogo();
+
+	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
+	m_pInputCommand->Init();
+
+	m_pBeeconCursor->SetDraw(false);
+	m_pPressGameStartText->SetDraw(false);
+	m_pPressGameStartTextF->SetDraw(false);
 
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -179,15 +189,24 @@ void CTitle::Update(void)
 	// フェードしていなければ更新
 	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
 	{
-		UpdateInputEvent();
+		if(m_bScaling == false)
+		{
+			UpdateInputEvent();
 
-		MoveBeeconCursor();
+			MoveBeeconCursor();
+		}
 	}
 
-	UpdateAnimationTitleLogo();
-	UpdateAnimationTitleBg();
+	if(m_bScaling)
+	{
+		UpdateAnimationTitleLogo();
+	}
+	else
+	{
+		UpdateAnimationTitleBg();
 
-	UpdateAnimationBeeconCursor();
+		UpdateAnimationBeeconCursor();
+	}
 
 	if(m_bDecide)
 	{
@@ -219,35 +238,95 @@ void CTitle::Update(void)
 #endif
 }
 
+void CTitle::InitAnimationTitleLogo(void)
+{
+	m_pTitleLogo->SetScale(0.0f, 0.0f);
+
+	D3DXVECTOR2 size;
+
+	const float sizeUp = 1.0f;
+	const float sizeDown = -1.0f;
+
+	m_scaleAttribute[0].countLimit = 30.0f;
+	m_scaleAttribute[0].scaleLimit = D3DXVECTOR2(900.0f, 350.0f);
+	size.x = m_pTitleLogo->GetSize().x - m_scaleAttribute[0].scaleLimit.x;
+	size.y = m_pTitleLogo->GetSize().y - m_scaleAttribute[0].scaleLimit.y;
+	size *= -1.0f;
+	m_scaleAttribute[0].scale = sizeUp * size;
+ 	m_scaleAttribute[0].next = &m_scaleAttribute[1];
+
+	m_scaleAttribute[1].countLimit = 8.0f;
+	m_scaleAttribute[1].scaleLimit = D3DXVECTOR2(700.0f, 250.0f);
+	size.x = m_scaleAttribute[0].scaleLimit.x - m_scaleAttribute[1].scaleLimit.x;
+	size.y = m_scaleAttribute[0].scaleLimit.y - m_scaleAttribute[1].scaleLimit.y;
+	size *= -1.0f;
+	m_scaleAttribute[1].scale = -sizeDown * size;
+	m_scaleAttribute[1].next = &m_scaleAttribute[2];
+	
+	m_scaleAttribute[2].countLimit = 5.0f;
+	m_scaleAttribute[2].scaleLimit = D3DXVECTOR2(720.0f, 260.0f);
+	size.x = m_scaleAttribute[1].scaleLimit.x - m_scaleAttribute[2].scaleLimit.x;
+	size.y = m_scaleAttribute[1].scaleLimit.y - m_scaleAttribute[2].scaleLimit.y;
+	size *= -1.0f;
+	m_scaleAttribute[2].scale = sizeUp * size;
+	m_scaleAttribute[2].next = &m_scaleAttribute[3];
+	
+	m_scaleAttribute[3].countLimit = 3.0f;
+	m_scaleAttribute[3].scaleLimit = D3DXVECTOR2(680.0f, 240.0f);
+	size.x = m_scaleAttribute[2].scaleLimit.x - m_scaleAttribute[3].scaleLimit.x;
+	size.y = m_scaleAttribute[2].scaleLimit.y - m_scaleAttribute[3].scaleLimit.y;
+	size *= -1.0f;
+	m_scaleAttribute[3].scale = -sizeDown * size;
+	m_scaleAttribute[3].next = &m_scaleAttribute[4];
+	
+	m_scaleAttribute[4].countLimit = 5.0f;
+	m_scaleAttribute[4].scaleLimit = D3DXVECTOR2(700.0f, 250.0f);
+	size.x = m_scaleAttribute[3].scaleLimit.x - m_scaleAttribute[4].scaleLimit.x;
+	size.y = m_scaleAttribute[3].scaleLimit.y - m_scaleAttribute[4].scaleLimit.y;
+	size *= -1.0f;
+	m_scaleAttribute[4].scale = sizeUp * size;
+	m_scaleAttribute[4].next = nullptr;
+
+	m_currentScaleAnim = &m_scaleAttribute[0];
+
+	m_basicScale.x = m_pTitleLogo->GetSize().x;
+	m_basicScale.y = m_pTitleLogo->GetSize().y;
+
+	m_countScale = 0.0f;
+	m_bScaling = true;
+}
+
 void CTitle::UpdateAnimationTitleLogo(void)
 {
-	D3DXVECTOR3 scl = m_pTitleLogo->GetSize();
+	D3DXVECTOR2 scaleLogo;
 
-	m_curve += D3DX_PI * 0.01f;
+	m_countScale++;
 
-	if(m_curve > D3DX_PI)
+	scaleLogo.x = m_currentScaleAnim->scale.x * (m_countScale/ m_currentScaleAnim->countLimit);
+	scaleLogo.y = m_currentScaleAnim->scale.y * (m_countScale / m_currentScaleAnim->countLimit);
+
+	m_pTitleLogo->SetScale(m_basicScale.x + scaleLogo.x, m_basicScale.y + scaleLogo.y);
+
+	if(m_countScale >= m_currentScaleAnim->countLimit)
 	{
-		m_curve -= D3DX_PI * 2.0f;
-	}
+		// スケーリングするアニメをひとつ進める
+		if(m_currentScaleAnim->next != nullptr)
+		{
+			m_basicScale.x = m_basicScale.x + scaleLogo.x;
+			m_basicScale.y = m_basicScale.y + scaleLogo.y;
 
-	if(m_bScaling)
-	{
-		scl.x += SCALING_SPEED;
-		scl.y += SCALING_SPEED;
-
-		if(scl.x > m_scaleMax)
+			m_currentScaleAnim = m_currentScaleAnim->next;
+		}
+		else
 		{
 			m_bScaling = false;
-		}
-	}else
-	{
-		scl.x -= SCALING_SPEED;
-		scl.y -= SCALING_SPEED;
 
-		if(scl.x < m_scaleMin)
-		{
-			m_bScaling = true;
+			m_pBeeconCursor->SetDraw(true);
+			m_pPressGameStartText->SetDraw(true);
+			m_pPressGameStartTextF->SetDraw(true);
 		}
+
+		m_countScale = 0.0f;
 	}
 }
 
