@@ -17,6 +17,7 @@
 	ContentƒNƒ‰ƒX
 -----------------------------------------------------------------------------*/
 class CScene2D;
+class CInputCommand;
 class CGroupLogo : public CPhase
 {
 	public:
@@ -40,8 +41,9 @@ class CGroupLogo : public CPhase
 
 	private:
 		void UpdateInputEvent(void);
-		void UpdateInputEventDebug(void);
 		void Skip(void);
+
+		CInputCommand *m_pInputCommand;
 
 		CScene2D *m_pLogoBg;
 		CScene2D *m_pGroupLogo;
