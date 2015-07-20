@@ -12,6 +12,7 @@
 #include "CManager.h"
 #include "CInput.h"
 #include "CFade.h"
+#include "CInputCommand.h"
 
 /*-----------------------------------------------------------------------------
 	グループロゴの生成設定
@@ -52,6 +53,9 @@ void CGroupLogo::Init(void)
 	m_bSkip = false;
 	m_countDisp = 0.0f;
 
+	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
+	m_pInputCommand->Init();
+
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
@@ -61,6 +65,9 @@ void CGroupLogo::Init(void)
 -----------------------------------------------------------------------------*/
 void CGroupLogo::Uninit(void)
 {
+	m_pInputCommand->Uninit();
+	delete m_pInputCommand;
+
 	// 描画対象オブジェクトの開放
 	CScene::ReleaseAll();
 }
@@ -70,16 +77,14 @@ void CGroupLogo::Uninit(void)
 -----------------------------------------------------------------------------*/
 void CGroupLogo::Update(void)
 {
+	m_pInputCommand->Update();
+
 	// フェードしていなければ更新
 	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
 	{
 		m_countDisp++;
 
 		UpdateInputEvent();
-
-#ifdef _DEBUG
-		UpdateInputEventDebug();
-#endif
 
 		Skip();
 	}
@@ -111,42 +116,15 @@ void CGroupLogo::Update(void)
 -----------------------------------------------------------------------------*/
 void CGroupLogo::UpdateInputEvent(void)
 {
-	CInputJoypad *pJoyPad = CManager::GetInputJoypad();
+	const bool bDecide = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_ENTER)
+						|| m_pInputCommand->IsTrigger(CInputCommand::COMMAND_CONNECT)
+						|| m_pInputCommand->IsTrigger(CInputCommand::COMMAND_CANCEL)
+						|| m_pInputCommand->IsTrigger(CInputCommand::COMMAND_GIMMICKACTION);
 
-	if(pJoyPad == nullptr) return;
-
-	if(pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_1)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_2)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_3)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_4)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_5)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_6)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_7)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_8)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_9)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_10)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_11)
-	|| pJoyPad->GetKeyTrigger(CInputJoypad::GAMEPAD_12))
+	if(bDecide)
 	{
 		m_bSkip = true;
 	}
-}
-
-/*-----------------------------------------------------------------------------
-	入力イベント更新（デバッグ）
------------------------------------------------------------------------------*/
-void CGroupLogo::UpdateInputEventDebug(void)
-{
-#ifdef _DEBUG
-	CInputKeyboard *pKeyboard = CManager::GetInputKeyboard();
-
-	if(pKeyboard == nullptr) return;
-
-	if(pKeyboard->GetKeyTrigger(DIK_RETURN))
-	{
-		m_bSkip = true;
-	}
-#endif
 }
 
 /*-----------------------------------------------------------------------------
