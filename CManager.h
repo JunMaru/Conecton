@@ -36,6 +36,7 @@ class CCamera;
 class CLight;
 class CSoundXAudio2;
 class CFade;
+class CConfigRecorder;
 #ifdef _DEBUG
 class CDebugProcDX9;
 #endif
@@ -47,6 +48,7 @@ class CManager
 		{
 			PHASE_GROUPLOGO = 0,
 			PHASE_TITLE,
+			PHASE_STAGESELECT,
 			PHASE_GAME,
 			PHASE_RESULT,
 			PHASE_MAX
@@ -109,6 +111,12 @@ class CManager
 		static CFade* GetPhaseFade(void){ return m_pPhaseFade; }
 
 		/*-----------------------------------------------------------------------------
+			設定記録の取得
+			return	CConfigRecorder*		設定記録へのポインタ
+		-----------------------------------------------------------------------------*/
+		static CConfigRecorder* GetConfigRecorder(void){ return m_pConfigRecorder; }
+
+		/*-----------------------------------------------------------------------------
 			現在のフェーズ取得
 			return	PHASE		現在のフェーズの値
 		-----------------------------------------------------------------------------*/
@@ -146,6 +154,8 @@ class CManager
 		static CSoundXAudio2* m_pSoundXAudio2;
 		// フェーズ遷移時にはさむフェードへのポインタ
 		static CFade* m_pPhaseFade;
+		// 設定記録へのポインタ
+		static CConfigRecorder* m_pConfigRecorder;
 
 #ifdef _DEBUG
 		// デバッグ表示へのポインタ

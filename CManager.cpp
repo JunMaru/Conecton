@@ -14,11 +14,13 @@
 #include "CLight.h"
 #include "CSoundXAudio2.h"
 #include "CGroupLogo.h"
+#include "CStageSelect.h"
 #include "CTitle.h"
 #include "CGame.h"
 #include "CResult.h"
 #include "ScreenCaptureDX9.h"
 #include "CFade.h"
+#include "CConfigRecorder.h"
 
 /*-----------------------------------------------------------------------------
 	静的メンバ変数の初期化
@@ -31,13 +33,14 @@ CCamera* CManager::m_pCamera					= nullptr;
 CLight* CManager::m_pLight						= nullptr;
 CSoundXAudio2* CManager::m_pSoundXAudio2		= nullptr;
 CFade* CManager::m_pPhaseFade					= nullptr;
+CConfigRecorder* CManager::m_pConfigRecorder	= nullptr;
 #ifdef _DEBUG
 CDebugProcDX9* CManager::m_pDebugProcDX9		= nullptr;
 #endif
 // フェーズの初期設定 その1
 #ifdef _DEBUG
-CManager::PHASE CManager::m_Phase = PHASE_GAME;
-CManager::PHASE CManager::m_OldPhase = PHASE_GAME;
+CManager::PHASE CManager::m_Phase = PHASE_STAGESELECT;
+CManager::PHASE CManager::m_OldPhase = PHASE_STAGESELECT;
 #else
 CManager::PHASE CManager::m_Phase = PHASE_GROUPLOGO;
 CManager::PHASE CManager::m_OldPhase = PHASE_GROUPLOGO;
@@ -103,6 +106,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 									VEC3_ZERO
 	);
 
+	// 設定記録生成
+	m_pConfigRecorder = CConfigRecorder::Create();
+
 #ifdef _DEBUG
 	// デバッグ表示生成
 	m_pDebugProcDX9 = new CDebugProcDX9;
@@ -111,7 +117,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	// フェーズの初期設定 その2
 #ifdef _DEBUG
-	m_pPhase = new CGame();
+	m_pPhase = new CStageSelect();
 	m_pPhase->Init();
 #else
 	m_pPhase = new CGroupLogo();
@@ -196,6 +202,12 @@ void CManager::Uninit(void)
 		m_pPhaseFade->Uninit();
 		delete m_pPhaseFade;
 		m_pPhaseFade = nullptr;
+	}
+
+	if(m_pConfigRecorder)
+	{
+		delete m_pConfigRecorder;
+		m_pConfigRecorder = nullptr;
 	}
 
 #ifdef _DEBUG
@@ -331,6 +343,12 @@ void CManager::ChangePhase(void)
 			case PHASE_TITLE:
 			{
 				m_pPhase = new CTitle();
+				break;
+			}
+
+			case PHASE_STAGESELECT:
+			{
+				m_pPhase = new CStageSelect();
 				break;
 			}
 

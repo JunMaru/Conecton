@@ -229,7 +229,7 @@ void CTitle::Update(void)
 	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_UNOUT)
 	{
 		// フェードアウト終了後にゲーム画面遷移
-		CManager::SetPhase(CManager::PHASE_GAME);
+		CManager::SetPhase(CManager::PHASE_STAGESELECT);
 	}
 
 #ifdef _DEBUG
@@ -371,13 +371,13 @@ void CTitle::UpdateInputEvent(void)
 	const bool bRight = m_pInputCommand->IsPress(CInputCommand::COMMAND_RIGHT);
 	if(bRight)
 	{
-		CommandLeft();
+		CommandRight();
 	}
 
 	const bool bLeft = m_pInputCommand->IsPress(CInputCommand::COMMAND_LEFT);
 	if(bLeft)
 	{
-		CommandRight();
+		CommandLeft();
 	}
 
 	const bool bUp = m_pInputCommand->IsPress(CInputCommand::COMMAND_UP);
@@ -413,12 +413,12 @@ void CTitle::MoveBeeconCursor(void)
 
 void CTitle::CommandLeft(void)
 {
-	m_velocity.x += m_speed;
+	m_velocity.x -= m_speed;
 }
 
 void CTitle::CommandRight(void)
 {
-	m_velocity.x -= m_speed;
+	m_velocity.x += m_speed;
 }
 
 void CTitle::CommandUp(void)

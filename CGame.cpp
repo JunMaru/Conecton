@@ -30,6 +30,8 @@ since	20140713
 #include "CInputCommand.h"
 #include "CPseudoLight.h"
 #include "C2DLogo.h"
+#include "CConfigRecorder.h"
+#include "CStageConfig.h"
 
 /*-----------------------------------------------------------------------------
 	テクスチャ読み込み先のパス設定
@@ -77,10 +79,10 @@ void CGame::Init(void)
 {
 	m_pPseudoLight = CPseudoLight::Create("data/texture/pseudo_light/pseudo_light.png");
 
-	m_pBlockManager = CBlockManager::Create( "data/stage_info/stage1.csv" );
+	InitStage();
+
 	m_pPlayer = CPlayer::Create(VEC3_ZERO, VEC3_ZERO);
 	InitGauge();
-	m_pBackGround = CBackGround::Create("data/texture/game_bg/game_bg.jpg");
 	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
 	
 	m_pScrollManager = new CScrollManager();
@@ -147,7 +149,7 @@ void CGame::Update(void)
 	// フェードアウト完了後に画面遷移
 	if (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_UNOUT)
 	{
-		CManager::SetPhase(CManager::PHASE_RESULT);
+		CManager::SetPhase(CManager::PHASE_STAGESELECT);
 	}
 
 #ifdef _DEBUG
@@ -736,5 +738,40 @@ void CGame::CheckGameEnd(void)
 			CFade::FADETYPE_OUT,
 			60.0f,
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+}
+
+/*-----------------------------------------------------------------------------
+	設定記録から選択されているステージを取得し、
+	遊びたいステージのブロックと背景を生成 / 初期化する
+-----------------------------------------------------------------------------*/
+void CGame::InitStage(void)
+{
+	int selectStage = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_STAGESELECT);
+
+	switch(selectStage)
+	{
+		case STAGEID_1:
+			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage1.csv" );
+			m_pBackGround = CBackGround::Create("data/texture/game_bg/s1_bg.jpg");
+			break;
+
+		case STAGEID_2:
+			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage2ex.csv" );
+			m_pBackGround = CBackGround::Create("data/texture/game_bg/s2_bg.jpg");
+			break;
+
+		case STAGEID_3:
+			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage3.csv" );
+			m_pBackGround = CBackGround::Create("data/texture/game_bg/s3_bg.jpg");
+			break;
+
+		case STAGEID_4:
+			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage4.csv" );
+			m_pBackGround = CBackGround::Create("data/texture/game_bg/s4_bg.jpg");
+			break;
+
+		default:
+			break;
 	}
 }

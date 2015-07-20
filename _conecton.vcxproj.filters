@@ -90,6 +90,9 @@
     <Filter Include="ソース ファイル\application\CPseudoLight">
       <UniqueIdentifier>{9a9259fe-8bdf-42e9-ae21-3e7122e81b8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\CStageSelect">
+      <UniqueIdentifier>{a2d40039-53c0-4875-bf46-79db06d31e1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTitle.cpp">
@@ -226,6 +229,12 @@
     </ClCompile>
     <ClCompile Include="CGauge.cpp">
       <Filter>ソース ファイル\application\CGauge</Filter>
+    </ClCompile>
+    <ClCompile Include="CStageSelect.cpp">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="CConfigRecorder.cpp">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -366,6 +375,15 @@
     </ClInclude>
     <ClInclude Include="CGauge.h">
       <Filter>ソース ファイル\application\CGauge</Filter>
+    </ClInclude>
+    <ClInclude Include="CConfigRecorder.h">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="CStageConfig.h">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="CStageSelect.h">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

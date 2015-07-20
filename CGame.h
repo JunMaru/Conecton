@@ -71,4 +71,5 @@ public:
 		bool ConnectNormalBlock(void);
 		void HitCheckItem(void);
 		void CheckGameEnd(void);
+		void InitStage(void);
 };
