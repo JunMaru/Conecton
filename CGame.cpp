@@ -33,6 +33,9 @@ since	20140713
 #include "CConfigRecorder.h"
 #include "CStageConfig.h"
 
+static const float testOffsetX = 25.0f;
+static const float testOffsetY = 25.0f;
+
 /*-----------------------------------------------------------------------------
 	テクスチャ読み込み先のパス設定
 -----------------------------------------------------------------------------*/
@@ -511,9 +514,12 @@ void CGame::CheckConnectAction(void)
 //=============================================================================
 bool CGame::ConnectChangeAntonBlock(void)
 {
+	const float fOffsetX = testOffsetX;
+	const float fOffsetY = testOffsetY;
+
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
-	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
+	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x + fOffsetX, beeconPos.y + fOffsetY, 0.0f);
 	CBlock::BLOCKID blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
 	const CBlock::BLOCKID aChangeAntonBlockTable[] = { CBlock::BLOCKID_METAL, CBlock::BLOCKID_MINIMUM, CBlock::BLOCKID_POWERFUL, };
@@ -547,9 +553,12 @@ bool CGame::ConnectChangeAntonBlock(void)
 //=============================================================================
 bool CGame::ConnectGimmickBlock(void)
 {
+	const float fOffsetX = testOffsetX;
+	const float fOffsetY = testOffsetY;
+
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
-	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
+	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x + fOffsetX, beeconPos.y + fOffsetY, 0.0f);
 	CBlock::BLOCKID blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
 	const CBlock::BLOCKID aGimmickBlockTable[] = { CBlock::BLOCKID_LASER_CONTROL_DOWN, CBlock::BLOCKID_LASER_CONTROL_LEFT,
@@ -576,7 +585,6 @@ bool CGame::ConnectGimmickBlock(void)
 		// ビーコンがギミックブロックのストックを持っていない場合
 		if (blockIDFromBeecon == CBlock::BLOCKID_NONE)
 		{
-
 			int nLaserNo = m_pBlockManager->GetBlockHitLaserNo(workPos);
 			m_pLaserManager->ReplaceLaser(nLaserNo);
 
@@ -590,7 +598,6 @@ bool CGame::ConnectGimmickBlock(void)
 		// ビーコンがなんかしらのブロックを持っていた場合
 		else
 		{
-
 			int nLaserNo = m_pBlockManager->GetBlockHitLaserNo(workPos);
 			m_pLaserManager->ReplaceLaser(nLaserNo);
 
@@ -610,9 +617,12 @@ bool CGame::ConnectGimmickBlock(void)
 //=============================================================================
 bool CGame::ConnectNormalBlock(void)
 {
+	const float fOffsetX = testOffsetX;
+	const float fOffsetY = testOffsetY;
+
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
-	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
+	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x + fOffsetX, beeconPos.y + fOffsetY, 0.0f);
 	CBlock::BLOCKID blockIDFromBlockManager = m_pBlockManager->GetBlockID(workPos);
 
 	const CBlock::BLOCKID aGimmickBlockTable[] = { CBlock::BLOCKID_LASER_CONTROL_DOWN, CBlock::BLOCKID_LASER_CONTROL_LEFT,

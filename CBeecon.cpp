@@ -266,6 +266,7 @@ void CBeecon::TemporaryUpdate()
 	vtx[ 1 ].vtx = pos[ 1 ];
 	vtx[ 2 ].vtx = pos[ 2 ];
 	vtx[ 3 ].vtx = pos[ 3 ];
+
 	if ( m_bDirectionRight )
 	{
 		vtx[ 0 ].tex = D3DXVECTOR2( m_texPos.x, m_texPos.y );

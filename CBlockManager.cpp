@@ -380,7 +380,6 @@ int CBlockManager::GetBlockHitLaserNo(D3DXVECTOR3 pos)
 	CalculateBlockArrayNum(pos, &nArrayX, &nArrayY);
 	CBlock *pBlock = GetBlock(nArrayX, nArrayY);
 
-	// ƒuƒƒbƒN‚ÌŽí—Þ‚ð•Ô‚·
 	if (pBlock != nullptr)
 	{
 		return pBlock->GetHitLaserNo();
