@@ -166,8 +166,11 @@ void CTitle::Init(void)
 	m_pPressGameStartText->SetDraw(false);
 	m_pPressGameStartTextF->SetDraw(false);
 
-	// ライフ初期化
+	// ライフ初期化（ループ対応）
 	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, INIT_RETRYLIFE);
+
+	// 選択ステージ初期化（ループ対応）
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_STAGESELECT, 0);
 
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_TITLE);
 
