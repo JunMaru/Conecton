@@ -22,7 +22,7 @@
 	マクロ定義
 -----------------------------------------------------------------------------*/
 static const D3DXVECTOR3 STARTPOS_TOP_CURSOR	= D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 250.0f, 150.0f, 0.0f);
-static const D3DXVECTOR3 STARTPOS_UNDER_CURSOR	= D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 250.0f, 325.0f, 0.0f);
+static const D3DXVECTOR3 STARTPOS_UNDER_CURSOR	= D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 250.0f, 450.0f, 0.0f);
 
 /*-----------------------------------------------------------------------------
 	コンストラクタ
@@ -100,6 +100,13 @@ void CPause::Enable(void)
 	// ポーズメニュー初期位置をゲームに戻るに設定
 	m_pauseMenu->SetPositionCursor(STARTPOS_TOP_CURSOR);
 	m_menuCursorPos = CPauseMenu::PAUSEMENU_RETRY;
+
+	/*
+	if(CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE) == 0)
+	{
+
+	}
+	*/
 
 	m_pauseMenu->DispAll();
 }
