@@ -28,6 +28,7 @@ class CInputCommand;
 class CPseudoLight;
 class C2DLogo;
 class CPause;
+class CScene2D;
 
 class CGame : public CPhase
 {
@@ -91,6 +92,8 @@ public:
 		CPseudoLight *m_pPseudoLight;
 		C2DLogo *m_pEndLogo;
 
+		CScene2D *m_pGameOverBG;
+
 		TRANSITIONID m_transitionID;
 		bool m_bTransition;
 
@@ -107,4 +110,5 @@ public:
 		void InitStage(void);
 		void CheckPauseSelect(void);
 		void CheckTransition(void);
+		void InitGameOverBG(void);
 };

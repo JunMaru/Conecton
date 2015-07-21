@@ -20,6 +20,7 @@
 #include "ScreenCaptureDX9.h"
 #include "CFade.h"
 #include "CConfigRecorder.h"
+#include "CLifeConfig.h"
 
 /*-----------------------------------------------------------------------------
 	静的メンバ変数の初期化
@@ -107,6 +108,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	// 設定記録生成
 	m_pConfigRecorder = CConfigRecorder::Create();
+
+	// ライフ初期化
+	m_pConfigRecorder->Set(CConfigRecorder::CI_RETRYLIFE, INIT_RETRYLIFE);
 
 #ifdef _DEBUG
 	// デバッグ表示生成

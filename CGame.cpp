@@ -33,6 +33,8 @@ since	20140713
 #include "CConfigRecorder.h"
 #include "CStageConfig.h"
 #include "CPause.h"
+#include "CSoundXAudio2.h"
+#include "CLifeConfig.h"
 
 /*-----------------------------------------------------------------------------
 	テクスチャ読み込み先のパス設定
@@ -43,6 +45,14 @@ static const char* TEXTUREPATH_FONT_CLEAR = "data/texture/font/clear.png";
 	ゲージUIのベース値(これが最大値になる)
 -----------------------------------------------------------------------------*/
 static const float GAUGE_BASE_VALUE = (100.0f);
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバーＢＧの生成設定
+-----------------------------------------------------------------------------*/
+static const char* TEXTUREPATH_GAMEOVERBG = "data/texture/stageselect_bg/gameover_bg.png";
+static const D3DXVECTOR3 POS_GAMEOVERBG = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
+static const float WIDTH_GAMEOVERBG = 1280.0f;
+static const float HEIGHT_GAMEOVERBG = 720.0f;
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
@@ -90,8 +100,15 @@ void CGame::Init(void)
 	InitStage();
 
 	m_pPlayer = CPlayer::Create(VEC3_ZERO, VEC3_ZERO);
+	
 	InitGauge();
+
 	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
+
+	// 現在の設定記録されているライフの値に初期化する
+	int nowLife = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE);
+	nowLife = MAX_RETRYLIFE - nowLife;
+	m_pLifeUI->AddLife(nowLife);
 	
 	m_pScrollManager = new CScrollManager();
 	m_pScrollManager->Init();
@@ -104,11 +121,15 @@ void CGame::Init(void)
 	m_pPause = new CPause();
 	m_pPause->Init();
 
+	// ポーズの選択情報を初期化して、ループしたときにいきなり画面遷移みたいなのを防止
 	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_PAUSESLECT, 0);
 
 	m_transitionID = TRANSITIONID_NONE;
-
 	m_bTransition = false;
+
+	InitGameOverBG();
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_GAME);
 
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -119,6 +140,8 @@ void CGame::Init(void)
 -----------------------------------------------------------------------------*/
 void CGame::Uninit(void)
 {
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
+
 	// 描画対象オブジェクトの解放
 	CScene::ReleaseAll();
 
@@ -917,3 +940,19 @@ void CGame::CheckTransition(void)
 		}
 	}
 }
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバーＢＧの初期化
+-----------------------------------------------------------------------------*/
+void CGame::InitGameOverBG(void)
+{
+	m_pGameOverBG = CScene2D::Create(
+										TEXTUREPATH_GAMEOVERBG,
+										POS_GAMEOVERBG,
+										VEC3_ZERO,
+										WIDTH_GAMEOVERBG,
+										HEIGHT_GAMEOVERBG);
+
+	m_pGameOverBG->SetDraw(false);
+}
+

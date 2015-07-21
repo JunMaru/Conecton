@@ -16,6 +16,7 @@
 #include "CInputCommand.h"
 #include "CStageConfig.h"
 #include "CConfigRecorder.h"
+#include "CSoundXAudio2.h"
 
 /*-----------------------------------------------------------------------------
 	背景の生成設定
@@ -215,6 +216,8 @@ void CStageSelect::Init(void)
 	m_bChange = false;
 	m_countChange = 0.0f;
 
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_STAGESELECT);
+
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
@@ -224,6 +227,8 @@ void CStageSelect::Init(void)
 -----------------------------------------------------------------------------*/
 void CStageSelect::Uninit(void)
 {
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_STAGESELECT);
+
 	m_pInputCommand->Uninit();
 	delete m_pInputCommand;
 
