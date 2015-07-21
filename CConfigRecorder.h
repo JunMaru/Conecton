@@ -26,6 +26,7 @@ class CConfigRecorder
 		{
 			CI_STAGESELECT = 0,
 			CI_PAUSESLECT,
+			CI_RETRYLIFE,
 			CI_MAX
 		};
 
