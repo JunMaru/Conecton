@@ -208,7 +208,7 @@ void CPlayer::CreateAnton(D3DXVECTOR3 pos)
 	m_pAnton->SetRotation(0, 0, 0);
 	m_pAnton->SetScaling(100, 130);
 	m_pAnton->SetTargetPosition(pos.x,pos.y);
-	m_pAnton->SetSpd(8);
+	m_pAnton->SetSpd(8.0f);
 	m_pAnton->CommandChangeNormal();
 }
 
@@ -225,7 +225,7 @@ void CPlayer::CreateBeecon(D3DXVECTOR3 pos)
 	m_pBeecon->SetRotation(0, 0, 0);
 	m_pBeecon->SetScaling(100, 130);
 	m_pBeecon->SetTargetPosition(pos.x, pos.y);
-	m_pBeecon->SetSpd(8);
+	m_pBeecon->SetSpd(8.0f);
 }
 
 /*-----------------------------------------------------------------------------

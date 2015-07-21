@@ -375,12 +375,22 @@ void CLaserManager::SetLaserGoalTexture(void)
 
 }
 
+//=============================================================================
+// レーザー再配置処理
+//=============================================================================
 void CLaserManager::ReplaceLaser(int nNo)
 {
-	m_pLaserArray[nNo]->MoveRestart();
+	if (nNo < 0)
+	{
+		return;
+	}
+
+	// moveRestartはしない
+	// これにより、動きはしないが、止まっているフラグがOFFの為判定される
 	m_nCurrentLaser = nNo;
 	m_bStopLaserFlag[m_nCurrentLaser] = false;
 
+	// レーザー消去処理(自分より後に出来たレーザーを対象)
 	for (int nCnt = MAX_LASER_NUM - 1; nCnt > nNo; --nCnt)
 	{
 		if (m_pLaserArray[nCnt] == nullptr)

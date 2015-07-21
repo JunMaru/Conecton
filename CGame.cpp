@@ -39,6 +39,11 @@ since	20140713
 static const char* TEXTUREPATH_FONT_CLEAR = "data/texture/font/clear.png";
 
 /*-----------------------------------------------------------------------------
+	ゲージUIのベース値(これが最大値になる)
+-----------------------------------------------------------------------------*/
+static const float GAUGE_BASE_VALUE = (100.0f);
+
+/*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
 -----------------------------------------------------------------------------*/
 CPlayer *CGame::m_pPlayer = nullptr;
@@ -431,7 +436,7 @@ void CGame::InitGauge(void)
 	m_pGauge->Init();
 	m_pGauge->SetPosition(D3DXVECTOR3(1200.0f, 100.0f, 0.0f));
 	m_pGauge->SetScling(D3DXVECTOR2(116.0f, 116.0f));
-	m_pGauge->SetGaugeBaseVal(100.0f);
+	m_pGauge->SetGaugeBaseVal(GAUGE_BASE_VALUE);
 	m_pGauge->SetGaugeVal(0.0f);
 
 	const char *pFilePathTable[] = { "data/texture/ui/gauge_base.png", "data/texture/ui/gauge.png", "data/texture/ui/gauge_frame.png", };
@@ -685,7 +690,8 @@ void CGame::HitCheckItem(void)
 	}
 
 	const CBlock::BLOCKID aItemBlockTable[] = { CBlock::BLOCKID_FOOD_ACORN, CBlock::BLOCKID_FOOD_APPLE, CBlock::BLOCKID_FOOD_MUSHROOM, };
-	const float aItemScoreTable[] = { 10.0f, 20.0f, 30.0f, };
+	const int nFoodNum = m_pBlockManager->GetFoodNum();
+	const float fFoodScore = GAUGE_BASE_VALUE / nFoodNum;
 
 	// アイテムチェック
 	for (int nCnt = 0; nCnt < sizeof(aItemBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
@@ -695,7 +701,7 @@ void CGame::HitCheckItem(void)
 			continue;
 		}
 
-		m_fScore += aItemScoreTable[nCnt];
+		m_fScore += fFoodScore;
 		m_pGauge->SetGaugeVal(m_fScore);
 
 		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_NONE, antonPos);

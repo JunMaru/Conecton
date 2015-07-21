@@ -57,7 +57,8 @@ public:
 
 	// ブロックIDゲッター
 	CBlock::BLOCKID GetBlockID( D3DXVECTOR3 pos );
-	int CBlockManager::GetBlockHitLaserNo(D3DXVECTOR3 pos);
+	int GetBlockHitLaserNo(D3DXVECTOR3 pos);
+	int GetFoodNum(void){ return m_nFoodNum; }
 
 	// ギミックブロックへ上書きする関数
 	void OverwriteGimmickBlock( CBlock::BLOCKID block_type, D3DXVECTOR3 pos );
@@ -74,6 +75,7 @@ private:
 	// CSVの情報を受け取る場所？
 	int m_nMaxArrayNumX;	// ブロック配列最大数-X
 	int m_nMaxArrayNumY;	// ブロック配列最大数-Y
+	int m_nFoodNum;
 
 	char *m_pFileName;
 };

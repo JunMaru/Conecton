@@ -43,6 +43,8 @@ CBlockManager* CBlockManager::Create(char *pFileName)
 //=============================================================================
 HRESULT CBlockManager::Init()
 {
+	m_nFoodNum = 0;
+
 	if (!CreateBlockMap(m_pFileName))
 	{
 		return E_FAIL;
@@ -252,16 +254,19 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 				case CBlock::BLOCKID_FOOD_ACORN:
 					pBlock = new CGimmickBlock;
 					pBlock->SetBlockTexID(0, 18);
+					++m_nFoodNum;
 					break;
 
 				case CBlock::BLOCKID_FOOD_APPLE:
 					pBlock = new CGimmickBlock;
 					pBlock->SetBlockTexID(1, 18);
+					++m_nFoodNum;
 					break;
 
 				case CBlock::BLOCKID_FOOD_MUSHROOM:
 					pBlock = new CGimmickBlock;
 					pBlock->SetBlockTexID(2, 18);
+					++m_nFoodNum;
 					break;
 
 				default:
