@@ -93,6 +93,7 @@ public:
 	void SetAntonAction(ANTON_ACTION action);
 	void SetBeeconBlockID(BEECON_BLOCKID block_id);
 	void SetBeeconIconUIType(BEECON_ICONTYPE icon_type);
+	void SetStopMove(bool bFlg){ m_bStopMove = bFlg; }
 
 	CAnton* GetAnton(void){ return m_pAnton; }
 	CBeecon* GetBeecon(void){ return m_pBeecon; }
@@ -112,4 +113,5 @@ private:
 	CInputCommand *m_pInputCommand;
 	CAntonIconUI *m_pAntonIconUI;
 	CBeeconIconUI *m_pBeeconIconUI;
+	bool m_bStopMove;
 };

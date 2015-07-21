@@ -733,6 +733,7 @@ void CGame::CheckGameEnd(void)
 	{
 		m_pPlayer->SetAntonState(CPlayer::ANTON_STATE_NORMAL);
 		m_pPlayer->SetAntonAction(CPlayer::ANTON_ACTION_FRONT);
+		m_pPlayer->SetStopMove(true);
 	}
 
 	if (m_pEndLogo == nullptr)

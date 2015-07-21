@@ -33,6 +33,7 @@ CPlayer::CPlayer()
 	m_pInputCommand = nullptr;
 	m_pAntonIconUI = nullptr;
 	m_pBeeconIconUI = nullptr;
+	m_bStopMove = false;
 }
 
 /*-----------------------------------------------------------------------------
@@ -163,6 +164,13 @@ void CPlayer::Update(void)
 -----------------------------------------------------------------------------*/
 void CPlayer::CheckMove(void)
 {
+	// ƒQ[ƒ€ƒNƒŠƒA“™‚Å“®‚©‚È‚¢–½—ß‚ª—ˆ‚Ä‚¢‚Ä‚¢‚éê‡
+	if (m_bStopMove == true)
+	{
+		m_pBeecon->CommandStopMove();
+		return;
+	}
+
 	const bool bRight = m_pInputCommand->IsPress(CInputCommand::COMMAND_RIGHT);
 	const bool bLeft = m_pInputCommand->IsPress(CInputCommand::COMMAND_LEFT);
 	const bool bUp = m_pInputCommand->IsPress(CInputCommand::COMMAND_UP);

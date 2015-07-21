@@ -116,8 +116,6 @@ void CAnton::Draw()
 
 void CAnton::CommandRightMove()
 {
-	m_bDirectionRight = true;
-
 	const bool bWalk = (m_action == ACTION_WALK);
 	const bool bPowerfulPush = ((m_state == STATE_POWERFUL) && (m_action == ACTION_PUSH));
 	const bool bHandMove = ((m_state == STATE_NORMAL) && (m_action == ACTION_FRONT));
@@ -140,14 +138,13 @@ void CAnton::CommandRightMove()
 		return;
 	}
 
+	m_bDirectionRight = true;
 	m_action = ACTION_WALK;
 	ResetSelectAnimetionIndex();
 }
 
 void CAnton::CommandLeftMove()
 {
-	m_bDirectionRight = false;
-
 	const bool bWalk = (m_action == ACTION_WALK);
 	const bool bPowerfulPush = ((m_state == STATE_POWERFUL) && (m_action == ACTION_PUSH));
 	const bool bHandMove = ((m_state == STATE_NORMAL) && (m_action == ACTION_FRONT));
@@ -170,6 +167,7 @@ void CAnton::CommandLeftMove()
 		return;
 	}
 
+	m_bDirectionRight = false;
 	m_action = ACTION_WALK;
 	ResetSelectAnimetionIndex();
 }
