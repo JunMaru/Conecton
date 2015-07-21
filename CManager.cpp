@@ -17,7 +17,6 @@
 #include "CStageSelect.h"
 #include "CTitle.h"
 #include "CGame.h"
-#include "CResult.h"
 #include "ScreenCaptureDX9.h"
 #include "CFade.h"
 #include "CConfigRecorder.h"
@@ -355,12 +354,6 @@ void CManager::ChangePhase(void)
 			case PHASE_GAME:
 			{
 				m_pPhase = new CGame();
-				break;
-			}
-
-			case PHASE_RESULT:
-			{
-				m_pPhase = new CResult();
 				break;
 			}
 

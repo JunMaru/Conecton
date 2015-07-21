@@ -50,7 +50,6 @@ class CManager
 			PHASE_TITLE,
 			PHASE_STAGESELECT,
 			PHASE_GAME,
-			PHASE_RESULT,
 			PHASE_MAX
 		};
 

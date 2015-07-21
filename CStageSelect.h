@@ -46,6 +46,7 @@ class CStageSelect : public CPhase
 		void CreateSelectUI(void);
 		void CreateObjectCharacter(void);
 		void InitSelect(void);
+		void InitAnimationCharacter(void);
 		bool IsSelected(void);
 		void UpdateInputEvent(void);
 		void CommandSelect(void);
@@ -53,12 +54,16 @@ class CStageSelect : public CPhase
 		void CommandRight(void);
 		void UpdateStageNumUI(void);
 		void UpdateSS(void);
+		void UpdateAnimationBeecon(void);
+		void UpdateAnimationAnton(void);
 		void MoveCharacter(void);
+		void BlinkSelect(float flashTime);
 
 		CInputCommand *m_pInputCommand;
 
 		CScene2D *m_pStageSelectBg;
 		CScene2D *m_pInfoPanel;
+		CScene2D *m_pFrameSS;
 		CScene2D *m_pStage1SS;
 		CScene2D *m_pStage2SS;
 		CScene2D *m_pStage3SS;
@@ -71,7 +76,42 @@ class CStageSelect : public CPhase
 		CScene2D *m_pBeecon;
 		CScene2D *m_pAnton;
 
+		enum AnimListBeecon
+		{
+			ALB_WAIT = 0,
+			ALB_MAX
+		};
+		AnimListBeecon m_selectAnimBeecon;
+
+		enum AnimListAnton
+		{
+			ALA_WAIT = 0,
+			ALA_MAX
+		};
+		AnimListAnton m_selectAnimAnton;
+
+		struct AnimInfoSimple
+		{
+			int wait;
+			D3DXVECTOR2 uv[4];
+		};
+
+		AnimInfoSimple m_beeconAnimWait[8];
+		bool m_bRoopStopBeecon;
+		float m_countAnimBeecon;
+		int m_idxAnimBeecon;
+
+		AnimInfoSimple m_antonAnimWait[8];
+		bool m_bRoopStopAnton;
+		float m_countAnimAnton;
+		int m_idxAnimAnton;
+
 		// î‘çÜÅi0Å`3ÅjÇ≈ÉXÉeÅ[ÉWÇPÅ`ÇSÇéØï 
 		int m_selectStage;
 		bool m_bSelected;
+
+		float m_countBlink;
+
+		bool m_bChange;
+		float m_countChange;
 };

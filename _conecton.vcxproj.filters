@@ -98,9 +98,6 @@
     <ClCompile Include="CTitle.cpp">
       <Filter>ソース ファイル\framework\phase</Filter>
     </ClCompile>
-    <ClCompile Include="CResult.cpp">
-      <Filter>ソース ファイル\framework\phase</Filter>
-    </ClCompile>
     <ClCompile Include="CGame.cpp">
       <Filter>ソース ファイル\framework\phase</Filter>
     </ClCompile>
@@ -242,9 +239,6 @@
       <Filter>ソース ファイル\framework\phase</Filter>
     </ClInclude>
     <ClInclude Include="CPhase.h">
-      <Filter>ソース ファイル\framework\phase</Filter>
-    </ClInclude>
-    <ClInclude Include="CResult.h">
       <Filter>ソース ファイル\framework\phase</Filter>
     </ClInclude>
     <ClInclude Include="CTitle.h">

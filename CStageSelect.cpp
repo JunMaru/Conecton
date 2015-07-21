@@ -36,6 +36,11 @@ static const float HEIGHT_INFOPANEL = 450.0f;
 /*-----------------------------------------------------------------------------
 	ＳＳの生成設定
 -----------------------------------------------------------------------------*/
+static const char* TEXTUREPATH_SS_FRAME = NULL;
+static const D3DXVECTOR3 POS_SS_FRAME = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, (SCREEN_HEIGHT * 0.5f) - 50.0f, 0.0f);
+static const float WIDTH_SS_FRAME = 490.0f;
+static const float HEIGHT_SS_FRAME = 280.0f;
+
 static const char* TEXTUREPATH_SS_STAGE1 = "data/texture/stageselect_ui/ss1.jpg";
 static const D3DXVECTOR3 POS_SS_STAGE1 = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, (SCREEN_HEIGHT * 0.5f) - 50.0f, 0.0f);
 static const float WIDTH_SS_STAGE1 = 480.0f;
@@ -147,7 +152,20 @@ void CStageSelect::Init(void)
 
 	CrateStageInfoUI();
 
+	m_pInfoPanel->SetDiffuse(COL_BLACK_ALPHA(0.3f));
+	m_pStageNumText->SetTexcoord(
+									INIT_TEX0_STAGE_NUM,
+									INIT_TEX1_STAGE_NUM,
+									INIT_TEX2_STAGE_NUM,
+									INIT_TEX3_STAGE_NUM);
+
 	CreateObjectSS();
+
+	m_pFrameSS->SetDiffuse(COL_BLACK_ALPHA(0.8f));
+
+	m_pStage2SS->SetDraw(false);
+	m_pStage3SS->SetDraw(false);
+	m_pStage4SS->SetDraw(false);
 
 	// 足場オブジェクト生成
 	m_pSelectScaffold = CScene2D::Create(
@@ -159,12 +177,43 @@ void CStageSelect::Init(void)
 
 	CreateObjectCharacter();
 
+	m_pAnton->SetTexcoord(
+								INIT_TEX0_ANTON_WAIT,
+								INIT_TEX1_ANTON_WAIT,
+								INIT_TEX2_ANTON_WAIT,
+								INIT_TEX3_ANTON_WAIT);
+
+	m_pBeecon->SetTexcoord(
+								INIT_TEX0_BEECON_WAIT,
+								INIT_TEX1_BEECON_WAIT,
+								INIT_TEX2_BEECON_WAIT,
+								INIT_TEX3_BEECON_WAIT);
+
+	// 頂点情報をいれるときにひしゃげるための対応措置（SetVertexが問題点）
+	m_pAnton->SetScale(D3DXVECTOR2(130.0f, 100.0f));
+	m_pAnton->SetVertex();
+	m_pBeecon->SetScale(D3DXVECTOR2(130.0f, 100.0f));
+	m_pBeecon->SetVertex();
+
+	InitAnimationCharacter();
+
 	CreateSelectUI();
+
+	m_pSelectButton->SetTexcoord(
+								INIT_TEX0_BUTTON,
+								INIT_TEX1_BUTTON,
+								INIT_TEX2_BUTTON,
+								INIT_TEX3_BUTTON);
 
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
 	m_pInputCommand->Init();
 
 	InitSelect();
+
+	m_countBlink = 0.0f;
+
+	m_bChange = false;
+	m_countChange = 0.0f;
 
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -199,7 +248,25 @@ void CStageSelect::Update(void)
 
 		MoveCharacter();
 
+		BlinkSelect(15.0f);
+
 		if(IsSelected())
+		{
+			m_bChange = true;
+		}
+	}
+
+	UpdateAnimationAnton();
+
+	UpdateAnimationBeecon();
+
+	// 画面遷移のフラグがONならば、SELECTの点滅を早めて認識させてからフェードアウトさせる
+	if(m_bChange)
+	{
+		BlinkSelect(1.0f);
+
+		m_countChange++;
+		if(m_countChange > 30.0f)
 		{
 			// ゲーム画面に遷移するためのフェードアウト発生
 			CManager::GetPhaseFade()->Start(
@@ -209,6 +276,9 @@ void CStageSelect::Update(void)
 
 			// ゲーム画面で読み込むために選択しているステージを記録
 			CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_STAGESELECT, m_selectStage);
+
+			// 無限防止
+			m_bChange = false;
 		}
 	}
 
@@ -234,7 +304,6 @@ void CStageSelect::CrateStageInfoUI(void)
 										VEC3_ZERO,
 										WIDTH_INFOPANEL,
 										HEIGHT_INFOPANEL);
-	m_pInfoPanel->SetDiffuse(COL_BLACK_ALPHA(0.4f));
 
 	// ステージテキスト生成
 	m_pStageText = CScene2D::Create(
@@ -251,15 +320,17 @@ void CStageSelect::CrateStageInfoUI(void)
 										VEC3_ZERO,
 										WIDTH_STAGE_NUM,
 										HEIGHT_STAGE_NUM);
-	m_pStageNumText->SetTexcoord(
-									INIT_TEX0_STAGE_NUM,
-									INIT_TEX1_STAGE_NUM,
-									INIT_TEX2_STAGE_NUM,
-									INIT_TEX3_STAGE_NUM);
 }
 
 void CStageSelect::CreateObjectSS(void)
 {
+	m_pFrameSS = CScene2D::Create(
+										NULL,
+										POS_SS_FRAME,
+										VEC3_ZERO,
+										WIDTH_SS_FRAME,
+										HEIGHT_SS_FRAME);
+
 	m_pStage1SS = CScene2D::Create(
 										TEXTUREPATH_SS_STAGE1,
 										POS_SS_STAGE1,
@@ -287,18 +358,6 @@ void CStageSelect::CreateObjectSS(void)
 										VEC3_ZERO,
 										WIDTH_SS_STAGE4,
 										HEIGHT_SS_STAGE4);
-
-	m_pStage2SS->SetDraw(false);
-	m_pStage3SS->SetDraw(false);
-	m_pStage4SS->SetDraw(false);
-
-#ifdef _DEBUG
-	// 識別のための色付け
-	m_pStage1SS->SetDiffuse(D3DXCOLOR(0.8f, 0.2f, 0.2f, 1.0f));
-	m_pStage2SS->SetDiffuse(D3DXCOLOR(0.2f, 0.8f, 0.2f, 1.0f));
-	m_pStage3SS->SetDiffuse(D3DXCOLOR(0.2f, 0.2f, 0.8f, 1.0f));
-	m_pStage4SS->SetDiffuse(D3DXCOLOR(0.8f, 0.2f, 8.0f, 1.0f));
-#endif
 }
 
 void CStageSelect::CreateSelectUI(void)
@@ -310,11 +369,6 @@ void CStageSelect::CreateSelectUI(void)
 										VEC3_ZERO,
 										WIDTH_BUTTON,
 										HEIGHT_BUTTON);
-	m_pSelectButton->SetTexcoord(
-								INIT_TEX0_BUTTON,
-								INIT_TEX1_BUTTON,
-								INIT_TEX2_BUTTON,
-								INIT_TEX3_BUTTON);
 
 	// SELECT生成
 	m_pSelectText = CScene2D::Create(
@@ -334,11 +388,6 @@ void CStageSelect::CreateObjectCharacter(void)
 									VEC3_ZERO,
 									WIDTH_ANTON,
 									HEIGHT_ANTON);
-	m_pAnton->SetTexcoord(
-								INIT_TEX0_ANTON_WAIT,
-								INIT_TEX1_ANTON_WAIT,
-								INIT_TEX2_ANTON_WAIT,
-								INIT_TEX3_ANTON_WAIT);
 
 	// ビーコン生成
 	m_pBeecon = CScene2D::Create(
@@ -347,23 +396,49 @@ void CStageSelect::CreateObjectCharacter(void)
 									VEC3_ZERO,
 									WIDTH_BEECON,
 									HEIGHT_BEECON);
-	m_pBeecon->SetTexcoord(
-								INIT_TEX0_BEECON_WAIT,
-								INIT_TEX1_BEECON_WAIT,
-								INIT_TEX2_BEECON_WAIT,
-								INIT_TEX3_BEECON_WAIT);
-
-	// 頂点情報をいれるときにひしゃげるための対応措置（SetVertexが問題点）
-	m_pAnton->SetScale(D3DXVECTOR2(130.0f, 100.0f));
-	m_pAnton->SetVertex();
-	m_pBeecon->SetScale(D3DXVECTOR2(130.0f, 100.0f));
-	m_pBeecon->SetVertex();
 }
 
 void CStageSelect::InitSelect(void)
 {
 	m_selectStage = 0;
 	m_bSelected = false;
+}
+
+void CStageSelect::InitAnimationCharacter(void)
+{
+	m_selectAnimBeecon = AnimListBeecon::ALB_WAIT;
+
+	for(int i = 0; i < 8; i++)
+	{
+		m_beeconAnimWait[i].wait = 3;
+
+		float offset = i * 0.125f;
+		m_beeconAnimWait[i].uv[0] = D3DXVECTOR2(INIT_TEX0_BEECON_WAIT.x + offset, INIT_TEX0_BEECON_WAIT.y);
+		m_beeconAnimWait[i].uv[1] = D3DXVECTOR2(INIT_TEX1_BEECON_WAIT.x + offset, INIT_TEX1_BEECON_WAIT.y);
+		m_beeconAnimWait[i].uv[2] = D3DXVECTOR2(INIT_TEX2_BEECON_WAIT.x + offset, INIT_TEX2_BEECON_WAIT.y);
+		m_beeconAnimWait[i].uv[3] = D3DXVECTOR2(INIT_TEX3_BEECON_WAIT.x + offset, INIT_TEX3_BEECON_WAIT.y);
+	}
+
+	m_bRoopStopBeecon = false;
+	m_countAnimBeecon = 0.0f;
+	m_idxAnimBeecon = 0;
+
+	m_selectAnimAnton = AnimListAnton::ALA_WAIT;
+
+	for(int i = 0; i < 4; i++)
+	{
+		m_antonAnimWait[i].wait = 3;
+
+		float offset = i * 0.125f;
+		m_antonAnimWait[i].uv[0] = D3DXVECTOR2(INIT_TEX0_ANTON_WAIT.x + offset, INIT_TEX0_ANTON_WAIT.y);
+		m_antonAnimWait[i].uv[1] = D3DXVECTOR2(INIT_TEX1_ANTON_WAIT.x + offset, INIT_TEX1_ANTON_WAIT.y);
+		m_antonAnimWait[i].uv[2] = D3DXVECTOR2(INIT_TEX2_ANTON_WAIT.x + offset, INIT_TEX2_ANTON_WAIT.y);
+		m_antonAnimWait[i].uv[3] = D3DXVECTOR2(INIT_TEX3_ANTON_WAIT.x + offset, INIT_TEX3_ANTON_WAIT.y);
+	}
+
+	m_bRoopStopAnton = false;
+	m_countAnimAnton = 0.0f;
+	m_idxAnimAnton = 0;
 }
 
 bool CStageSelect::IsSelected(void)
@@ -507,6 +582,66 @@ void CStageSelect::UpdateSS(void)
 	}
 }
 
+void CStageSelect::UpdateAnimationBeecon(void)
+{
+	switch(m_selectAnimBeecon)
+	{
+		case AnimListBeecon::ALB_WAIT:
+		{
+			m_idxAnimBeecon = (int)(m_countAnimBeecon / m_beeconAnimWait[m_idxAnimBeecon].wait) % 8;
+
+			m_pBeecon->SetTexcoord(
+											m_beeconAnimWait[m_idxAnimBeecon].uv[0],
+											m_beeconAnimWait[m_idxAnimBeecon].uv[1],
+											m_beeconAnimWait[m_idxAnimBeecon].uv[2],
+											m_beeconAnimWait[m_idxAnimBeecon].uv[3]);
+
+			if(m_idxAnimBeecon >= 7)
+			{
+				m_idxAnimBeecon = 0;
+				m_countAnimBeecon = 0.0f;
+			}
+
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	m_countAnimBeecon++;
+}
+
+void CStageSelect::UpdateAnimationAnton(void)
+{
+	switch(m_selectAnimAnton)
+	{
+		case AnimListAnton::ALA_WAIT:
+		{
+			m_idxAnimAnton = (int)(m_countAnimAnton / m_antonAnimWait[m_idxAnimAnton].wait) % 4;
+
+			m_pAnton->SetTexcoord(
+											m_antonAnimWait[m_idxAnimAnton].uv[0],
+											m_antonAnimWait[m_idxAnimAnton].uv[1],
+											m_antonAnimWait[m_idxAnimAnton].uv[2],
+											m_antonAnimWait[m_idxAnimAnton].uv[3]);
+
+			if(m_idxAnimAnton >= 7)
+			{
+				m_idxAnimAnton = 0;
+				m_countAnimAnton = 0.0f;
+			}
+
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	m_countAnimAnton++;
+}
+
 void CStageSelect::MoveCharacter(void)
 {
 	switch(m_selectStage)
@@ -540,11 +675,33 @@ void CStageSelect::MoveCharacter(void)
 
 		case 3:
 		{
-			m_pAnton->SetPosition(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) + 450.0f, (SCREEN_HEIGHT * 0.5f) + 200.0f, 0.0f));
+			m_pAnton->SetPosition(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) + 440.0f, (SCREEN_HEIGHT * 0.5f) + 200.0f, 0.0f));
 			m_pAnton->SetVertex();
-			m_pBeecon->SetPosition(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) + 400.0f, (SCREEN_HEIGHT * 0.5f) + 150.0f, 0.0f));
+			m_pBeecon->SetPosition(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) + 390.0f, (SCREEN_HEIGHT * 0.5f) + 150.0f, 0.0f));
 			m_pBeecon->SetVertex();
 			break;
 		}
+	}
+}
+
+void CStageSelect::BlinkSelect(float flashTime)
+{
+	m_countBlink++;
+	
+	// 明るい文字色に切り替え
+	if(m_countBlink > flashTime * 2)
+	{
+		m_pSelectButton->SetDiffuse(COL_WHITE);
+		m_pSelectText->SetDiffuse(COL_WHITE);
+		m_countBlink = 0.0f;
+		return; // 処理後はとばす
+	}
+
+	// 暗い文字色に切り替え
+	if(m_countBlink > flashTime)
+	{
+		// 初期のアルファ値が１．０ならばうまく作用する
+		m_pSelectButton->SetDiffuse(COL_WHITE_ALPHA(0.3f));
+		m_pSelectText->SetDiffuse(COL_WHITE_ALPHA(0.3f));
 	}
 }
