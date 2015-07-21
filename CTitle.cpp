@@ -16,6 +16,7 @@
 #include "CScene2D.h"
 #include "CCamera.h"
 #include "collisionDetection.h"
+#include "CSoundXAudio2.h"
 
 /*-----------------------------------------------------------------------------
 	タイトル背景の生成設定
@@ -163,6 +164,8 @@ void CTitle::Init(void)
 	m_pPressGameStartText->SetDraw(false);
 	m_pPressGameStartTextF->SetDraw(false);
 
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SOUND_LABEL_BGM_TITLE);
+
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
@@ -172,6 +175,8 @@ void CTitle::Init(void)
 -----------------------------------------------------------------------------*/
 void CTitle::Uninit(void)
 {
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SOUND_LABEL_BGM_TITLE);
+
 	m_pInputCommand->Uninit();
 	delete m_pInputCommand;
 

@@ -13,10 +13,15 @@
 /*-----------------------------------------------------------------------------
 	静的メンバ変数の初期化
 -----------------------------------------------------------------------------*/
-const PARAM CSoundXAudio2::m_param[SOUND_LABEL_MAX] = 
+const PARAM CSoundXAudio2::m_param[SL_MAX] = 
 {
 	"data/testsample/bgm000.wav", true,
 	"data/testsample/shot000.wav", false,
+	"data/sound/bgm/BGM_Game.wav", true,
+	"data/sound/bgm/BGM_Stage.wav", true,
+	"data/sound/bgm/BGM_Title.wav", true,
+	"data/sound/jingle/jingle_Clear.wav", true,
+	"data/sound/jingle/jingle_Over.wav", true,
 };
 
 /*-----------------------------------------------------------------------------
@@ -80,7 +85,7 @@ HRESULT CSoundXAudio2::Init(HWND hWnd)
 	}
 
 	// サウンドデータの初期化
-	for(int nCntSound = 0; nCntSound < SOUND_LABEL_MAX; nCntSound++)
+	for(int nCntSound = 0; nCntSound < SL_MAX; nCntSound++)
 	{
 		HANDLE hFile;
 		DWORD dwChunkSize = 0;
@@ -239,7 +244,7 @@ HRESULT CSoundXAudio2::Init(HWND hWnd)
 void CSoundXAudio2::Uninit(void)
 {
 	// 一時停止
-	for(int nCntSound = 0; nCntSound < SOUND_LABEL_MAX; nCntSound++)
+	for(int nCntSound = 0; nCntSound < SL_MAX; nCntSound++)
 	{
 		if(m_pSourceVoice[nCntSound])
 		{
@@ -348,7 +353,7 @@ void CSoundXAudio2::Stop(SOUND_LABEL label)
 -----------------------------------------------------------------------------*/
 void CSoundXAudio2::AllStop(void)
 {
-	for(int nCntSound = 0; nCntSound < SOUND_LABEL_MAX; nCntSound++)
+	for(int nCntSound = 0; nCntSound < SL_MAX; nCntSound++)
 	{
 		if(m_pSourceVoice[nCntSound])
 		{
