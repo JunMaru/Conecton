@@ -90,6 +90,7 @@ public:
 		float m_fScore;
 		CPseudoLight *m_pPseudoLight;
 		C2DLogo *m_pEndLogo;
+		int m_nLogoTimer;
 
 		TRANSITIONID m_transitionID;
 		bool m_bTransition;

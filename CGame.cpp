@@ -71,6 +71,7 @@ CGame::CGame()
 	m_pPseudoLight = nullptr;
 	m_pEndLogo = nullptr;
 	m_pPause = nullptr;
+	m_nLogoTimer = 0;
 }
 
 /*-----------------------------------------------------------------------------
@@ -764,6 +765,8 @@ void CGame::CheckGameEnd(void)
 	}
 
 	const bool bMoveHand = (m_pPlayer->GetAntonAction() == CPlayer::ANTON_ACTION_FRONT) && (m_pPlayer->GetAntonState() == CPlayer::ANTON_STATE_NORMAL);
+	const int nGoResultTime = 200;
+	const float fAnimSpeed = (1.0f / nGoResultTime) * 2.0f * 2.0f;		// (Å¬‚©‚çÅ‘å‚É‚©‚©‚éŽžŠÔ) * s‚«•Ô‚è * 2‰•œ
 
 	if (bMoveHand == false)
 	{
@@ -781,10 +784,14 @@ void CGame::CheckGameEnd(void)
 		m_pEndLogo->Init();
 		m_pEndLogo->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X,SCREEN_CENTER_Y + fLogoOffsetY,0.0f));
 		m_pEndLogo->SetScling(texSize / 2);
-		m_pEndLogo->StartSclAnimation(true, texSize / 4, texSize / 2, 0.01f);
+		m_pEndLogo->StartSclAnimation(true, texSize / 4, texSize / 2, fAnimSpeed);
 	}
 
-	const bool bEnter = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_ENTER);
+	++m_nLogoTimer;
+
+	const bool bTimeOver = (nGoResultTime < m_nLogoTimer);
+	const bool bEnterPush = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_ENTER);
+	const bool bEnter = (bEnterPush || bTimeOver);
 
 	if (bEnter == true)
 	{
