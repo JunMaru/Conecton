@@ -136,6 +136,9 @@ void CGame::Uninit(void)
 
 	m_pInputCommand->Uninit();
 	delete m_pInputCommand;
+
+	m_pPause->Uninit();
+	delete m_pPause;
 }
 
 /*-----------------------------------------------------------------------------
