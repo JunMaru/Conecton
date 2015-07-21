@@ -17,6 +17,8 @@
 #include "CCamera.h"
 #include "collisionDetection.h"
 #include "CSoundXAudio2.h"
+#include "CConfigRecorder.h"
+#include "CLifeConfig.h"
 
 /*-----------------------------------------------------------------------------
 	タイトル背景の生成設定
@@ -163,6 +165,9 @@ void CTitle::Init(void)
 	m_pBeeconCursor->SetDraw(false);
 	m_pPressGameStartText->SetDraw(false);
 	m_pPressGameStartTextF->SetDraw(false);
+
+	// ライフ初期化
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, INIT_RETRYLIFE);
 
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_TITLE);
 

@@ -92,6 +92,8 @@ public:
 		C2DLogo *m_pEndLogo;
 
 		CScene2D *m_pGameOverBG;
+		bool m_bGameOver;
+		float m_autoChange;
 
 		TRANSITIONID m_transitionID;
 		bool m_bTransition;
@@ -112,4 +114,5 @@ public:
 		void InitGameOverBG(void);
 		void Retry(void);
 		void ReturnToStageSelect(void);
+		void CheckGameOver(void);
 };

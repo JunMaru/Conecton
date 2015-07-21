@@ -211,6 +211,12 @@ void CStageSelect::Init(void)
 
 	InitSelect();
 
+	MoveCharacter();
+
+	UpdateSS();
+
+	UpdateStageNumUI();
+
 	m_countBlink = 0.0f;
 
 	m_bChange = false;
@@ -406,6 +412,9 @@ void CStageSelect::CreateObjectCharacter(void)
 void CStageSelect::InitSelect(void)
 {
 	m_selectStage = 0;
+
+	m_selectStage = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_STAGESELECT);
+
 	m_bSelected = false;
 }
 

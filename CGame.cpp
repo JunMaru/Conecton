@@ -62,10 +62,15 @@ static const float GAUGE_BASE_VALUE = (100.0f);
 /*-----------------------------------------------------------------------------
 	ゲームオーバーＢＧの生成設定
 -----------------------------------------------------------------------------*/
-static const char* TEXTUREPATH_GAMEOVERBG = "data/texture/stageselect_bg/gameover_bg.png";
+static const char* TEXTUREPATH_GAMEOVERBG = "data/texture/gameover_bg/gameover_bg.png";
 static const D3DXVECTOR3 POS_GAMEOVERBG = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 static const float WIDTH_GAMEOVERBG = 1280.0f;
 static const float HEIGHT_GAMEOVERBG = 720.0f;
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバーのタイトルへの遷移
+-----------------------------------------------------------------------------*/
+static const float TIME_AUTOCHANGE_GAMEOVER = 30.0f * 2.0f;
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
@@ -182,10 +187,6 @@ void CGame::Uninit(void)
 -----------------------------------------------------------------------------*/
 void CGame::Update(void)
 {
-	// キーボード入力を取得
-	CInputKeyboard *pKeyboard = CManager::GetInputKeyboard();
-	CInputJoypad *pJoyPad = CManager::GetInputJoypad();
-
 	m_pInputCommand->Update();
 
 	// フェードしていなければ更新
@@ -193,13 +194,15 @@ void CGame::Update(void)
 	{
 		PauseTo();
 
+		CheckGameOver();
+
 		// 無限フェードアウトにしないようにここで発生させる
 		if(m_bTransition)
 		{
 			CManager::GetPhaseFade()->Start(
 												CFade::FADETYPE_OUT,
 												30.0f,
-												D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+												COL_WHITE);
 		}
 	}
 
@@ -824,11 +827,11 @@ void CGame::CheckGameEnd(void)
 
 	if (bEnter == true)
 	{
-		CManager::GetPhaseFade()->Start(
-			CFade::FADETYPE_OUT,
-			30.0f,
-			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		m_bTransition = true;
 		SetTransitionID(TRANSITIONID_STAGESELECT);
+
+		// クリア特典でライフを最大値まで上げる
+		CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, MAX_RETRYLIFE);
 	}
 }
 
@@ -907,6 +910,11 @@ void CGame::CheckPauseSelect(void)
 		return;
 	}
 
+	if(m_bGameOver)
+	{
+		return;
+	}
+
 	switch(selectPauseMenu)
 	{
 		case PAUSEID_RETRY:
@@ -968,6 +976,10 @@ void CGame::InitGameOverBG(void)
 										HEIGHT_GAMEOVERBG);
 
 	m_pGameOverBG->SetDraw(false);
+
+	m_bGameOver = false;
+
+	m_autoChange = 0.0f;
 }
 
 /*-----------------------------------------------------------------------------
@@ -988,6 +1000,40 @@ void CGame::Retry(void)
 -----------------------------------------------------------------------------*/
 void CGame::ReturnToStageSelect(void)
 {
-	m_bTransition = true;
-	SetTransitionID(TRANSITIONID_STAGESELECT);
+	if(CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE) == 0)
+	{
+		m_pGameOverBG->SetDraw(true);
+		m_bGameOver = true;
+	}
+	else
+	{
+		m_bTransition = true;
+		SetTransitionID(TRANSITIONID_STAGESELECT);
+	}
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバー表示
+-----------------------------------------------------------------------------*/
+void CGame::CheckGameOver(void)
+{
+	if(m_bGameOver == false)
+	{
+		return;
+	}
+
+	bool bSkip = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_CONNECT);
+	if(bSkip)
+	{
+		m_autoChange = TIME_AUTOCHANGE_GAMEOVER;
+	}
+
+	m_autoChange++;
+
+	bool bAutoChange = m_autoChange > TIME_AUTOCHANGE_GAMEOVER;
+	if(bAutoChange)
+	{
+		m_bTransition = true;
+		SetTransitionID(TRANSITIONID_TITLE);
+	}
 }

@@ -97,16 +97,21 @@ void CPause::Enable(void)
 {
 	m_bPause = true;
 
-	// ポーズメニュー初期位置をゲームに戻るに設定
-	m_pauseMenu->SetPositionCursor(STARTPOS_TOP_CURSOR);
-	m_menuCursorPos = CPauseMenu::PAUSEMENU_RETRY;
-
-	/*
 	if(CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE) == 0)
 	{
+		// リトライ回数０のときは、初期位置をＥＸＩＴ設定
+		m_pauseMenu->SetPositionCursor(STARTPOS_UNDER_CURSOR);
+		m_menuCursorPos = CPauseMenu::PAUSEMENU_EXIT;
 
+		// メニュー選択できないため、非表示にする
+		m_pauseMenu->SetColorRetry(COL_BLACK_ALPHA(0.0f));
 	}
-	*/
+	else
+	{
+		// ポーズメニュー初期位置をＲＥＴＲＹ設定
+		m_pauseMenu->SetPositionCursor(STARTPOS_TOP_CURSOR);
+		m_menuCursorPos = CPauseMenu::PAUSEMENU_RETRY;
+	}
 
 	m_pauseMenu->DispAll();
 }
@@ -129,7 +134,8 @@ void CPause::UpCoursorPos(void)
 	// 選択しているメニューから上のメニューを選択しているようにずらす
 	m_menuCursorPos--;
 
-	if(m_menuCursorPos < CPauseMenu::PAUSEMENU_RETRY)
+	bool bMenuUpLimit = m_menuCursorPos < CPauseMenu::PAUSEMENU_RETRY;
+	if(bMenuUpLimit)
 	{
 		// メニュー位置が一番上の状態でさらに同様の入力をしたときに下にループさせる
 		m_pauseMenu->SetPositionCursor(STARTPOS_UNDER_CURSOR);
@@ -153,11 +159,15 @@ void CPause::DownCoursorPos(void)
 	// 選択しているメニューから下のメニューを選択しているようにずらす
 	m_menuCursorPos++;
 
-	if(m_menuCursorPos >= CPauseMenu::PAUSEMENU_MAX)
+	bool bMenuDownLimit = m_menuCursorPos >= CPauseMenu::PAUSEMENU_MAX;
+	if(bMenuDownLimit)
 	{
-		// メニュー位置が一番下の状態でさらに同様の入力をしたときに上にループさせる
-		m_pauseMenu->SetPositionCursor(STARTPOS_TOP_CURSOR);
-		m_menuCursorPos = CPauseMenu::PAUSEMENU_RETRY;
+		if(CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE) != 0)
+		{
+			// メニュー位置が一番下の状態でさらに同様の入力をしたときに上にループさせる
+			m_pauseMenu->SetPositionCursor(STARTPOS_TOP_CURSOR);
+			m_menuCursorPos = CPauseMenu::PAUSEMENU_RETRY;
+		}
 	}
 	else
 	{
@@ -176,7 +186,10 @@ void CPause::MoveCursor(void)
 {
 	if(m_bUp)
 	{
-		UpCoursorPos();
+		if(CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE) != 0)
+		{
+			UpCoursorPos();
+		}
 	}
 
 	if(m_bDown)
@@ -192,34 +205,38 @@ void CPause::SelectMenu(void)
 {
 	// ポーズメニューの頂点カラー
 	D3DXCOLOR selectCol = COL_WHITE;
-	D3DXCOLOR non_col = D3DXCOLOR(0.2f, 0.2f, 0.2f, 0.75f);
+	D3DXCOLOR unSelectCol = D3DXCOLOR(0.2f, 0.2f, 0.2f, 0.75f);
 
 	switch(m_menuCursorPos)
 	{
 		case CPauseMenu::PAUSEMENU_RETRY:
 		{
-			m_pauseMenu->SetColorRetry(selectCol);
-			m_pauseMenu->SetColorExit(non_col);
+			if(CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE) != 0)
+			{
+				m_pauseMenu->SetColorRetry(selectCol);
+			}
+
+			m_pauseMenu->SetColorExit(unSelectCol);
 
 			if(m_bSelsect)
 			{
-				m_pauseMenu->HideAll();
-				Disable();
-				CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_PAUSESLECT, CGame::PAUSEID_RETRY);
+				SelectRetry();
 			}
 			break;
 		}
 
 		case CPauseMenu::PAUSEMENU_EXIT:
 		{
-			m_pauseMenu->SetColorRetry(non_col);
+			if(CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE) != 0)
+			{
+				m_pauseMenu->SetColorRetry(unSelectCol);
+			}
+
 			m_pauseMenu->SetColorExit(selectCol);
 
 			if(m_bSelsect)
 			{
-				m_pauseMenu->HideAll();
-				Disable();
-				CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_PAUSESLECT, CGame::PAUSEID_EXIT);
+				SelectExit();
 			}
 			break;
 		}
@@ -279,3 +296,27 @@ void CPause::CommandDown(void)
 	m_bDown = true;
 }
 
+void CPause::SelectRetry(void)
+{
+	m_pauseMenu->HideAll();
+	Disable();
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_PAUSESLECT, CGame::PAUSEID_RETRY);
+}
+
+void CPause::SelectExit(void)
+{
+
+	m_pauseMenu->HideAll();
+	Disable();
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_PAUSESLECT, CGame::PAUSEID_EXIT);
+}
+
+void CPause::InitMenuDiffuse(void)
+{
+
+}
+
+void CPause::UpdateMenuDiffuse(void)
+{
+
+}

@@ -21,6 +21,7 @@
 #include "CFade.h"
 #include "CConfigRecorder.h"
 #include "CLifeConfig.h"
+#include "CPause.h"
 
 /*-----------------------------------------------------------------------------
 	静的メンバ変数の初期化
@@ -103,14 +104,15 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// フェーズフェード生成
 	m_pPhaseFade = CFade::Create(
 									D3DXVECTOR3((float)(SCREEN_WIDTH / 2), (float)(SCREEN_HEIGHT/ 2), 0.0f),
-									VEC3_ZERO
-	);
+									VEC3_ZERO);
 
 	// 設定記録生成
 	m_pConfigRecorder = CConfigRecorder::Create();
 
+#ifdef _DEBUG
 	// ライフ初期化
 	m_pConfigRecorder->Set(CConfigRecorder::CI_RETRYLIFE, INIT_RETRYLIFE);
+#endif
 
 #ifdef _DEBUG
 	// デバッグ表示生成
@@ -297,6 +299,9 @@ void CManager::Update(void)
 
 	// フェーズの移行
 	ChangePhase();
+
+	// ゲームフェーズでポーズ中はオブジェクトを更新しない
+	if(GetPhase() == CManager::PHASE_GAME && CGame::GetPause()->GetPause() == true){ return; }
 
 	// オブジェクトの全更新
 	if(m_pRenderer)

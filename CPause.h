@@ -52,6 +52,12 @@ class CPause
 		// 選択しているポーズメニューの決定処理と対応する状態遷移
 		void SelectMenu(void);
 
+		void SelectRetry(void);
+		void SelectExit(void);
+
+		void InitMenuDiffuse(void);
+		void UpdateMenuDiffuse(void);
+
 		// ポーズ中フラグ
 		bool m_bPause;
 
