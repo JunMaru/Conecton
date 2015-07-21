@@ -33,9 +33,6 @@ since	20140713
 #include "CConfigRecorder.h"
 #include "CStageConfig.h"
 
-static const float testOffsetX = 25.0f;
-static const float testOffsetY = 25.0f;
-
 /*-----------------------------------------------------------------------------
 	テクスチャ読み込み先のパス設定
 -----------------------------------------------------------------------------*/
@@ -462,9 +459,12 @@ void CGame::CheckConnectAction(void)
 		return;
 	}
 
+	const float fOffsetX = 25.0f;
+	const float fOffsetY = 25.0f;
+
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
-	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x, beeconPos.y, 0.0f);
+	D3DXVECTOR3 workPos = D3DXVECTOR3(beeconPos.x + fOffsetX, beeconPos.y + fOffsetY, 0.0f);
 	CBlock::BLOCKID blockIDFromBlockManager = CBlock::BLOCKID_NONE;
 
 	// ここでブロックマネージャーからブロック情報を取得
@@ -514,8 +514,8 @@ void CGame::CheckConnectAction(void)
 //=============================================================================
 bool CGame::ConnectChangeAntonBlock(void)
 {
-	const float fOffsetX = testOffsetX;
-	const float fOffsetY = testOffsetY;
+	const float fOffsetX = 25.0f;
+	const float fOffsetY = 25.0f;
 
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
@@ -553,8 +553,8 @@ bool CGame::ConnectChangeAntonBlock(void)
 //=============================================================================
 bool CGame::ConnectGimmickBlock(void)
 {
-	const float fOffsetX = testOffsetX;
-	const float fOffsetY = testOffsetY;
+	const float fOffsetX = 25.0f;
+	const float fOffsetY = 25.0f;
 
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();
@@ -617,8 +617,8 @@ bool CGame::ConnectGimmickBlock(void)
 //=============================================================================
 bool CGame::ConnectNormalBlock(void)
 {
-	const float fOffsetX = testOffsetX;
-	const float fOffsetY = testOffsetY;
+	const float fOffsetX = 25.0f;
+	const float fOffsetY = 25.0f;
 
 	CBeecon *pBeecon = m_pPlayer->GetBeecon();
 	D3DXVECTOR2 beeconPos = pBeecon->GetPosition();

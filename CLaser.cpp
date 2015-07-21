@@ -90,8 +90,6 @@ void CLaser::Update(void)
 	// MoveStopŠÖ”‚ğŒÄ‚ñ‚¾ê‡Am_fMoveSpeed‚Í0.0f‚É‚È‚Á‚Äi‚Ü‚È‚¢
 	m_endPosition.x += m_fMoveSpeed;
 
-	CDebugProcDX9::Print("%f\n", m_endPosition.x);
-
 	UpdateVertexBuffer();
 }
 
