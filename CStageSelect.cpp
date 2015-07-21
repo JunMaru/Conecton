@@ -266,7 +266,7 @@ void CStageSelect::Update(void)
 		BlinkSelect(1.0f);
 
 		m_countChange++;
-		if(m_countChange > 30.0f)
+		if(m_countChange > 15.0f)
 		{
 			// ゲーム画面に遷移するためのフェードアウト発生
 			CManager::GetPhaseFade()->Start(
