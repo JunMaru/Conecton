@@ -67,7 +67,7 @@ void CDebugProcDX9::Init(void)
 					"Terminal",				// フォント名
 					&m_pD3DXFont);			// フォントポインタへのアドレス
 
-	m_bDisp = false;
+	m_bDisp = true;
 	m_countFrame = 0;
 }
 
@@ -188,7 +188,7 @@ void CDebugProcDX9::Draw(void)
 								-1,
 								&rect,
 								DT_LEFT,
-								D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+								COL_BLACK);
 
 		// デバッグ情報のバッファクリア
 		memset(m_aStr, 0, sizeof m_aStr);

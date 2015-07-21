@@ -211,3 +211,14 @@ void CFade::Start(FADETYPE type, float time_frame, D3DXCOLOR color)
 	// 色を設定
 	SetDiffuse(m_color);
 }
+
+// フェードを初期状態に戻す（フェードなし, FADETYPE_NONE）
+void CFade::Reset(void)
+{
+	m_alpha = 0.0f;
+	m_bUse = false;
+	m_fadetype = FADETYPE_NONE;
+	m_color.a = m_alpha;
+	SetDiffuse(m_color);
+}
+

@@ -39,35 +39,17 @@
     <Filter Include="ソース ファイル\framework\object\_scene sample">
       <UniqueIdentifier>{801c506d-b994-41b6-bf11-b00cc7b64ef8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\application\CBlock">
-      <UniqueIdentifier>{e0d0dddc-eb50-493e-b861-32c144481a13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\application\CBackGround">
-      <UniqueIdentifier>{0511b88f-8f16-4c32-992d-62e826eabec8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\application\CAnton">
-      <UniqueIdentifier>{dce95473-070c-4fb5-9f70-55388725753b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\application\CBeecon">
-      <UniqueIdentifier>{776ffe4d-caee-41bf-80d6-b1535acaede7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\application\CInstacing">
-      <UniqueIdentifier>{b00f90ab-f1a3-4794-9c55-6bb46a419fd0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\application\CPlayer">
-      <UniqueIdentifier>{e93f3507-5990-49ab-a9ed-88e156ed6d02}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\application\CScrollManager">
       <UniqueIdentifier>{570a6587-2f13-437e-a1ff-3fc8feca8fe6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\application\CEnemy">
-      <UniqueIdentifier>{b3d0d06d-3850-40a4-a1d4-6b63d8c813cb}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\application\CGroupLogo">
+      <UniqueIdentifier>{6ed08441-aa79-4ce4-ab47-2811f005636d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\application\CItem">
-      <UniqueIdentifier>{ad64ebf7-f0af-41ef-adda-7eee31b6512f}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\application\C2DLogo">
+      <UniqueIdentifier>{d4d1b359-2e83-4062-b860-d389d5a6f565}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\application\CLaser">
-      <UniqueIdentifier>{4cecf94b-7b47-4c1c-be1d-b373c9089413}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\application\CAnton">
+      <UniqueIdentifier>{dce95473-070c-4fb5-9f70-55388725753b}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\application\CAntonIconUI">
       <UniqueIdentifier>{504c6d1e-49bc-43f6-ae74-dc458db6b949}</UniqueIdentifier>
@@ -75,15 +57,45 @@
     <Filter Include="ソース ファイル\application\CAntonLifeUI">
       <UniqueIdentifier>{bef19d9c-a708-4fbd-acf3-831bda7ca5c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\CBackGround">
+      <UniqueIdentifier>{0511b88f-8f16-4c32-992d-62e826eabec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CBeecon">
+      <UniqueIdentifier>{776ffe4d-caee-41bf-80d6-b1535acaede7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソース ファイル\application\CBeeconIconUI">
       <UniqueIdentifier>{d300ff4d-a544-409c-b2a6-2688f0a3e485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CBlock">
+      <UniqueIdentifier>{e0d0dddc-eb50-493e-b861-32c144481a13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CEnemy">
+      <UniqueIdentifier>{b3d0d06d-3850-40a4-a1d4-6b63d8c813cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CGauge">
+      <UniqueIdentifier>{c8312ea7-f099-4642-9397-2f1cb8bb5443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CInstacing">
+      <UniqueIdentifier>{b00f90ab-f1a3-4794-9c55-6bb46a419fd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CItem">
+      <UniqueIdentifier>{ad64ebf7-f0af-41ef-adda-7eee31b6512f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CLaser">
+      <UniqueIdentifier>{4cecf94b-7b47-4c1c-be1d-b373c9089413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CPlayer">
+      <UniqueIdentifier>{e93f3507-5990-49ab-a9ed-88e156ed6d02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CPseudoLight">
+      <UniqueIdentifier>{9a9259fe-8bdf-42e9-ae21-3e7122e81b8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\CStageSelect">
+      <UniqueIdentifier>{a2d40039-53c0-4875-bf46-79db06d31e1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTitle.cpp">
-      <Filter>ソース ファイル\framework\phase</Filter>
-    </ClCompile>
-    <ClCompile Include="CResult.cpp">
       <Filter>ソース ファイル\framework\phase</Filter>
     </ClCompile>
     <ClCompile Include="CGame.cpp">
@@ -191,17 +203,11 @@
     <ClCompile Include="CAntonIconUI.cpp">
       <Filter>ソース ファイル\application\CAntonIconUI</Filter>
     </ClCompile>
-    <ClCompile Include="CGauge.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="CAntonLifeUI.cpp">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
     </ClCompile>
     <ClCompile Include="CLaserManager.cpp">
       <Filter>ソース ファイル\application\CLaser</Filter>
-    </ClCompile>
-    <ClCompile Include="C2DLogo.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CBeeconIconUI.cpp">
       <Filter>ソース ファイル\application\CBeeconIconUI</Filter>
@@ -209,8 +215,23 @@
     <ClCompile Include="CGimickBlock.cpp">
       <Filter>ソース ファイル\application\CBlock</Filter>
     </ClCompile>
+    <ClCompile Include="CGroupLogo.cpp">
+      <Filter>ソース ファイル\application\CGroupLogo</Filter>
+    </ClCompile>
     <ClCompile Include="CPseudoLight.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\application\CPseudoLight</Filter>
+    </ClCompile>
+    <ClCompile Include="C2DLogo.cpp">
+      <Filter>ソース ファイル\application\C2DLogo</Filter>
+    </ClCompile>
+    <ClCompile Include="CGauge.cpp">
+      <Filter>ソース ファイル\application\CGauge</Filter>
+    </ClCompile>
+    <ClCompile Include="CStageSelect.cpp">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="CConfigRecorder.cpp">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,9 +239,6 @@
       <Filter>ソース ファイル\framework\phase</Filter>
     </ClInclude>
     <ClInclude Include="CPhase.h">
-      <Filter>ソース ファイル\framework\phase</Filter>
-    </ClInclude>
-    <ClInclude Include="CResult.h">
       <Filter>ソース ファイル\framework\phase</Filter>
     </ClInclude>
     <ClInclude Include="CTitle.h">
@@ -328,9 +346,6 @@
     <ClInclude Include="CAntonIconUI.h">
       <Filter>ソース ファイル\application\CAntonIconUI</Filter>
     </ClInclude>
-    <ClInclude Include="CGauge.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="CAntonLifeUI.h">
       <Filter>ソース ファイル\application\CAntonLifeUI</Filter>
     </ClInclude>
@@ -340,14 +355,29 @@
     <ClInclude Include="CBeeconIconUI.h">
       <Filter>ソース ファイル\application\CBeeconIconUI</Filter>
     </ClInclude>
-    <ClInclude Include="C2DLogo.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="CGimickBlock.h">
       <Filter>ソース ファイル\application\CBlock</Filter>
     </ClInclude>
+    <ClInclude Include="CGroupLogo.h">
+      <Filter>ソース ファイル\application\CGroupLogo</Filter>
+    </ClInclude>
     <ClInclude Include="CPseudoLight.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\application\CPseudoLight</Filter>
+    </ClInclude>
+    <ClInclude Include="C2DLogo.h">
+      <Filter>ソース ファイル\application\C2DLogo</Filter>
+    </ClInclude>
+    <ClInclude Include="CGauge.h">
+      <Filter>ソース ファイル\application\CGauge</Filter>
+    </ClInclude>
+    <ClInclude Include="CConfigRecorder.h">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="CStageConfig.h">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="CStageSelect.h">
+      <Filter>ソース ファイル\application\CStageSelect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

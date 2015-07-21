@@ -100,12 +100,14 @@
     <ClCompile Include="CBlock.cpp" />
     <ClCompile Include="CBlockManager.cpp" />
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CConfigRecorder.cpp" />
     <ClCompile Include="CDebugProcDX9.cpp" />
     <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CFade.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CGauge.cpp" />
     <ClCompile Include="CGimickBlock.cpp" />
+    <ClCompile Include="CGroupLogo.cpp" />
     <ClCompile Include="CInput.cpp" />
     <ClCompile Include="CInputCommand.cpp" />
     <ClCompile Include="CInstancingObject.cpp" />
@@ -120,7 +122,6 @@
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CPseudoLight.cpp" />
     <ClCompile Include="CRenderer.cpp" />
-    <ClCompile Include="CResult.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CScene2D.cpp" />
     <ClCompile Include="CScene3D.cpp" />
@@ -128,6 +129,7 @@
     <ClCompile Include="CSceneX.cpp" />
     <ClCompile Include="CScrollManager.cpp" />
     <ClCompile Include="CSoundXAudio2.cpp" />
+    <ClCompile Include="CStageSelect.cpp" />
     <ClCompile Include="CTitle.cpp" />
     <ClCompile Include="Define.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -146,12 +148,14 @@
     <ClInclude Include="CBlock.h" />
     <ClInclude Include="CBlockManager.h" />
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CConfigRecorder.h" />
     <ClInclude Include="CDebugProcDX9.h" />
     <ClInclude Include="CEnemy.h" />
     <ClInclude Include="CFade.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CGauge.h" />
     <ClInclude Include="CGimickBlock.h" />
+    <ClInclude Include="CGroupLogo.h" />
     <ClInclude Include="CInput.h" />
     <ClInclude Include="CInputCommand.h" />
     <ClInclude Include="CInstancingObject.h" />
@@ -166,7 +170,6 @@
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CPseudoLight.h" />
     <ClInclude Include="CRenderer.h" />
-    <ClInclude Include="CResult.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CScene2D.h" />
     <ClInclude Include="CScene3D.h" />
@@ -174,6 +177,8 @@
     <ClInclude Include="CSceneX.h" />
     <ClInclude Include="CScrollManager.h" />
     <ClInclude Include="CSoundXAudio2.h" />
+    <ClInclude Include="CStageConfig.h" />
+    <ClInclude Include="CStageSelect.h" />
     <ClInclude Include="CTitle.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Main.h" />
