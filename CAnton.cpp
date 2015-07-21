@@ -376,7 +376,7 @@ void CAnton::SetState(const CAnton::STATE state)
 void CAnton::InitAnimation(void)
 {
 	// アニメーション設定テーブル
-	const int anTexIdArrayNumTable[] = { 4, 8, 5, 4, 8, 1, 1, 4, 6, 1, 4, 8, 6, };
+	const int anTexIdArrayNumTable[] = { 4, 8, 6, 4, 8, 1, 1, 4, 6, 1, 4, 8, 6, };
 	const bool abLoopTable[] = { true, true, true, false, true, false,
 		false, false, true, false, false, true, true, };
 	const int anWaitTimeTable[] = { 3, 3, 5, 3, 3, 1, 1, 3, 3, 1, 3, 3, 3, };
