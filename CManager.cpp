@@ -357,6 +357,15 @@ void CManager::ChangePhase(void)
 				break;
 			}
 
+
+			case PHASE_GAME_RETRY:
+			{
+				// ƒQ[ƒ€‚ğ‰Šúó‘Ô‚©‚çn‚ß‚éˆ×‚ÉAPHASE_GAME‚ÉÄİ’è‚·‚é
+				m_pPhase = new CGame();
+				m_Phase = PHASE_GAME;
+				break;
+			}
+
 			default:
 			{
 				break;
