@@ -93,6 +93,9 @@
     <Filter Include="ソース ファイル\application\CStageSelect">
       <UniqueIdentifier>{a2d40039-53c0-4875-bf46-79db06d31e1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\Pause">
+      <UniqueIdentifier>{4a5b02da-870e-4ce0-bf13-1bc3303c004d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTitle.cpp">
@@ -232,6 +235,12 @@
     </ClCompile>
     <ClCompile Include="CConfigRecorder.cpp">
       <Filter>ソース ファイル\application\CStageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="CPause.cpp">
+      <Filter>ソース ファイル\application\Pause</Filter>
+    </ClCompile>
+    <ClCompile Include="CPauseMenu.cpp">
+      <Filter>ソース ファイル\application\Pause</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -378,6 +387,12 @@
     </ClInclude>
     <ClInclude Include="CStageSelect.h">
       <Filter>ソース ファイル\application\CStageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="CPauseMenu.h">
+      <Filter>ソース ファイル\application\Pause</Filter>
+    </ClInclude>
+    <ClInclude Include="CPause.h">
+      <Filter>ソース ファイル\application\Pause</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

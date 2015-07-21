@@ -32,6 +32,7 @@ since	20140713
 #include "C2DLogo.h"
 #include "CConfigRecorder.h"
 #include "CStageConfig.h"
+#include "CPause.h"
 
 /*-----------------------------------------------------------------------------
 	テクスチャ読み込み先のパス設定
@@ -49,6 +50,7 @@ static const float GAUGE_BASE_VALUE = (100.0f);
 CPlayer *CGame::m_pPlayer = nullptr;
 CBlockManager *CGame::m_pBlockManager = nullptr;
 CLaserManager *CGame::m_pLaserManager = nullptr;
+CPause* CGame::m_pPause = nullptr;
 
 /*-----------------------------------------------------------------------------
 グローバル変数
@@ -68,6 +70,7 @@ CGame::CGame()
 	m_fScore = 0.0f;
 	m_pPseudoLight = nullptr;
 	m_pEndLogo = nullptr;
+	m_pPause = nullptr;
 }
 
 /*-----------------------------------------------------------------------------
@@ -97,6 +100,15 @@ void CGame::Init(void)
 
 	m_pInputCommand = new CInputCommand(CManager::GetInputKeyboard(), CManager::GetInputJoypad());
 	m_pInputCommand->Init();
+
+	m_pPause = new CPause();
+	m_pPause->Init();
+
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_PAUSESLECT, 0);
+
+	m_transitionID = TRANSITIONID_NONE;
+
+	m_bTransition = false;
 
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -140,39 +152,45 @@ void CGame::Update(void)
 	// フェードしていなければ更新
 	if (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
 	{
-#ifdef _DEBUG
-		if (pKeyboard->GetKeyTrigger(DIK_RETURN))
+		PauseTo();
+
+		// 無限フェードアウトにしないようにここで発生させる
+		if(m_bTransition)
 		{
 			CManager::GetPhaseFade()->Start(
-				CFade::FADETYPE_OUT,
-				30.0f,
-				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+												CFade::FADETYPE_OUT,
+												30.0f,
+												D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		}
-#endif
 	}
 
-	// フェードアウト完了後に画面遷移
-	if (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_UNOUT)
+	CheckTransition();
+
+	// ポーズの更新
+	if(m_pPause->GetPause())
 	{
-		CManager::SetPhase(CManager::PHASE_STAGESELECT);
+		m_pPause->UpdateInputEvent(m_pInputCommand);
+
+		m_pPause->Update();
+	}
+	else
+	{
+		m_pPlayer->Update();
+
+		m_pLaserManager->Update();
+
+		CheckConnectAction();
 	}
 
-#ifdef _DEBUG
-	CDebugProcDX9::Print("[CGame.cpp]\n");
-	CDebugProcDX9::Print("[ENTER]:フェーズ遷移\n");
-#endif
+	HitCheckItem();
 
-	m_pPlayer->Update();
-
-	m_pLaserManager->Update();
-	
 	CAnton *ant = m_pPlayer->GetAnton();
 
-	if (ant->GetState() == CAnton::STATE_MINIMUM)
+	if(ant->GetState() == CAnton::STATE_MINIMUM)
 	{
 		HitCheckMinimumAnton();
 	}
-	else if (ant->GetState() == CAnton::STATE_METAL)
+	else if(ant->GetState() == CAnton::STATE_METAL)
 	{
 		HitCheckMetalAnton();
 	}
@@ -181,9 +199,14 @@ void CGame::Update(void)
 		HitCheckAnton();
 	}
 
-	CheckConnectAction();
-	HitCheckItem();
 	CheckGameEnd();
+
+	CheckPauseSelect();
+
+#ifdef _DEBUG
+	CDebugProcDX9::Print("[CGame.cpp]\n");
+	CDebugProcDX9::Print("[ENTER]:フェーズ遷移\n");
+#endif
 }
 
 // ミニマム用のあたり判定。多分普通のと同じソースで実装できる
@@ -764,8 +787,9 @@ void CGame::CheckGameEnd(void)
 	{
 		CManager::GetPhaseFade()->Start(
 			CFade::FADETYPE_OUT,
-			60.0f,
+			30.0f,
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		SetTransitionID(TRANSITIONID_STAGESELECT);
 	}
 }
 
@@ -801,5 +825,92 @@ void CGame::InitStage(void)
 
 		default:
 			break;
+	}
+}
+
+/*-----------------------------------------------------------------------------
+	ポーズの入力処理をチェックし切り替える
+-----------------------------------------------------------------------------*/
+void CGame::PauseTo(void)
+{
+	const bool bPause = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_PAUSE);
+
+	if (bPause == false)
+	{
+		return;
+	}
+
+	if(!m_pPause->GetPause())
+	{
+		m_pPause->Enable();
+	}
+	else
+	{
+		m_pPause->Disable();
+	}
+}
+
+/*-----------------------------------------------------------------------------
+	画面遷移のイベント更新
+-----------------------------------------------------------------------------*/
+void CGame::CheckPauseSelect(void)
+{
+	int selectPauseMenu = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_PAUSESLECT);
+
+	if(selectPauseMenu == 0)
+	{
+		return;
+	}
+
+	switch(selectPauseMenu)
+	{
+		case PAUSEID_RETRY:
+			m_bTransition = true;
+			SetTransitionID(TRANSITIONID_GAME_RETRY);
+			break;
+
+		case PAUSEID_EXIT:
+			m_bTransition = true;
+			SetTransitionID(TRANSITIONID_STAGESELECT);
+			break;
+
+		default:
+			break;
+	}
+}
+
+/*-----------------------------------------------------------------------------
+	画面遷移のイベント更新
+-----------------------------------------------------------------------------*/
+void CGame::CheckTransition(void)
+{
+	if(m_transitionID == TRANSITIONID_NONE)
+	{
+		return;
+	}
+
+	// フェードアウト完了後に画面遷移
+	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_UNOUT)
+	{
+		switch(m_transitionID)
+		{
+			case TRANSITIONID_GAME_RETRY:
+				CManager::SetPhase(CManager::PHASE_GAME_RETRY);
+				break;
+
+			case TRANSITIONID_GAMEOVER:
+				break;
+
+			case TRANSITIONID_STAGESELECT:
+				CManager::SetPhase(CManager::PHASE_STAGESELECT);
+				break;
+
+			case TRANSITIONID_TITLE:
+				CManager::SetPhase(CManager::PHASE_TITLE);
+				break;
+
+			default:
+				break;
+		}
 	}
 }

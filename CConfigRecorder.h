@@ -25,6 +25,7 @@ class CConfigRecorder
 		enum CONFIG_ID
 		{
 			CI_STAGESELECT = 0,
+			CI_PAUSESLECT,
 			CI_MAX
 		};
 

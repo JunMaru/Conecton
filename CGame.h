@@ -27,6 +27,7 @@ class CLaserManager;
 class CInputCommand;
 class CPseudoLight;
 class C2DLogo;
+class CPause;
 
 class CGame : public CPhase
 {
@@ -46,11 +47,40 @@ public:
 	static CBlockManager* GetBlockManager(void){ return m_pBlockManager; }
 	static CLaserManager* GetLaserManager(void){ return m_pLaserManager; }
 
+	enum TRANSITIONID
+	{
+		TRANSITIONID_NONE = -1,
+		TRANSITIONID_GAME_RETRY = 0,
+		TRANSITIONID_GAMEOVER,
+		TRANSITIONID_STAGESELECT,
+		TRANSITIONID_TITLE,
+		TRANSITIONID_MAX
+	};
+
+	// ポーズメニューＩＤ
+	enum PAUSEID
+	{
+		PAUSEID_RETRY = 1,
+		PAUSEID_EXIT, // ステージ選択に戻る
+		PAUSEID_MAX
+	};
+
+	void SetTransitionID(TRANSITIONID id){ m_transitionID = id; }
+
+	// ポーズの取得
+	static CPause* GetPause(void){ return m_pPause; }
+
+	// ポーズの入力処理をチェックし切り替える
+	void PauseTo(void);
+
 	private:
 		// プレイヤーへのポインタ
 		static CPlayer* m_pPlayer;
 		static CBlockManager* m_pBlockManager;
 		static CLaserManager* m_pLaserManager;
+
+		// ポーズへのポインタ
+		static CPause *m_pPause;
 
 		CScrollManager *m_pScrollManager;
 		CBackGround *m_pBackGround;
@@ -60,6 +90,9 @@ public:
 		float m_fScore;
 		CPseudoLight *m_pPseudoLight;
 		C2DLogo *m_pEndLogo;
+
+		TRANSITIONID m_transitionID;
+		bool m_bTransition;
 
 		void InitGauge(void);
 		void HitCheckMinimumAnton(void);
@@ -72,4 +105,6 @@ public:
 		void HitCheckItem(void);
 		void CheckGameEnd(void);
 		void InitStage(void);
+		void CheckPauseSelect(void);
+		void CheckTransition(void);
 };
