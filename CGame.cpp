@@ -40,6 +40,19 @@ since	20140713
 	テクスチャ読み込み先のパス設定
 -----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_FONT_CLEAR = "data/texture/font/clear.png";
+static const char* TEXTUREPATH_PSEUDOLIGHT = "data/texture/pseudo_light/pseudo_light.png";
+static const char* TEXTUREPATH_BG_STAGE1 = "data/texture/game_bg/s1_bg.jpg";
+static const char* TEXTUREPATH_BG_STAGE2 = "data/texture/game_bg/s2_bg.jpg";
+static const char* TEXTUREPATH_BG_STAGE3 = "data/texture/game_bg/s3_bg.jpg";
+static const char* TEXTUREPATH_BG_STAGE4 = "data/texture/game_bg/s4_bg.jpg";
+
+/*-----------------------------------------------------------------------------
+	ステージデータ読み込み先のパス設定
+-----------------------------------------------------------------------------*/
+static char* MAPDATAPATH_CSV_STAGE1 = "data/stage_info/stage1.csv";
+static char* MAPDATAPATH_CSV_STAGE2 = "data/stage_info/stage2ex.csv";
+static char* MAPDATAPATH_CSV_STAGE3 = "data/stage_info/stage3.csv";
+static char* MAPDATAPATH_CSV_STAGE4 = "data/stage_info/stage4.csv";
 
 /*-----------------------------------------------------------------------------
 	ゲージUIのベース値(これが最大値になる)
@@ -95,7 +108,7 @@ CGame::~CGame()
 -----------------------------------------------------------------------------*/
 void CGame::Init(void)
 {
-	m_pPseudoLight = CPseudoLight::Create("data/texture/pseudo_light/pseudo_light.png");
+	m_pPseudoLight = CPseudoLight::Create(TEXTUREPATH_PSEUDOLIGHT);
 
 	InitStage();
 
@@ -108,7 +121,7 @@ void CGame::Init(void)
 	// 現在の設定記録されているライフの値に初期化する
 	int nowLife = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE);
 	nowLife = MAX_RETRYLIFE - nowLife;
-	m_pLifeUI->AddLife(nowLife);
+	m_pLifeUI->AddLife(-nowLife);
 	
 	m_pScrollManager = new CScrollManager();
 	m_pScrollManager->Init();
@@ -830,23 +843,23 @@ void CGame::InitStage(void)
 	switch(selectStage)
 	{
 		case STAGEID_1:
-			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage1.csv" );
-			m_pBackGround = CBackGround::Create("data/texture/game_bg/s1_bg.jpg");
+			m_pBlockManager = CBlockManager::Create(MAPDATAPATH_CSV_STAGE1);
+			m_pBackGround = CBackGround::Create(TEXTUREPATH_BG_STAGE1);
 			break;
 
 		case STAGEID_2:
-			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage2ex.csv" );
-			m_pBackGround = CBackGround::Create("data/texture/game_bg/s2_bg.jpg");
+			m_pBlockManager = CBlockManager::Create(MAPDATAPATH_CSV_STAGE2);
+			m_pBackGround = CBackGround::Create(TEXTUREPATH_BG_STAGE2);
 			break;
 
 		case STAGEID_3:
-			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage3.csv" );
-			m_pBackGround = CBackGround::Create("data/texture/game_bg/s3_bg.jpg");
+			m_pBlockManager = CBlockManager::Create(MAPDATAPATH_CSV_STAGE3);
+			m_pBackGround = CBackGround::Create(TEXTUREPATH_BG_STAGE3);
 			break;
 
 		case STAGEID_4:
-			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage4.csv" );
-			m_pBackGround = CBackGround::Create("data/texture/game_bg/s4_bg.jpg");
+			m_pBlockManager = CBlockManager::Create(MAPDATAPATH_CSV_STAGE4);
+			m_pBackGround = CBackGround::Create(TEXTUREPATH_BG_STAGE4);
 			break;
 
 		default:
@@ -888,16 +901,20 @@ void CGame::CheckPauseSelect(void)
 		return;
 	}
 
+	// １度だけ通るようにフラグＯＮならば返す
+	if(m_bTransition)
+	{
+		return;
+	}
+
 	switch(selectPauseMenu)
 	{
 		case PAUSEID_RETRY:
-			m_bTransition = true;
-			SetTransitionID(TRANSITIONID_GAME_RETRY);
+			Retry();
 			break;
 
 		case PAUSEID_EXIT:
-			m_bTransition = true;
-			SetTransitionID(TRANSITIONID_STAGESELECT);
+			ReturnToStageSelect();
 			break;
 
 		default:
@@ -922,9 +939,6 @@ void CGame::CheckTransition(void)
 		{
 			case TRANSITIONID_GAME_RETRY:
 				CManager::SetPhase(CManager::PHASE_GAME_RETRY);
-				break;
-
-			case TRANSITIONID_GAMEOVER:
 				break;
 
 			case TRANSITIONID_STAGESELECT:
@@ -956,3 +970,24 @@ void CGame::InitGameOverBG(void)
 	m_pGameOverBG->SetDraw(false);
 }
 
+/*-----------------------------------------------------------------------------
+	ポーズにてＲＥＴＲＹ選択時の処理
+-----------------------------------------------------------------------------*/
+void CGame::Retry(void)
+{
+	// ライフ表示などに対応させるために、リトライライフ値を１減少
+	int nowLife = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE);
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, nowLife - 1);
+
+	m_bTransition = true;
+	SetTransitionID(TRANSITIONID_GAME_RETRY);
+}
+
+/*-----------------------------------------------------------------------------
+	ポーズにてＥＸＩＴ選択時の処理
+-----------------------------------------------------------------------------*/
+void CGame::ReturnToStageSelect(void)
+{
+	m_bTransition = true;
+	SetTransitionID(TRANSITIONID_STAGESELECT);
+}

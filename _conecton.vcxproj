@@ -164,6 +164,7 @@
     <ClInclude Include="CItem.h" />
     <ClInclude Include="CLaser.h" />
     <ClInclude Include="CLaserManager.h" />
+    <ClInclude Include="CLifeConfig.h" />
     <ClInclude Include="CLight.h" />
     <ClInclude Include="C2DLogo.h" />
     <ClInclude Include="CManager.h" />

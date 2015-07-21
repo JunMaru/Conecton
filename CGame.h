@@ -111,4 +111,6 @@ public:
 		void CheckPauseSelect(void);
 		void CheckTransition(void);
 		void InitGameOverBG(void);
+		void Retry(void);
+		void ReturnToStageSelect(void);
 };
