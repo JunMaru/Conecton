@@ -26,6 +26,7 @@ const PARAM CSoundXAudio2::m_param[SL_MAX] =
 	"data/sound/se/Block_Brake.wav", false,
 	"data/sound/se/Box_Slip.wav", false,
 	"data/sound/se/Damage.wav", false,
+	"data/sound/se/Food.wav", false,
 	"data/sound/se/Kernel.wav", false,
 	"data/sound/se/Laser_End.wav", false,
 	"data/sound/se/Laser_Start.wav", false,

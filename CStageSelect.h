@@ -58,6 +58,8 @@ class CStageSelect : public CPhase
 		void UpdateAnimationAnton(void);
 		void MoveCharacter(void);
 		void BlinkSelect(float flashTime);
+		void PlayBGM(void);
+		void StopBGM(void);
 
 		CInputCommand *m_pInputCommand;
 
