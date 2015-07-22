@@ -16,6 +16,7 @@
 #include "CScrollManager.h"
 #include "Define.h"
 #include <stdio.h>
+#include "CSoundXAudio2.h"
 
 static const float ANTON_SPEED_X = (0.01f);
 static const float ANTON_MOVE_THRESHOLD = (3.0f);

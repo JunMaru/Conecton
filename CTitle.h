@@ -98,4 +98,6 @@ class CTitle : public CPhase
 		D3DXVECTOR2 m_basicScale;
 		float m_countScale;
 		bool m_bScaling;
+
+		bool m_bDeciedSe;
 };

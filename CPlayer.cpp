@@ -15,6 +15,7 @@
 #include "CAntonIconUI.h"
 #include "CBeeconIconUI.h"
 #include "Define.h"
+#include "CSoundXAudio2.h"
 
 /*-----------------------------------------------------------------------------
 	’è”’è‹`

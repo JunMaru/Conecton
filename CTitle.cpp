@@ -174,6 +174,8 @@ void CTitle::Init(void)
 
 	PlayBgm();
 
+	m_bDeciedSe = false;
+
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
@@ -371,7 +373,10 @@ void CTitle::UpdateInputEvent(void)
 		// 重なっている時に選択すれば遷移条件ＯＫ
 		if(bDecide)
 		{
-			PlaySeDecied();
+			if(m_bDeciedSe == false)
+			{
+				PlaySeDecied();
+			}
 
 			m_selectAnim = AnimList::AL_CONNECT;
 
@@ -544,5 +549,7 @@ void CTitle::StopBgm(void)
 
 void CTitle::PlaySeDecied(void)
 {
+	m_bDeciedSe = true;
+
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_ENTER);
 }

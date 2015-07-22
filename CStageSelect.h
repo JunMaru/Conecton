@@ -62,6 +62,8 @@ class CStageSelect : public CPhase
 		void StopBgm(void);
 		void PlaySeLeftAndRight(void);
 		void PlaySeSelect(void);
+		bool IsMaxSelect(void);
+		bool IsMinSelect(void);
 
 		CInputCommand *m_pInputCommand;
 
@@ -118,4 +120,6 @@ class CStageSelect : public CPhase
 
 		bool m_bChange;
 		float m_countChange;
+
+		bool m_bSelectSe;
 };

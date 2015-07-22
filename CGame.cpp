@@ -779,6 +779,8 @@ void CGame::HitCheckItem(void)
 		m_fScore += fFoodScore;
 		m_pGauge->SetGaugeVal(m_fScore);
 
+		PlaySeFood();
+
 		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_NONE, antonPos);
 	}
 }
@@ -1081,3 +1083,10 @@ void CGame::PlayJingleOver(void)
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_JINGLE_OVER);
 }
 
+/*-----------------------------------------------------------------------------
+	H‚×•¨Žæ“¾Ä¶
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeFood(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_FOOD);
+}

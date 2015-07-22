@@ -119,4 +119,5 @@ public:
 		void StopBgm(void);
 		void PlayJingleClear(void);
 		void PlayJingleOver(void);
+		void PlaySeFood(void);
 };

@@ -224,6 +224,8 @@ void CStageSelect::Init(void)
 
 	PlayBgm();
 
+	m_bSelectSe = false;
+
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
@@ -469,7 +471,10 @@ void CStageSelect::UpdateInputEvent(void)
 	{
 		CommandSelect();
 
-		PlaySeSelect();
+		if(m_bSelectSe == false)
+		{
+			PlaySeSelect();
+		}
 	}
 
 	const bool bRight = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_RIGHT);
@@ -477,15 +482,29 @@ void CStageSelect::UpdateInputEvent(void)
 	{
 		CommandRight();
 
-		PlaySeLeftAndRight();
+		if(IsMaxSelect())
+		{
+			m_selectStage = STAGEID_MAX - 1;
+		}
+		else
+		{
+			PlaySeLeftAndRight();
+		}
 	}
 
 	const bool bLeft = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_LEFT);
 	if(bLeft)
 	{
 		CommandLeft();
-
-		PlaySeLeftAndRight();
+	
+		if(IsMinSelect())
+		{
+			m_selectStage = 0;
+		}
+		else
+		{
+			PlaySeLeftAndRight();
+		}
 	}
 }
 
@@ -497,21 +516,11 @@ void CStageSelect::CommandSelect(void)
 void CStageSelect::CommandLeft(void)
 {
 	m_selectStage--;
-
-	if(m_selectStage < 0)
-	{
-		m_selectStage = 0;
-	}
 }
 
 void CStageSelect::CommandRight(void)
 {
 	m_selectStage++;
-
-	if(m_selectStage >= STAGEID_MAX)
-	{
-		m_selectStage = STAGEID_MAX - 1;
-	}
 }
 
 void CStageSelect::UpdateStageNumUI(void)
@@ -743,5 +752,17 @@ void CStageSelect::PlaySeLeftAndRight(void)
 
 void CStageSelect::PlaySeSelect(void)
 {
+	m_bSelectSe = true;
+
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_ENTER);
+}
+
+bool CStageSelect::IsMaxSelect(void)
+{
+	return (m_selectStage >= STAGEID_MAX);
+}
+
+bool CStageSelect::IsMinSelect(void)
+{
+	return (m_selectStage < 0);
 }
