@@ -70,7 +70,7 @@ static const float HEIGHT_GAMEOVERBG = 720.0f;
 /*-----------------------------------------------------------------------------
 	ゲームオーバーのタイトルへの遷移
 -----------------------------------------------------------------------------*/
-static const float TIME_AUTOCHANGE_GAMEOVER = 30.0f * 2.0f;
+static const float TIME_AUTOCHANGE_GAMEOVER = 30.0f * 6.0f;
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
@@ -147,7 +147,7 @@ void CGame::Init(void)
 
 	InitGameOverBG();
 
-	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_GAME);
+	PlayBGM();
 
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -158,7 +158,7 @@ void CGame::Init(void)
 -----------------------------------------------------------------------------*/
 void CGame::Uninit(void)
 {
-	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
+	StopBGM();
 
 	// 描画対象オブジェクトの解放
 	CScene::ReleaseAll();
@@ -821,6 +821,8 @@ void CGame::CheckGameEnd(void)
 		m_pEndLogo->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X,SCREEN_CENTER_Y + fLogoOffsetY,0.0f));
 		m_pEndLogo->SetScling(texSize / 2);
 		m_pEndLogo->StartSclAnimation(true, texSize / 4, texSize / 2, 0.01f);
+
+		PlayJingleClear();
 	}
 
 	const bool bEnter = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_ENTER);
@@ -1004,6 +1006,8 @@ void CGame::ReturnToStageSelect(void)
 	{
 		m_pGameOverBG->SetDraw(true);
 		m_bGameOver = true;
+
+		PlayJingleOver();
 	}
 	else
 	{
@@ -1037,3 +1041,43 @@ void CGame::CheckGameOver(void)
 		SetTransitionID(TRANSITIONID_TITLE);
 	}
 }
+
+
+/*-----------------------------------------------------------------------------
+	ゲームBGM再生
+-----------------------------------------------------------------------------*/
+void CGame::PlayBGM(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_GAME);
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームBGM停止
+-----------------------------------------------------------------------------*/
+void CGame::StopBGM(void)
+{
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームクリアジングル再生
+-----------------------------------------------------------------------------*/
+void CGame::PlayJingleClear(void)
+{
+	// ステージクリアジングル再生の前にBGMは止めておく
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_JINGLE_CLEAR);
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバージングル再生
+-----------------------------------------------------------------------------*/
+void CGame::PlayJingleOver(void)
+{
+	// ゲームオーバージングル再生の前にBGMは止めておく
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_JINGLE_OVER);
+}
+
