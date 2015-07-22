@@ -115,8 +115,8 @@ public:
 		void Retry(void);
 		void ReturnToStageSelect(void);
 		void CheckGameOver(void);
-		void PlayBGM(void);
-		void StopBGM(void);
+		void PlayBgm(void);
+		void StopBgm(void);
 		void PlayJingleClear(void);
 		void PlayJingleOver(void);
 };

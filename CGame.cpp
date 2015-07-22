@@ -147,7 +147,7 @@ void CGame::Init(void)
 
 	InitGameOverBG();
 
-	PlayBGM();
+	PlayBgm();
 
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -158,7 +158,7 @@ void CGame::Init(void)
 -----------------------------------------------------------------------------*/
 void CGame::Uninit(void)
 {
-	StopBGM();
+	StopBgm();
 
 	// 描画対象オブジェクトの解放
 	CScene::ReleaseAll();
@@ -1046,7 +1046,7 @@ void CGame::CheckGameOver(void)
 /*-----------------------------------------------------------------------------
 	ゲームBGM再生
 -----------------------------------------------------------------------------*/
-void CGame::PlayBGM(void)
+void CGame::PlayBgm(void)
 {
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_GAME);
 }
@@ -1054,7 +1054,7 @@ void CGame::PlayBGM(void)
 /*-----------------------------------------------------------------------------
 	ゲームBGM停止
 -----------------------------------------------------------------------------*/
-void CGame::StopBGM(void)
+void CGame::StopBgm(void)
 {
 	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
 }

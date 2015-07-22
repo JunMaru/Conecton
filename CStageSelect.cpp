@@ -222,7 +222,7 @@ void CStageSelect::Init(void)
 	m_bChange = false;
 	m_countChange = 0.0f;
 
-	PlayBGM();
+	PlayBgm();
 
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -233,7 +233,7 @@ void CStageSelect::Init(void)
 -----------------------------------------------------------------------------*/
 void CStageSelect::Uninit(void)
 {
-	StopBGM();
+	StopBgm();
 
 	m_pInputCommand->Uninit();
 	delete m_pInputCommand;
@@ -468,18 +468,24 @@ void CStageSelect::UpdateInputEvent(void)
 	if(bSelected)
 	{
 		CommandSelect();
+
+		PlaySeSelect();
 	}
 
 	const bool bRight = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_RIGHT);
 	if(bRight)
 	{
 		CommandRight();
+
+		PlaySeLeftAndRight();
 	}
 
 	const bool bLeft = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_LEFT);
 	if(bLeft)
 	{
 		CommandLeft();
+
+		PlaySeLeftAndRight();
 	}
 }
 
@@ -720,13 +726,22 @@ void CStageSelect::BlinkSelect(float flashTime)
 	}
 }
 
-void CStageSelect::PlayBGM(void)
+void CStageSelect::PlayBgm(void)
 {
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_STAGESELECT);
 }
 
-void CStageSelect::StopBGM(void)
+void CStageSelect::StopBgm(void)
 {
 	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_STAGESELECT);
 }
 
+void CStageSelect::PlaySeLeftAndRight(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_PI);
+}
+
+void CStageSelect::PlaySeSelect(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_ENTER);
+}

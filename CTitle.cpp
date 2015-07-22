@@ -172,7 +172,7 @@ void CTitle::Init(void)
 	// 選択ステージ初期化（ループ対応）
 	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_STAGESELECT, 0);
 
-	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_TITLE);
+	PlayBgm();
 
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -183,7 +183,7 @@ void CTitle::Init(void)
 -----------------------------------------------------------------------------*/
 void CTitle::Uninit(void)
 {
-	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_TITLE);
+	StopBgm();
 
 	m_pInputCommand->Uninit();
 	delete m_pInputCommand;
@@ -371,6 +371,8 @@ void CTitle::UpdateInputEvent(void)
 		// 重なっている時に選択すれば遷移条件ＯＫ
 		if(bDecide)
 		{
+			PlaySeDecied();
+
 			m_selectAnim = AnimList::AL_CONNECT;
 
 			m_bDecide = true;
@@ -528,4 +530,19 @@ void CTitle::UpdateAnimationBeeconCursor(void)
 	}
 
 	m_countAnim++;
+}
+
+void CTitle::PlayBgm(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_TITLE);
+}
+
+void CTitle::StopBgm(void)
+{
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_TITLE);
+}
+
+void CTitle::PlaySeDecied(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_ENTER);
 }

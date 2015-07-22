@@ -31,6 +31,7 @@ const PARAM CSoundXAudio2::m_param[SL_MAX] =
 	"data/sound/se/Laser_End.wav", false,
 	"data/sound/se/Laser_Start.wav", false,
 	"data/sound/se/Magnet.wav", false,
+	"data/sound/se/Pi.wav", false,
 	"data/sound/se/Picon.wav", false,
 	"data/sound/se/Powerup_Metal.wav", false,
 	"data/sound/se/Powerup_Minimum.wav", false,

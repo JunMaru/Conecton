@@ -41,6 +41,9 @@ class CTitle : public CPhase
 		void InitAnimationTitleLogo(void);
 		void UpdateAnimationTitleLogo(void);
 		void UpdateAnimationTitleBg(void);
+		void PlayBgm(void);
+		void StopBgm(void);
+		void PlaySeDecied(void);
 
 		CInputCommand *m_pInputCommand;
 
