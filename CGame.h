@@ -122,4 +122,5 @@ public:
 		void PlaySeFood(void);
 		void PlaySeMetamorPowerUp(int metamorState);
 		void PlaySeSandstorm(void);
+		void PlaySeConnect(void);
 };

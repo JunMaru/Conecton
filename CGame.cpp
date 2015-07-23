@@ -562,6 +562,8 @@ void CGame::CheckConnectAction(void)
 	// 取ってきたのは変身ブロックか？
 	if (ConnectChangeAntonBlock())
 	{
+		PlaySeConnect();
+
 		// 選ばれたのは変身ブロックでした
 		return;
 	}
@@ -569,6 +571,8 @@ void CGame::CheckConnectAction(void)
 	// 取ってきたのはギミックブロックか？
 	if (ConnectGimmickBlock())
 	{
+		PlaySeConnect();
+
 		// 選ばれたのはギミックブロックでした
 		return;
 	}
@@ -576,6 +580,8 @@ void CGame::CheckConnectAction(void)
 	// 取ってきたのはノーマルブロックか？
 	if (ConnectNormalBlock())
 	{
+		PlaySeConnect();
+
 		// 選ばれたのはノーマルブロックでした
 		return;
 	}
@@ -1026,6 +1032,9 @@ void CGame::ReturnToStageSelect(void)
 	}
 	else
 	{
+		int nowLife = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE);
+		CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, nowLife - 1);
+
 		m_bTransition = true;
 		SetTransitionID(TRANSITIONID_STAGESELECT);
 	}
@@ -1097,7 +1106,7 @@ void CGame::PlayJingleOver(void)
 }
 
 /*-----------------------------------------------------------------------------
-	食べ物取得再生
+	食べ物取得ＳＥ再生
 -----------------------------------------------------------------------------*/
 void CGame::PlaySeFood(void)
 {
@@ -1105,7 +1114,7 @@ void CGame::PlaySeFood(void)
 }
 
 /*-----------------------------------------------------------------------------
-	変身パワーアップ再生
+	変身パワーアップＳＥ再生
 -----------------------------------------------------------------------------*/
 void CGame::PlaySeMetamorPowerUp(int metamorState)
 {
@@ -1129,10 +1138,18 @@ void CGame::PlaySeMetamorPowerUp(int metamorState)
 }
 
 /*-----------------------------------------------------------------------------
-	すなあらし再生
+	すなあらしＳＥ再生
 -----------------------------------------------------------------------------*/
 void CGame::PlaySeSandstorm(void)
 {
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_SANDSTORM);
+}
+
+/*-----------------------------------------------------------------------------
+	コネクトＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeConnect(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_BEECON_CONNECT);
 }
 
