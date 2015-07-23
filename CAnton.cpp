@@ -235,6 +235,8 @@ void CAnton::TemporaryInit()
 	m_selectAnimIdx = 0;
 	m_action = ACTION_WAIT;
 	m_spd = 0.0f;
+	m_animIdxRecord = 0;
+	m_countWalk = 0.0f;
 }
 
 void CAnton::TemporaryUninit()
@@ -268,7 +270,10 @@ void CAnton::TemporaryUpdate()
 	m_animSum = m_animSet[m_selectAnimIdx].animSum;
 	m_animWait = m_animSet[m_selectAnimIdx].animWait;
 
+	m_animIdxRecord = m_animIdx;
 	m_animIdx = (int)(m_animCnt / m_animWait) % m_animSum;
+
+	CheckWalkFrame();
 
 	m_texPos = m_pTexInfoArray[m_animSet[m_selectAnimIdx].texIdArray[m_animIdx]].uv;
 	m_texSize = m_pTexInfoArray[m_animSet[m_selectAnimIdx].texIdArray[m_animIdx]].size;
@@ -405,3 +410,68 @@ void CAnton::ResetSelectAnimetionIndex(void)
 {
 	m_selectAnimIdx = ANTON_TEXTURETABLE_OFFSET[m_state] + m_action;
 }
+
+void CAnton::CheckWalkFrame()
+{
+	m_countWalk++;
+
+	bool bChanged = m_animIdxRecord != m_animIdx;
+	if(bChanged == false)
+	{
+		return;
+	}
+
+	bool bWalk = m_action == ACTION_WALK;
+	if(bWalk == false)
+	{
+		return;
+	}
+
+	if(m_countWalk > 10.0f)
+	{
+		switch(GetState())
+		{
+			case STATE_NORMAL:
+				PlaySeWalkNormal();
+				break;
+
+			case STATE_METAL:
+				PlaySeWalkMetal();
+				break;
+
+			case STATE_MINIMUM:
+				PlaySeWalkMinimum();
+				break;
+
+			case STATE_POWERFUL:
+				PlaySeWalkPowerful();
+				break;
+
+			default:
+				break;
+		}
+
+		m_countWalk = 0.0f;
+	}
+}
+
+void CAnton::PlaySeWalkNormal()
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_WALK_NORMAL);
+}
+
+void CAnton::PlaySeWalkMetal()
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_WALK_METAL);
+}
+
+void CAnton::PlaySeWalkMinimum()
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_WALK_MINI);
+}
+
+void CAnton::PlaySeWalkPowerful()
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_WALK_POWERFUL);
+}
+
