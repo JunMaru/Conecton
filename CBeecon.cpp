@@ -14,6 +14,7 @@
 #include "Define.h"
 #include "CBeecon.h"
 #include "CScrollManager.h"
+#include "CSoundXAudio2.h"
 #include < stdio.h >
 
 /*-----------------------------------------------------------------------------

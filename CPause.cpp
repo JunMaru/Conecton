@@ -17,6 +17,7 @@
 #include "CFade.h"
 #include "CConfigRecorder.h"
 #include "CInputCommand.h"
+#include "CSoundXAudio2.h"
 
 /*-----------------------------------------------------------------------------
 	ƒ}ƒNƒ’è‹`
@@ -55,9 +56,11 @@ HRESULT CPause::Init(void)
 
 	m_curve = 0.0f;
 
-	m_bSelsect = false;
+	m_bSelect = false;
 	m_bUp = false;
 	m_bDown = false;
+
+	m_bSelectSe = false;
 
 	return S_OK;
 }
@@ -218,7 +221,7 @@ void CPause::SelectMenu(void)
 
 			m_pauseMenu->SetColorExit(unSelectCol);
 
-			if(m_bSelsect)
+			if(m_bSelect)
 			{
 				SelectRetry();
 			}
@@ -234,7 +237,7 @@ void CPause::SelectMenu(void)
 
 			m_pauseMenu->SetColorExit(selectCol);
 
-			if(m_bSelsect)
+			if(m_bSelect)
 			{
 				SelectExit();
 			}
@@ -254,16 +257,23 @@ void CPause::UpdateInputEvent(CInputCommand* pInputCmd)
 	if(bSelect)
 	{
 		CommandSelect();
+
+		if(m_bSelectSe == false)
+		{
+			PlaySeSelect();
+		}
 	}
 	else
 	{
-		m_bSelsect = false;
+		m_bSelect = false;
 	}
 
 	bool bUp = pInputCmd->IsTrigger(CInputCommand::COMMAND_UP);
 	if(bUp)
 	{
 		CommandUp();
+
+		PlaySeUpAndDown();
 	}
 	else
 	{
@@ -274,6 +284,8 @@ void CPause::UpdateInputEvent(CInputCommand* pInputCmd)
 	if(bDown)
 	{
 		CommandDown();
+
+		PlaySeUpAndDown();
 	}
 	else
 	{
@@ -283,7 +295,7 @@ void CPause::UpdateInputEvent(CInputCommand* pInputCmd)
 
 void CPause::CommandSelect(void)
 {
-	m_bSelsect = true;
+	m_bSelect = true;
 }
 
 void CPause::CommandUp(void)
@@ -305,18 +317,20 @@ void CPause::SelectRetry(void)
 
 void CPause::SelectExit(void)
 {
-
 	m_pauseMenu->HideAll();
 	Disable();
 	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_PAUSESLECT, CGame::PAUSEID_EXIT);
 }
 
-void CPause::InitMenuDiffuse(void)
+void CPause::PlaySeSelect(void)
 {
+	m_bSelectSe = true;
 
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_ENTER);
 }
 
-void CPause::UpdateMenuDiffuse(void)
+void CPause::PlaySeUpAndDown(void)
 {
-
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_PI);
 }
+

@@ -55,8 +55,8 @@ class CPause
 		void SelectRetry(void);
 		void SelectExit(void);
 
-		void InitMenuDiffuse(void);
-		void UpdateMenuDiffuse(void);
+		void PlaySeSelect(void);
+		void PlaySeUpAndDown(void);
 
 		// ポーズ中フラグ
 		bool m_bPause;
@@ -70,7 +70,9 @@ class CPause
 		// 点滅用
 		float m_curve;
 
-		bool m_bSelsect;
+		bool m_bSelect;
 		bool m_bUp;
 		bool m_bDown;
+
+		bool m_bSelectSe;
 };
