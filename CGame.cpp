@@ -145,6 +145,10 @@ void CGame::Init(void)
 	m_transitionID = TRANSITIONID_NONE;
 	m_bTransition = false;
 
+	m_bClearJingle = false;
+	m_bLaserStartSe = false;
+	m_bLaserEndSe = false;
+
 	InitGameOverBG();
 
 	PlayBgm();
@@ -192,6 +196,11 @@ void CGame::Update(void)
 	// フェードしていなければ更新
 	if (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
 	{
+		if(m_bLaserStartSe == false)
+		{
+			PlaySeLaserStart();
+		}
+
 		PauseTo();
 
 		CheckGameOver();
@@ -842,8 +851,16 @@ void CGame::CheckGameEnd(void)
 		m_pEndLogo->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X,SCREEN_CENTER_Y + fLogoOffsetY,0.0f));
 		m_pEndLogo->SetScling(texSize / 2);
 		m_pEndLogo->StartSclAnimation(true, texSize / 4, texSize / 2, 0.01f);
+	}
 
+	if(m_bClearJingle == false)
+	{
 		PlayJingleClear();
+	}
+
+	if(m_bLaserEndSe == false)
+	{
+		PlaySeLaserEnd();
 	}
 
 	const bool bEnter = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_ENTER);
@@ -1088,6 +1105,8 @@ void CGame::StopBgm(void)
 -----------------------------------------------------------------------------*/
 void CGame::PlayJingleClear(void)
 {
+	m_bClearJingle = true;
+
 	// ステージクリアジングル再生の前にBGMは止めておく
 	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
 
@@ -1153,3 +1172,22 @@ void CGame::PlaySeConnect(void)
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_BEECON_CONNECT);
 }
 
+/*-----------------------------------------------------------------------------
+	ステージ開始ＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeLaserStart(void)
+{
+	m_bLaserStartSe = true;
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_LASER_START);
+}
+
+/*-----------------------------------------------------------------------------
+	ステージ終了ＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeLaserEnd(void)
+{
+	m_bLaserEndSe = true;
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_LASER_END);
+}

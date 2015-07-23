@@ -98,6 +98,10 @@ public:
 		TRANSITIONID m_transitionID;
 		bool m_bTransition;
 
+		bool m_bClearJingle;
+		bool m_bLaserStartSe;
+		bool m_bLaserEndSe;
+
 		void InitGauge(void);
 		void HitCheckMinimumAnton(void);
 		void HitCheckMetalAnton(void);
@@ -123,4 +127,6 @@ public:
 		void PlaySeMetamorPowerUp(int metamorState);
 		void PlaySeSandstorm(void);
 		void PlaySeConnect(void);
+		void PlaySeLaserStart(void);
+		void PlaySeLaserEnd(void);
 };
