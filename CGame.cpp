@@ -549,6 +549,16 @@ void CGame::CheckConnectAction(void)
 		return;
 	}
 
+	// すなあらしＴＶブロックの場合
+	bool bBlockSandstorm = blockIDFromBlockManager ==  CBlock::BLOCKID_NO_METAMOR;
+	if(bBlockSandstorm)
+	{
+		PlaySeSandstorm();
+
+		// なにも変身処理せずにできないことを知らせるＳＥを鳴らせてとばす
+		return;
+	}
+
 	// 取ってきたのは変身ブロックか？
 	if (ConnectChangeAntonBlock())
 	{
@@ -1117,3 +1127,12 @@ void CGame::PlaySeMetamorPowerUp(int metamorState)
 			break;
 	}
 }
+
+/*-----------------------------------------------------------------------------
+	すなあらし再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeSandstorm(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_SANDSTORM);
+}
+

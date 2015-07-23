@@ -121,4 +121,5 @@ public:
 		void PlayJingleOver(void);
 		void PlaySeFood(void);
 		void PlaySeMetamorPowerUp(int metamorState);
+		void PlaySeSandstorm(void);
 };
