@@ -120,4 +120,5 @@ public:
 		void PlayJingleClear(void);
 		void PlayJingleOver(void);
 		void PlaySeFood(void);
+		void PlaySeMetamorPowerUp(int metamorState);
 };

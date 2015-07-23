@@ -603,6 +603,9 @@ bool CGame::ConnectChangeAntonBlock(void)
 		// アントンを変身させ、ブロックをノーマルにする
 		m_pPlayer->SetAntonState(aAntonStateTable[nCnt]);
 
+		// ＳＥ再生
+		PlaySeMetamorPowerUp(aAntonStateTable[nCnt]);
+
 		// ブロックマネージャーのブロックをノーマルに上書き
 		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_NO_METAMOR, workPos);
 
@@ -1089,4 +1092,28 @@ void CGame::PlayJingleOver(void)
 void CGame::PlaySeFood(void)
 {
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_FOOD);
+}
+
+/*-----------------------------------------------------------------------------
+	変身パワーアップ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeMetamorPowerUp(int metamorState)
+{
+	switch(metamorState)
+	{
+		case CPlayer::ANTON_STATE_METAL:
+			CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_POWERUP_METAL);
+			break;
+		
+		case CPlayer::ANTON_STATE_MINIMUM:
+			CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_POWERUP_MINI);
+			break;
+		
+		case CPlayer::ANTON_STATE_POWERFUL:
+			CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_POWERUP_POWERFUL);
+			break;
+		
+		default:
+			break;
+	}
 }
