@@ -604,7 +604,7 @@ bool CGame::ConnectChangeAntonBlock(void)
 		m_pPlayer->SetAntonState(aAntonStateTable[nCnt]);
 
 		// ブロックマネージャーのブロックをノーマルに上書き
-		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_SOIL, workPos);
+		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_NO_METAMOR, workPos);
 
 		pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 		return true;
