@@ -129,4 +129,5 @@ public:
 		void PlaySeConnect(void);
 		void PlaySeLaserStart(void);
 		void PlaySeLaserEnd(void);
+		void PlaySeBlockBreak(void);
 };

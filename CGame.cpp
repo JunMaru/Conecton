@@ -383,6 +383,8 @@ void CGame::HitCheckMetalAnton(void)
 						pBlock -> Uninit();
 						pBlock = NULL;
 						CBlockManager::SetBlock( nBlockIdxX + nCntX, nBlockIdxY + 2, nullptr );
+
+						PlaySeBlockBreak();
 					}
 					else
 					{
@@ -1190,4 +1192,12 @@ void CGame::PlaySeLaserEnd(void)
 	m_bLaserEndSe = true;
 
 	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_LASER_END);
+}
+
+/*-----------------------------------------------------------------------------
+	ƒuƒƒbƒN”j‰ó‚r‚dÄ¶
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeBlockBreak(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_BLOCK_BRAKE);
 }

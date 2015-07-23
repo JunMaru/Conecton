@@ -56,6 +56,8 @@ public:
 	void SetWarpPoint(CGimmickBlock *p_warp_point){ m_pWarpPoint = p_warp_point; }
 
 private:
+	void PlaySeBoxSlip(void);
+
 	CGimmickBlock *m_pWarpPoint;	// このワープゾーンの転移先へのアドレス
 	bool m_bWarpFlag;				// ワープフラグ
 	static int m_nRetryWarpWaitTime;		// 再びワープ判定を取るまでの待ち時間
