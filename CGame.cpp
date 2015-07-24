@@ -148,6 +148,7 @@ void CGame::Init(void)
 	m_bClearJingle = false;
 	m_bLaserStartSe = false;
 	m_bLaserEndSe = false;
+	m_bGameClear = false;
 
 	InitGameOverBG();
 
@@ -201,7 +202,11 @@ void CGame::Update(void)
 			PlaySeLaserStart();
 		}
 
-		PauseTo();
+		bool bGameNotEnd = m_bGameClear == false && m_bGameOver == false;
+		if(bGameNotEnd)
+		{
+			PauseTo();
+		}
 
 		CheckGameOver();
 
@@ -853,6 +858,11 @@ void CGame::CheckGameEnd(void)
 		m_pEndLogo->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X,SCREEN_CENTER_Y + fLogoOffsetY,0.0f));
 		m_pEndLogo->SetScling(texSize / 2);
 		m_pEndLogo->StartSclAnimation(true, texSize / 4, texSize / 2, 0.01f);
+	}
+
+	if(m_bGameClear == false)
+	{
+		m_bGameClear = true;
 	}
 
 	if(m_bClearJingle == false)

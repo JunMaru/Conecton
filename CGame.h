@@ -101,6 +101,7 @@ public:
 		bool m_bClearJingle;
 		bool m_bLaserStartSe;
 		bool m_bLaserEndSe;
+		bool m_bGameClear;
 
 		void InitGauge(void);
 		void HitCheckMinimumAnton(void);

@@ -413,8 +413,6 @@ void CAnton::ResetSelectAnimetionIndex(void)
 
 void CAnton::CheckWalkFrame()
 {
-	m_countWalk++;
-
 	bool bChanged = m_animIdxRecord != m_animIdx;
 	if(bChanged == false)
 	{
@@ -427,7 +425,9 @@ void CAnton::CheckWalkFrame()
 		return;
 	}
 
-	if(m_countWalk > 10.0f)
+	m_countWalk++;
+
+	if(m_countWalk > 3.0f)
 	{
 		switch(GetState())
 		{
