@@ -90,6 +90,7 @@ void CLaserManager::Uninit()
 			m_pLaserArray[nCnt] = nullptr;
 		}
 	}
+	m_nCurrentLaser = 0;
 }
 
 //=============================================================================

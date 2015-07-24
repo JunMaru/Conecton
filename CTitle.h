@@ -41,6 +41,9 @@ class CTitle : public CPhase
 		void InitAnimationTitleLogo(void);
 		void UpdateAnimationTitleLogo(void);
 		void UpdateAnimationTitleBg(void);
+		void PlayBgm(void);
+		void StopBgm(void);
+		void PlaySeDecied(void);
 
 		CInputCommand *m_pInputCommand;
 
@@ -95,4 +98,6 @@ class CTitle : public CPhase
 		D3DXVECTOR2 m_basicScale;
 		float m_countScale;
 		bool m_bScaling;
+
+		bool m_bDeciedSe;
 };

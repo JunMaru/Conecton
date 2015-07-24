@@ -28,6 +28,7 @@ class CInputCommand;
 class CPseudoLight;
 class C2DLogo;
 class CPause;
+class CScene2D;
 
 class CGame : public CPhase
 {
@@ -51,7 +52,6 @@ public:
 	{
 		TRANSITIONID_NONE = -1,
 		TRANSITIONID_GAME_RETRY = 0,
-		TRANSITIONID_GAMEOVER,
 		TRANSITIONID_STAGESELECT,
 		TRANSITIONID_TITLE,
 		TRANSITIONID_MAX
@@ -92,8 +92,17 @@ public:
 		C2DLogo *m_pEndLogo;
 		int m_nLogoTimer;
 
+		CScene2D *m_pGameOverBG;
+		bool m_bGameOver;
+		float m_autoChange;
+
 		TRANSITIONID m_transitionID;
 		bool m_bTransition;
+
+		bool m_bClearJingle;
+		bool m_bLaserStartSe;
+		bool m_bLaserEndSe;
+		bool m_bGameClear;
 
 		void InitGauge(void);
 		void HitCheckMinimumAnton(void);
@@ -108,4 +117,19 @@ public:
 		void InitStage(void);
 		void CheckPauseSelect(void);
 		void CheckTransition(void);
+		void InitGameOverBG(void);
+		void Retry(void);
+		void ReturnToStageSelect(void);
+		void CheckGameOver(void);
+		void PlayBgm(void);
+		void StopBgm(void);
+		void PlayJingleClear(void);
+		void PlayJingleOver(void);
+		void PlaySeFood(void);
+		void PlaySeMetamorPowerUp(int metamorState);
+		void PlaySeSandstorm(void);
+		void PlaySeConnect(void);
+		void PlaySeLaserStart(void);
+		void PlaySeLaserEnd(void);
+		void PlaySeBlockBreak(void);
 };

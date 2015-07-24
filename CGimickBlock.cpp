@@ -15,6 +15,7 @@
 #include "CBeecon.h"
 #include "CPlayer.h"
 #include "CGame.h"
+#include "CSoundXAudio2.h"
 
 //=============================================================================
 // 静的メンバ
@@ -102,6 +103,8 @@ void CGimmickBlock::Update()
 				}
 
 				pAnton -> SetPosition( antonPos );
+
+				//CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_MAGNET);
 			}
 		}
 
@@ -119,6 +122,8 @@ void CGimmickBlock::Update()
 			blockPos.x += WOODBOX_MOVE;
 
 			bCheckRightHit = true;
+
+			PlaySeBoxSlip();
 		}
 
 		else if (blockPos.y - blockSize.y < antonPos.y + antonSize.y && blockPos.y + blockSize.y > antonPos.y - antonSize.y
@@ -130,6 +135,8 @@ void CGimmickBlock::Update()
 			blockPos.x -= WOODBOX_MOVE;
 
 			bCheckLeftHit = true;
+
+			PlaySeBoxSlip();
 		}
 
 		// 落下の判定は、変化前の座標からブロックIDを求めて
@@ -402,4 +409,12 @@ void CGimmickBlock::Update()
 void CGimmickBlock::Draw()
 {
 	CBlock::Draw();
+}
+
+/*-----------------------------------------------------------------------------
+	木箱押しＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGimmickBlock::PlaySeBoxSlip(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_BOX_SLIP);
 }

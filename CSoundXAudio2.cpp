@@ -13,10 +13,37 @@
 /*-----------------------------------------------------------------------------
 	静的メンバ変数の初期化
 -----------------------------------------------------------------------------*/
-const PARAM CSoundXAudio2::m_param[SOUND_LABEL_MAX] = 
+const PARAM CSoundXAudio2::m_param[SL_MAX] = 
 {
 	"data/testsample/bgm000.wav", true,
 	"data/testsample/shot000.wav", false,
+	"data/sound/bgm/BGM_Game.wav", true,
+	"data/sound/bgm/BGM_Stage.wav", true,
+	"data/sound/bgm/BGM_Title.wav", true,
+	"data/sound/jingle/jingle_Clear.wav", false,
+	"data/sound/jingle/jingle_Over.wav", false,
+	"data/sound/se/Beecon_Connect.wav", false,
+	"data/sound/se/Block_Brake.wav", false,
+	"data/sound/se/Box_Slip.wav", false,
+	"data/sound/se/Damage.wav", false,
+	"data/sound/se/Food.wav", false,
+	"data/sound/se/Kernel.wav", false,
+	"data/sound/se/Laser_End.wav", false,
+	"data/sound/se/Laser_Start.wav", false,
+	"data/sound/se/Magnet.wav", false,
+	"data/sound/se/Pi.wav", false,
+	"data/sound/se/Picon.wav", false,
+	"data/sound/se/Powerup_Metal.wav", false,
+	"data/sound/se/Powerup_Minimum.wav", false,
+	"data/sound/se/Powerup_Powerful.wav", false,
+	"data/sound/se/Rot_Arrow.wav", false,
+	"data/sound/se/Sandstorm.wav", false,
+	"data/sound/se/UI_Enter.wav", false,
+	"data/sound/se/Walk_Normal.wav", false,
+	"data/sound/se/Walk_Metal.wav", false,
+	"data/sound/se/Walk_Minimum.wav", false,
+	"data/sound/se/Walk_Powerful.wav", false,
+	"data/sound/se/Warp.wav", false,
 };
 
 /*-----------------------------------------------------------------------------
@@ -80,7 +107,7 @@ HRESULT CSoundXAudio2::Init(HWND hWnd)
 	}
 
 	// サウンドデータの初期化
-	for(int nCntSound = 0; nCntSound < SOUND_LABEL_MAX; nCntSound++)
+	for(int nCntSound = 0; nCntSound < SL_MAX; nCntSound++)
 	{
 		HANDLE hFile;
 		DWORD dwChunkSize = 0;
@@ -239,7 +266,7 @@ HRESULT CSoundXAudio2::Init(HWND hWnd)
 void CSoundXAudio2::Uninit(void)
 {
 	// 一時停止
-	for(int nCntSound = 0; nCntSound < SOUND_LABEL_MAX; nCntSound++)
+	for(int nCntSound = 0; nCntSound < SL_MAX; nCntSound++)
 	{
 		if(m_pSourceVoice[nCntSound])
 		{
@@ -348,7 +375,7 @@ void CSoundXAudio2::Stop(SOUND_LABEL label)
 -----------------------------------------------------------------------------*/
 void CSoundXAudio2::AllStop(void)
 {
-	for(int nCntSound = 0; nCntSound < SOUND_LABEL_MAX; nCntSound++)
+	for(int nCntSound = 0; nCntSound < SL_MAX; nCntSound++)
 	{
 		if(m_pSourceVoice[nCntSound])
 		{

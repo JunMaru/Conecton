@@ -31,7 +31,19 @@ CPseudoLight::~CPseudoLight(void)
 -----------------------------------------------------------------------------*/
 void CPseudoLight::Draw(void)
 {
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+
+	// 乗算ブレンド
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ZERO);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_SRCCOLOR);
+
 	CScene2D::Draw();
+
+	// 通常ブレンド
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 /*-----------------------------------------------------------------------------

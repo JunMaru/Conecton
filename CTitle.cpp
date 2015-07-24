@@ -16,6 +16,9 @@
 #include "CScene2D.h"
 #include "CCamera.h"
 #include "collisionDetection.h"
+#include "CSoundXAudio2.h"
+#include "CConfigRecorder.h"
+#include "CLifeConfig.h"
 
 /*-----------------------------------------------------------------------------
 	タイトル背景の生成設定
@@ -163,6 +166,16 @@ void CTitle::Init(void)
 	m_pPressGameStartText->SetDraw(false);
 	m_pPressGameStartTextF->SetDraw(false);
 
+	// ライフ初期化（ループ対応）
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, INIT_RETRYLIFE);
+
+	// 選択ステージ初期化（ループ対応）
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_STAGESELECT, 0);
+
+	PlayBgm();
+
+	m_bDeciedSe = false;
+
 	// フェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
 }
@@ -172,6 +185,8 @@ void CTitle::Init(void)
 -----------------------------------------------------------------------------*/
 void CTitle::Uninit(void)
 {
+	StopBgm();
+
 	m_pInputCommand->Uninit();
 	delete m_pInputCommand;
 
@@ -358,6 +373,11 @@ void CTitle::UpdateInputEvent(void)
 		// 重なっている時に選択すれば遷移条件ＯＫ
 		if(bDecide)
 		{
+			if(m_bDeciedSe == false)
+			{
+				PlaySeDecied();
+			}
+
 			m_selectAnim = AnimList::AL_CONNECT;
 
 			m_bDecide = true;
@@ -515,4 +535,21 @@ void CTitle::UpdateAnimationBeeconCursor(void)
 	}
 
 	m_countAnim++;
+}
+
+void CTitle::PlayBgm(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_TITLE);
+}
+
+void CTitle::StopBgm(void)
+{
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_TITLE);
+}
+
+void CTitle::PlaySeDecied(void)
+{
+	m_bDeciedSe = true;
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_ENTER);
 }

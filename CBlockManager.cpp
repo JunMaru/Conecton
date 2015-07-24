@@ -551,6 +551,26 @@ void CBlockManager::OverwriteGimmickBlock(CBlock::BLOCKID block_type, D3DXVECTOR
 	}
 
 	m_pBlockArray[nArrayY * MAX_BLOCK_X + nArrayX] = pBlock;
+
+	// 上にブロックが存在するかどうか
+	bool bExistOnOneBlock = m_pBlockArray[(nArrayY - 1) * MAX_BLOCK_X + nArrayX] != nullptr;
+	bool bNotExistOnOneBlock = m_pBlockArray[(nArrayY - 1) * MAX_BLOCK_X + nArrayX] == nullptr;
+
+	// 下地ブロックの設定
+	if(pBlock->GetBlockId() == CBlock::BLOCKID_NO_METAMOR
+	&& bExistOnOneBlock)
+	{
+		pBlock->SetSecondTexID(0, 0);
+	}
+	else if(pBlock->GetBlockId() == CBlock::BLOCKID_NO_METAMOR
+	&& bNotExistOnOneBlock)
+	{
+		pBlock->SetSecondTexID(1, 0);
+	}
+	else
+	{
+		pBlock->SetSecondTexID(-1, -1);
+	}
 }
 
 //=============================================================================

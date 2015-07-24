@@ -33,16 +33,44 @@ since	20140713
 #include "CConfigRecorder.h"
 #include "CStageConfig.h"
 #include "CPause.h"
+#include "CSoundXAudio2.h"
+#include "CLifeConfig.h"
 
 /*-----------------------------------------------------------------------------
 	テクスチャ読み込み先のパス設定
 -----------------------------------------------------------------------------*/
 static const char* TEXTUREPATH_FONT_CLEAR = "data/texture/font/clear.png";
+static const char* TEXTUREPATH_PSEUDOLIGHT = "data/texture/pseudo_light/pseudo_light.png";
+static const char* TEXTUREPATH_BG_STAGE1 = "data/texture/game_bg/s1_bg.jpg";
+static const char* TEXTUREPATH_BG_STAGE2 = "data/texture/game_bg/s2_bg.jpg";
+static const char* TEXTUREPATH_BG_STAGE3 = "data/texture/game_bg/s3_bg.jpg";
+static const char* TEXTUREPATH_BG_STAGE4 = "data/texture/game_bg/s4_bg.jpg";
+
+/*-----------------------------------------------------------------------------
+	ステージデータ読み込み先のパス設定
+-----------------------------------------------------------------------------*/
+static char* MAPDATAPATH_CSV_STAGE1 = "data/stage_info/stage1.csv";
+static char* MAPDATAPATH_CSV_STAGE2 = "data/stage_info/stage2ex.csv";
+static char* MAPDATAPATH_CSV_STAGE3 = "data/stage_info/stage3.csv";
+static char* MAPDATAPATH_CSV_STAGE4 = "data/stage_info/stage4.csv";
 
 /*-----------------------------------------------------------------------------
 	ゲージUIのベース値(これが最大値になる)
 -----------------------------------------------------------------------------*/
 static const float GAUGE_BASE_VALUE = (100.0f);
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバーＢＧの生成設定
+-----------------------------------------------------------------------------*/
+static const char* TEXTUREPATH_GAMEOVERBG = "data/texture/gameover_bg/gameover_bg.png";
+static const D3DXVECTOR3 POS_GAMEOVERBG = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
+static const float WIDTH_GAMEOVERBG = 1280.0f;
+static const float HEIGHT_GAMEOVERBG = 720.0f;
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバーのタイトルへの遷移
+-----------------------------------------------------------------------------*/
+static const float TIME_AUTOCHANGE_GAMEOVER = 30.0f * 6.0f;
 
 /*-----------------------------------------------------------------------------
 静的メンバ変数の初期化
@@ -86,13 +114,20 @@ CGame::~CGame()
 -----------------------------------------------------------------------------*/
 void CGame::Init(void)
 {
-	m_pPseudoLight = CPseudoLight::Create("data/texture/pseudo_light/pseudo_light.png");
+	m_pPseudoLight = CPseudoLight::Create(TEXTUREPATH_PSEUDOLIGHT);
 
 	InitStage();
 
 	m_pPlayer = CPlayer::Create(VEC3_ZERO, VEC3_ZERO);
+	
 	InitGauge();
+
 	m_pLifeUI = CAntonLifeUI::Create(D3DXVECTOR3(350.0f, 50.0f, 0.0f));
+
+	// 現在の設定記録されているライフの値に初期化する
+	int nowLife = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE);
+	nowLife = MAX_RETRYLIFE - nowLife;
+	m_pLifeUI->AddLife(-nowLife);
 	
 	m_pScrollManager = new CScrollManager();
 	m_pScrollManager->Init();
@@ -105,11 +140,20 @@ void CGame::Init(void)
 	m_pPause = new CPause();
 	m_pPause->Init();
 
+	// ポーズの選択情報を初期化して、ループしたときにいきなり画面遷移みたいなのを防止
 	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_PAUSESLECT, 0);
 
 	m_transitionID = TRANSITIONID_NONE;
-
 	m_bTransition = false;
+
+	m_bClearJingle = false;
+	m_bLaserStartSe = false;
+	m_bLaserEndSe = false;
+	m_bGameClear = false;
+
+	InitGameOverBG();
+
+	PlayBgm();
 
 	// 1秒間のフェードイン
 	CManager::GetPhaseFade()->Start(CFade::FADETYPE_IN, 30.0f, COL_WHITE);
@@ -120,6 +164,8 @@ void CGame::Init(void)
 -----------------------------------------------------------------------------*/
 void CGame::Uninit(void)
 {
+	StopBgm();
+
 	// 描画対象オブジェクトの解放
 	CScene::ReleaseAll();
 
@@ -147,16 +193,23 @@ void CGame::Uninit(void)
 -----------------------------------------------------------------------------*/
 void CGame::Update(void)
 {
-	// キーボード入力を取得
-	CInputKeyboard *pKeyboard = CManager::GetInputKeyboard();
-	CInputJoypad *pJoyPad = CManager::GetInputJoypad();
-
 	m_pInputCommand->Update();
 
 	// フェードしていなければ更新
 	if (CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
 	{
-		PauseTo();
+		if(m_bLaserStartSe == false)
+		{
+			PlaySeLaserStart();
+		}
+
+		bool bGameNotEnd = m_bGameClear == false && m_bGameOver == false;
+		if(bGameNotEnd)
+		{
+			PauseTo();
+		}
+
+		CheckGameOver();
 
 		// 無限フェードアウトにしないようにここで発生させる
 		if(m_bTransition)
@@ -164,7 +217,7 @@ void CGame::Update(void)
 			CManager::GetPhaseFade()->Start(
 												CFade::FADETYPE_OUT,
 												30.0f,
-												D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+												COL_WHITE);
 		}
 	}
 
@@ -336,6 +389,8 @@ void CGame::HitCheckMetalAnton(void)
 						pBlock -> Uninit();
 						pBlock = NULL;
 						CBlockManager::SetBlock( nBlockIdxX + nCntX, nBlockIdxY + 2, nullptr );
+
+						PlaySeBlockBreak();
 					}
 					else
 					{
@@ -511,9 +566,21 @@ void CGame::CheckConnectAction(void)
 		return;
 	}
 
+	// すなあらしＴＶブロックの場合
+	bool bBlockSandstorm = blockIDFromBlockManager ==  CBlock::BLOCKID_NO_METAMOR;
+	if(bBlockSandstorm)
+	{
+		PlaySeSandstorm();
+
+		// なにも変身処理せずにできないことを知らせるＳＥを鳴らせてとばす
+		return;
+	}
+
 	// 取ってきたのは変身ブロックか？
 	if (ConnectChangeAntonBlock())
 	{
+		PlaySeConnect();
+
 		// 選ばれたのは変身ブロックでした
 		return;
 	}
@@ -521,6 +588,8 @@ void CGame::CheckConnectAction(void)
 	// 取ってきたのはギミックブロックか？
 	if (ConnectGimmickBlock())
 	{
+		PlaySeConnect();
+
 		// 選ばれたのはギミックブロックでした
 		return;
 	}
@@ -528,6 +597,8 @@ void CGame::CheckConnectAction(void)
 	// 取ってきたのはノーマルブロックか？
 	if (ConnectNormalBlock())
 	{
+		PlaySeConnect();
+
 		// 選ばれたのはノーマルブロックでした
 		return;
 	}
@@ -565,8 +636,11 @@ bool CGame::ConnectChangeAntonBlock(void)
 		// アントンを変身させ、ブロックをノーマルにする
 		m_pPlayer->SetAntonState(aAntonStateTable[nCnt]);
 
+		// ＳＥ再生
+		PlaySeMetamorPowerUp(aAntonStateTable[nCnt]);
+
 		// ブロックマネージャーのブロックをノーマルに上書き
-		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_SOIL, workPos);
+		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_NO_METAMOR, workPos);
 
 		pBeecon->SetAction(CBeecon::ACTION_CONNECT);
 		return true;
@@ -741,6 +815,8 @@ void CGame::HitCheckItem(void)
 		m_fScore += fFoodScore;
 		m_pGauge->SetGaugeVal(m_fScore);
 
+		PlaySeFood();
+
 		m_pBlockManager->OverwriteGimmickBlock(CBlock::BLOCKID_NONE, antonPos);
 	}
 }
@@ -789,17 +865,31 @@ void CGame::CheckGameEnd(void)
 
 	++m_nLogoTimer;
 
+	if(m_bGameClear == false)
+	{
+		m_bGameClear = true;
+	}
+
+	if(m_bClearJingle == false)
+	{
+		PlayJingleClear();
+	}
+
+	if(m_bLaserEndSe == false)
+	{
+		PlaySeLaserEnd();
+	}
 	const bool bTimeOver = (nGoResultTime < m_nLogoTimer);
 	const bool bEnterPush = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_ENTER);
 	const bool bEnter = (bEnterPush || bTimeOver);
 
 	if (bEnter == true)
 	{
-		CManager::GetPhaseFade()->Start(
-			CFade::FADETYPE_OUT,
-			30.0f,
-			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		m_bTransition = true;
 		SetTransitionID(TRANSITIONID_STAGESELECT);
+
+		// クリア特典でライフを最大値まで上げる
+		CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, MAX_RETRYLIFE);
 	}
 }
 
@@ -814,23 +904,23 @@ void CGame::InitStage(void)
 	switch(selectStage)
 	{
 		case STAGEID_1:
-			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage1.csv" );
-			m_pBackGround = CBackGround::Create("data/texture/game_bg/s1_bg.jpg");
+			m_pBlockManager = CBlockManager::Create(MAPDATAPATH_CSV_STAGE1);
+			m_pBackGround = CBackGround::Create(TEXTUREPATH_BG_STAGE1);
 			break;
 
 		case STAGEID_2:
-			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage2ex.csv" );
-			m_pBackGround = CBackGround::Create("data/texture/game_bg/s2_bg.jpg");
+			m_pBlockManager = CBlockManager::Create(MAPDATAPATH_CSV_STAGE2);
+			m_pBackGround = CBackGround::Create(TEXTUREPATH_BG_STAGE2);
 			break;
 
 		case STAGEID_3:
-			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage3.csv" );
-			m_pBackGround = CBackGround::Create("data/texture/game_bg/s3_bg.jpg");
+			m_pBlockManager = CBlockManager::Create(MAPDATAPATH_CSV_STAGE3);
+			m_pBackGround = CBackGround::Create(TEXTUREPATH_BG_STAGE3);
 			break;
 
 		case STAGEID_4:
-			m_pBlockManager = CBlockManager::Create( "data/stage_info/stage4.csv" );
-			m_pBackGround = CBackGround::Create("data/texture/game_bg/s4_bg.jpg");
+			m_pBlockManager = CBlockManager::Create(MAPDATAPATH_CSV_STAGE4);
+			m_pBackGround = CBackGround::Create(TEXTUREPATH_BG_STAGE4);
 			break;
 
 		default:
@@ -872,16 +962,25 @@ void CGame::CheckPauseSelect(void)
 		return;
 	}
 
+	// １度だけ通るようにフラグＯＮならば返す
+	if(m_bTransition)
+	{
+		return;
+	}
+
+	if(m_bGameOver)
+	{
+		return;
+	}
+
 	switch(selectPauseMenu)
 	{
 		case PAUSEID_RETRY:
-			m_bTransition = true;
-			SetTransitionID(TRANSITIONID_GAME_RETRY);
+			Retry();
 			break;
 
 		case PAUSEID_EXIT:
-			m_bTransition = true;
-			SetTransitionID(TRANSITIONID_STAGESELECT);
+			ReturnToStageSelect();
 			break;
 
 		default:
@@ -908,9 +1007,6 @@ void CGame::CheckTransition(void)
 				CManager::SetPhase(CManager::PHASE_GAME_RETRY);
 				break;
 
-			case TRANSITIONID_GAMEOVER:
-				break;
-
 			case TRANSITIONID_STAGESELECT:
 				CManager::SetPhase(CManager::PHASE_STAGESELECT);
 				break;
@@ -923,4 +1019,201 @@ void CGame::CheckTransition(void)
 				break;
 		}
 	}
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバーＢＧの初期化
+-----------------------------------------------------------------------------*/
+void CGame::InitGameOverBG(void)
+{
+	m_pGameOverBG = CScene2D::Create(
+										TEXTUREPATH_GAMEOVERBG,
+										POS_GAMEOVERBG,
+										VEC3_ZERO,
+										WIDTH_GAMEOVERBG,
+										HEIGHT_GAMEOVERBG);
+
+	m_pGameOverBG->SetDraw(false);
+
+	m_bGameOver = false;
+
+	m_autoChange = 0.0f;
+}
+
+/*-----------------------------------------------------------------------------
+	ポーズにてＲＥＴＲＹ選択時の処理
+-----------------------------------------------------------------------------*/
+void CGame::Retry(void)
+{
+	// ライフ表示などに対応させるために、リトライライフ値を１減少
+	int nowLife = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE);
+	CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, nowLife - 1);
+
+	m_bTransition = true;
+	SetTransitionID(TRANSITIONID_GAME_RETRY);
+}
+
+/*-----------------------------------------------------------------------------
+	ポーズにてＥＸＩＴ選択時の処理
+-----------------------------------------------------------------------------*/
+void CGame::ReturnToStageSelect(void)
+{
+	if(CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE) == 0)
+	{
+		m_pGameOverBG->SetDraw(true);
+		m_bGameOver = true;
+
+		PlayJingleOver();
+	}
+	else
+	{
+		int nowLife = CManager::GetConfigRecorder()->Get(CConfigRecorder::CI_RETRYLIFE);
+		CManager::GetConfigRecorder()->Set(CConfigRecorder::CI_RETRYLIFE, nowLife - 1);
+
+		m_bTransition = true;
+		SetTransitionID(TRANSITIONID_STAGESELECT);
+	}
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバー表示
+-----------------------------------------------------------------------------*/
+void CGame::CheckGameOver(void)
+{
+	if(m_bGameOver == false)
+	{
+		return;
+	}
+
+	bool bSkip = m_pInputCommand->IsTrigger(CInputCommand::COMMAND_CONNECT);
+	if(bSkip)
+	{
+		m_autoChange = TIME_AUTOCHANGE_GAMEOVER;
+	}
+
+	m_autoChange++;
+
+	bool bAutoChange = m_autoChange > TIME_AUTOCHANGE_GAMEOVER;
+	if(bAutoChange)
+	{
+		m_bTransition = true;
+		SetTransitionID(TRANSITIONID_TITLE);
+	}
+}
+
+
+/*-----------------------------------------------------------------------------
+	ゲームBGM再生
+-----------------------------------------------------------------------------*/
+void CGame::PlayBgm(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_BGM_GAME);
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームBGM停止
+-----------------------------------------------------------------------------*/
+void CGame::StopBgm(void)
+{
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームクリアジングル再生
+-----------------------------------------------------------------------------*/
+void CGame::PlayJingleClear(void)
+{
+	m_bClearJingle = true;
+
+	// ステージクリアジングル再生の前にBGMは止めておく
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_JINGLE_CLEAR);
+}
+
+/*-----------------------------------------------------------------------------
+	ゲームオーバージングル再生
+-----------------------------------------------------------------------------*/
+void CGame::PlayJingleOver(void)
+{
+	// ゲームオーバージングル再生の前にBGMは止めておく
+	CManager::GetSoundXAudio2()->Stop(CSoundXAudio2::SL_BGM_GAME);
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_JINGLE_OVER);
+}
+
+/*-----------------------------------------------------------------------------
+	食べ物取得ＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeFood(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_FOOD);
+}
+
+/*-----------------------------------------------------------------------------
+	変身パワーアップＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeMetamorPowerUp(int metamorState)
+{
+	switch(metamorState)
+	{
+		case CPlayer::ANTON_STATE_METAL:
+			CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_POWERUP_METAL);
+			break;
+		
+		case CPlayer::ANTON_STATE_MINIMUM:
+			CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_POWERUP_MINI);
+			break;
+		
+		case CPlayer::ANTON_STATE_POWERFUL:
+			CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_POWERUP_POWERFUL);
+			break;
+		
+		default:
+			break;
+	}
+}
+
+/*-----------------------------------------------------------------------------
+	すなあらしＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeSandstorm(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_SANDSTORM);
+}
+
+/*-----------------------------------------------------------------------------
+	コネクトＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeConnect(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_BEECON_CONNECT);
+}
+
+/*-----------------------------------------------------------------------------
+	ステージ開始ＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeLaserStart(void)
+{
+	m_bLaserStartSe = true;
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_LASER_START);
+}
+
+/*-----------------------------------------------------------------------------
+	ステージ終了ＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeLaserEnd(void)
+{
+	m_bLaserEndSe = true;
+
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_LASER_END);
+}
+
+/*-----------------------------------------------------------------------------
+	ブロック破壊ＳＥ再生
+-----------------------------------------------------------------------------*/
+void CGame::PlaySeBlockBreak(void)
+{
+	CManager::GetSoundXAudio2()->Play(CSoundXAudio2::SL_SE_BLOCK_BRAKE);
 }

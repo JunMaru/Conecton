@@ -159,6 +159,12 @@ class CAnton : public CScene
 		void InitAnimation();
 		void ResetSelectAnimetionIndex();
 
+		void CheckWalkFrame();
+		void PlaySeWalkNormal();
+		void PlaySeWalkMetal();
+		void PlaySeWalkMinimum();
+		void PlaySeWalkPowerful();
+
 		//とりあえず普通に描画
 		LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;
 		LPDIRECT3DTEXTURE9      m_pTex;
@@ -215,5 +221,8 @@ class CAnton : public CScene
 		PARAMETER m_parameter;
 		STATE m_state;				// アントンの状態(ノーマル/メタル/ミニマム/パワフル)
 		ACTION m_action;			// アントンの行動(待機/歩く/正面を向く)
+
+		int m_animIdxRecord;
+		float m_countWalk;
 };
 

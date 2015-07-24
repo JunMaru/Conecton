@@ -30,9 +30,36 @@ class CSoundXAudio2
 		// サウンドファイルラベル名（m_paramに同順にファイルパスを記述）
 		typedef enum
 		{
-			SOUND_LABEL_BGM_000,
-			SOUND_LABEL_SE_SHOT_000,
-			SOUND_LABEL_MAX,
+			SL_BGM_TEST,
+			SL_SE_SHOT_TEST,
+			SL_BGM_GAME,
+			SL_BGM_STAGESELECT,
+			SL_BGM_TITLE,
+			SL_JINGLE_CLEAR,
+			SL_JINGLE_OVER,
+			SL_SE_BEECON_CONNECT,
+			SL_SE_BLOCK_BRAKE,
+			SL_SE_BOX_SLIP,
+			SL_SE_DAMAGE,
+			SL_SE_FOOD,
+			SL_SE_KERNEL,
+			SL_SE_LASER_END,
+			SL_SE_LASER_START,
+			SL_SE_MAGNET,
+			SL_SE_PI,
+			SL_SE_PICON,
+			SL_SE_POWERUP_METAL,
+			SL_SE_POWERUP_MINI,
+			SL_SE_POWERUP_POWERFUL,
+			SL_SE_ROT_ARROW,
+			SL_SE_SANDSTORM,
+			SL_SE_ENTER,
+			SL_SE_WALK_NORMAL,
+			SL_SE_WALK_METAL,
+			SL_SE_WALK_MINI,
+			SL_SE_WALK_POWERFUL,
+			SL_SE_WARP,
+			SL_MAX,
 		}SOUND_LABEL;
 
 		CSoundXAudio2();
@@ -94,12 +121,12 @@ class CSoundXAudio2
 		// マスターボイス
 		IXAudio2MasteringVoice *m_pMasteringVoice;
 		// ソースボイス
-		IXAudio2SourceVoice *m_pSourceVoice[SOUND_LABEL_MAX];
+		IXAudio2SourceVoice *m_pSourceVoice[SL_MAX];
 		// オーディオデータ
-		BYTE *m_pDataAudio[SOUND_LABEL_MAX];
+		BYTE *m_pDataAudio[SL_MAX];
 		// オーディオデータサイズ
-		DWORD m_sizeAudio[SOUND_LABEL_MAX];
+		DWORD m_sizeAudio[SL_MAX];
 
 		// メディアのパラメータ( PARAM構造体のフォーマット )
-		static const PARAM m_param[SOUND_LABEL_MAX];
+		static const PARAM m_param[SL_MAX];
 };

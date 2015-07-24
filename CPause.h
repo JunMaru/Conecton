@@ -52,6 +52,12 @@ class CPause
 		// 選択しているポーズメニューの決定処理と対応する状態遷移
 		void SelectMenu(void);
 
+		void SelectRetry(void);
+		void SelectExit(void);
+
+		void PlaySeSelect(void);
+		void PlaySeUpAndDown(void);
+
 		// ポーズ中フラグ
 		bool m_bPause;
 
@@ -64,7 +70,9 @@ class CPause
 		// 点滅用
 		float m_curve;
 
-		bool m_bSelsect;
+		bool m_bSelect;
 		bool m_bUp;
 		bool m_bDown;
+
+		bool m_bSelectSe;
 };

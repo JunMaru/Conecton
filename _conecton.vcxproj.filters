@@ -394,6 +394,9 @@
     <ClInclude Include="CPause.h">
       <Filter>ソース ファイル\application\Pause</Filter>
     </ClInclude>
+    <ClInclude Include="CLifeConfig.h">
+      <Filter>ソース ファイル\application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico">
