@@ -253,7 +253,10 @@ void CStageSelect::Update(void)
 	// フェードしていなければ更新
 	if(CManager::GetPhaseFade()->GetFadetype() == CFade::FADETYPE_NONE)
 	{
-		UpdateInputEvent();
+		if(!IsSelected())
+		{
+			UpdateInputEvent();
+		}
 
 		UpdateStageNumUI();
 
