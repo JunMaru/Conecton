@@ -281,6 +281,14 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 				pBlock->SetScaling(50.0f, 50.0f);
 				pBlock->SetBlockId((CBlock::BLOCKID)nBlockID);
 
+				// レーザコントロールブロックであるかどうか
+				bool bBlockLaserControl = pBlock->GetBlockId() > CBlock::BLOCKID_LASER_START_RIGHT
+										&& pBlock->GetBlockId() < CBlock::BLOCKID_MAGNET;
+
+				// 上にブロックが存在するかどうか
+				bool bExistOnOneBlock = m_pBlockArray[(nCntY - 1) * MAX_BLOCK_X + nCntX] != nullptr;
+				bool bNotExistOnOneBlock = m_pBlockArray[(nCntY - 1) * MAX_BLOCK_X + nCntX] == nullptr;
+
 				// 変身アイテムの下地のテクスチャを設定。上に別のブロックがある場合は
 				// 土ブロックを設定。無い場合は草ブロックを設定。
 				if (pBlock->GetBlockId() > CBlock::BLOCKID_GRASS_CRACK
@@ -292,6 +300,14 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 				else if (pBlock->GetBlockId() > CBlock::BLOCKID_GRASS_CRACK
 					&& pBlock->GetBlockId() < CBlock::BLOCKID_LASER_GOAL_TOP
 					&& m_pBlockArray[(nCntY - 1) * MAX_BLOCK_X + nCntX] == nullptr)
+				{
+					pBlock->SetSecondTexID(1, 0);
+				}
+				else if(bBlockLaserControl && bExistOnOneBlock)
+				{
+					pBlock->SetSecondTexID(0, 0);
+				}
+				else if(bBlockLaserControl && bNotExistOnOneBlock)
 				{
 					pBlock->SetSecondTexID(1, 0);
 				}
@@ -552,12 +568,24 @@ void CBlockManager::OverwriteGimmickBlock(CBlock::BLOCKID block_type, D3DXVECTOR
 
 	m_pBlockArray[nArrayY * MAX_BLOCK_X + nArrayX] = pBlock;
 
+	// レーザコントロールブロックであるかどうか
+	bool bBlockLaserControl = pBlock->GetBlockId() > CBlock::BLOCKID_LASER_START_RIGHT
+							&& pBlock->GetBlockId() < CBlock::BLOCKID_MAGNET;
+
 	// 上にブロックが存在するかどうか
 	bool bExistOnOneBlock = m_pBlockArray[(nArrayY - 1) * MAX_BLOCK_X + nArrayX] != nullptr;
 	bool bNotExistOnOneBlock = m_pBlockArray[(nArrayY - 1) * MAX_BLOCK_X + nArrayX] == nullptr;
 
 	// 下地ブロックの設定
-	if(pBlock->GetBlockId() == CBlock::BLOCKID_NO_METAMOR
+	if(bBlockLaserControl && bExistOnOneBlock)
+	{
+		pBlock->SetSecondTexID(0, 0);
+	}
+	else if(bBlockLaserControl && bNotExistOnOneBlock)
+	{
+		pBlock->SetSecondTexID(1, 0);
+	}
+	else if(pBlock->GetBlockId() == CBlock::BLOCKID_NO_METAMOR
 	&& bExistOnOneBlock)
 	{
 		pBlock->SetSecondTexID(0, 0);

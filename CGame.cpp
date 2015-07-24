@@ -753,7 +753,7 @@ bool CGame::ConnectNormalBlock(void)
 	}
 
 	// ギミックブロック判定テーブル
-	const CBlock::BLOCKID aNormalBlockTable[] = { CBlock::BLOCKID_GRASS, CBlock::BLOCKID_SOIL, };
+	const CBlock::BLOCKID aNormalBlockTable[] = { CBlock::BLOCKID_GRASS, CBlock::BLOCKID_SOIL, /*CBlock::BLOCKID_WOODBOX,*/ };
 
 	// 取得してきたブロック情報はノーマルなのか？
 	for (int nCnt = 0; nCnt < sizeof(aNormalBlockTable) / sizeof(CBlock::BLOCKID); ++nCnt)
