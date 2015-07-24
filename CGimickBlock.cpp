@@ -58,6 +58,8 @@ void CGimmickBlock::Update()
 	D3DXVECTOR3 blockSize = D3DXVECTOR3(BLOCK_WIDTH / 2.0f, BLOCK_HEIGHT / 2.0f, 0.0f);
 	D3DXVECTOR3 blockPos = D3DXVECTOR3( m_pos.x, m_pos.y, 0.0f ) + blockSize;
 
+	D3DXVECTOR3 checkPos = blockPos;
+
 	// 木箱の判定に必要な変数
 	CBlock* pBlock = nullptr;
 	int nArrayNumX = 0, nArrayNumY = 0;
@@ -137,6 +139,11 @@ void CGimmickBlock::Update()
 			bCheckLeftHit = true;
 
 			PlaySeBoxSlip();
+		}
+		
+		if(checkPos != blockPos)
+		{
+			pAnton->SetAction(CAnton::ACTION_PUSH);
 		}
 
 		// 落下の判定は、変化前の座標からブロックIDを求めて

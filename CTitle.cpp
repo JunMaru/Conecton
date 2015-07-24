@@ -23,7 +23,7 @@
 /*-----------------------------------------------------------------------------
 	ƒ^ƒCƒgƒ‹”wŒi‚Ì¶¬Ý’è
 -----------------------------------------------------------------------------*/
-static const char* TEXTUREPATH_TITLEBG = "data/texture/title_bg/title_bg.jpg";
+static const char* TEXTUREPATH_TITLEBG = "data/texture/title_bg/title_bg.png";
 static const D3DXVECTOR3 POS_TITLEBG = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);
 static const float WIDTH_TITLEBG = 1280.0f;
 static const float HEIGHT_TITLEBG = 720.0f;
@@ -350,10 +350,10 @@ void CTitle::UpdateAnimationTitleBg(void)
 	scrollBg += 0.001f;
 
 	m_pTitleBg->SetTexcoord(
-								D3DXVECTOR2(0.0f, 0.0f + scrollBg),
-								D3DXVECTOR2(1.0f, 0.0f + scrollBg),
-								D3DXVECTOR2(0.0f, 0.5f + scrollBg),
-								D3DXVECTOR2(1.0f, 0.5f + scrollBg));
+								D3DXVECTOR2(0.0f + scrollBg, 0.0f),
+								D3DXVECTOR2(1.0f + scrollBg, 0.0f),
+								D3DXVECTOR2(0.0f + scrollBg, 0.5f),
+								D3DXVECTOR2(1.0f + scrollBg, 0.5f));
 }
 
 void CTitle::UpdateInputEvent(void)
