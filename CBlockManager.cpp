@@ -12,6 +12,7 @@
 #include "CBlockManager.h"
 #include "CBlock.h"
 #include "CGimickBlock.h"
+#include "CWoodBox.h"
 #include "Utility.h"
 #include <stdio.h>
 
@@ -26,6 +27,8 @@ CInstancingObject *ins;
 CBlock *CBlockManager::m_pBlockArray[MAX_BLOCK_Y * MAX_BLOCK_X] = { nullptr };
 CBlock *CBlockManager::m_pLaserStart = nullptr;
 CBlock *CBlockManager::m_pLaserGoal = nullptr;
+
+CWoodBox *CBlockManager::m_pWoodBoxArray[MAX_WOOD_BOX] = { nullptr };
 
 //=============================================================================
 // ê∂ê¨èàóù
@@ -44,6 +47,7 @@ CBlockManager* CBlockManager::Create(char *pFileName)
 HRESULT CBlockManager::Init()
 {
 	m_nFoodNum = 0;
+	m_nWoodBoxCnt = 0;
 
 	if (!CreateBlockMap(m_pFileName))
 	{
@@ -62,10 +66,18 @@ void CBlockManager::Uninit()
 	{
 		for (int nLoopX = 0; nLoopX < MAX_BLOCK_X; nLoopX++)
 		{
-			if (m_pBlockArray != nullptr)
+			if ( m_pBlockArray[ nLoopY * MAX_BLOCK_X + nLoopX ] != nullptr )
 			{
-				m_pBlockArray[nLoopY * MAX_BLOCK_X + nLoopX] = nullptr;
+				m_pBlockArray[ nLoopY * MAX_BLOCK_X + nLoopX ] = nullptr;
 			}
+		}
+	}
+
+	for ( int nLoop = 0; nLoop < MAX_WOOD_BOX; nLoop++ )
+	{
+		if ( m_pWoodBoxArray[ nLoop ] != nullptr )
+		{
+			m_pWoodBoxArray[ nLoop ] = nullptr;
 		}
 	}
 }
@@ -222,7 +234,7 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 					break;
 
 				case CBlock::BLOCKID_WOODBOX:
-					pBlock = (CBlock*)new CGimmickBlock;
+					pBlock = (CBlock*)new CWoodBox;
 					pBlock->SetBlockTexID(0, 13);
 					break;
 
@@ -300,7 +312,16 @@ bool CBlockManager::CreateBlockMap(char *p_stagemap_filename)
 					pBlock->SetSecondTexID(-1, -1);
 				}
 
-				m_pBlockArray[nCntY * MAX_BLOCK_X + nCntX] = pBlock;
+				if ( nBlockID == CBlock::BLOCKID_WOODBOX )
+				{
+					m_pWoodBoxArray[ m_nWoodBoxCnt ] = ( CWoodBox* )pBlock;
+
+					m_nWoodBoxCnt++;
+				}
+				else
+				{
+					m_pBlockArray[ nCntY * MAX_BLOCK_X + nCntX ] = pBlock;
+				}
 			}
 		}
 	}

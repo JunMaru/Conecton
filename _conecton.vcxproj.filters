@@ -242,6 +242,9 @@
     <ClCompile Include="CPauseMenu.cpp">
       <Filter>ソース ファイル\application\Pause</Filter>
     </ClCompile>
+    <ClCompile Include="CWoodBox.cpp">
+      <Filter>ソース ファイル\application\CBlock</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGame.h">
@@ -396,6 +399,9 @@
     </ClInclude>
     <ClInclude Include="CLifeConfig.h">
       <Filter>ソース ファイル\application</Filter>
+    </ClInclude>
+    <ClInclude Include="CWoodBox.h">
+      <Filter>ソース ファイル\application\CBlock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

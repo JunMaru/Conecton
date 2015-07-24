@@ -133,6 +133,7 @@
     <ClCompile Include="CSoundXAudio2.cpp" />
     <ClCompile Include="CStageSelect.cpp" />
     <ClCompile Include="CTitle.cpp" />
+    <ClCompile Include="CWoodBox.cpp" />
     <ClCompile Include="Define.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MathHelper.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="CStageConfig.h" />
     <ClInclude Include="CStageSelect.h" />
     <ClInclude Include="CTitle.h" />
+    <ClInclude Include="CWoodBox.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MathHelper.h" />

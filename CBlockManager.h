@@ -20,11 +20,13 @@
 //=============================================================================
 #define MAX_BLOCK_X ( 30 )
 #define MAX_BLOCK_Y ( 100 )
+#define MAX_WOOD_BOX ( 10 )
 
 //=============================================================================
 // 前方定義
 //=============================================================================
 class CBlock;
+class CWoodBox;
 
 //=============================================================================
 // クラス定義
@@ -52,6 +54,8 @@ public:
 	static CBlock* GetLaserStart(){ return m_pLaserStart; }
 	static CBlock* GetLaserGoal(){ return m_pLaserGoal; }
 
+	static CWoodBox* GetWoodBoxAddress( int nWoodBoxArrayNum ){ return m_pWoodBoxArray[ nWoodBoxArrayNum ]; }
+
 	// ブロック配列番号算出関数
 	static void CalculateBlockArrayNum(D3DXVECTOR3 pos, int *p_array_x, int *p_array_y);
 
@@ -59,6 +63,7 @@ public:
 	CBlock::BLOCKID GetBlockID( D3DXVECTOR3 pos );
 	int GetBlockHitLaserNo(D3DXVECTOR3 pos);
 	int GetFoodNum(void){ return m_nFoodNum; }
+	int GetWoodBoxCnt(void){ return m_nWoodBoxCnt; }
 
 	// ギミックブロックへ上書きする関数
 	void OverwriteGimmickBlock( CBlock::BLOCKID block_type, D3DXVECTOR3 pos );
@@ -69,6 +74,7 @@ public:
 private:
 	// ステージ上のブロックへのアドレス管理場所
 	static CBlock *m_pBlockArray[MAX_BLOCK_Y * MAX_BLOCK_X];
+	static CWoodBox *m_pWoodBoxArray[ MAX_WOOD_BOX ];
 	static CBlock *m_pLaserStart;		// レーザースタート位置へのアドレス
 	static CBlock *m_pLaserGoal;		// レーザーゴール位置へのアドレス
 
@@ -76,6 +82,7 @@ private:
 	int m_nMaxArrayNumX;	// ブロック配列最大数-X
 	int m_nMaxArrayNumY;	// ブロック配列最大数-Y
 	int m_nFoodNum;
+	int m_nWoodBoxCnt;
 
 	char *m_pFileName;
 };
