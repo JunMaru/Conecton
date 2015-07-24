@@ -319,11 +319,6 @@ void CLaserManager::Update()
 		m_bLaserGoalFlag = true;
 		SetLaserGoalTexture();
 	}
-
-	if (m_bLaserGoalFlag == true)
-	{
-		CDebugProcDX9::Print("èIóπ\n");
-	}
 }
 
 //=============================================================================
