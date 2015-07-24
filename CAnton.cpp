@@ -285,6 +285,11 @@ void CAnton::TemporaryUpdate()
 	const bool bWaitRangeSpeed = fabs(m_prevPos.x - m_pos.x) < ANTON_MOVE_THRESHOLD;
 	const bool bRewriteMotion = ((!bPowerfulPush) && (!bHandMove));
 
+	if(m_state == STATE_POWERFUL)
+	{
+		m_action = ACTION_WALK;
+	}
+
 	// 待機になる速度かつ、上書きしてほしくないモーションではない
 	if (bWaitRangeSpeed && bRewriteMotion)
 	{

@@ -123,6 +123,8 @@ void CGimmickBlock::Update()
 
 			bCheckRightHit = true;
 
+			pAnton->SetAction(CAnton::ACTION_PUSH);
+
 			PlaySeBoxSlip();
 		}
 
@@ -135,6 +137,8 @@ void CGimmickBlock::Update()
 			blockPos.x -= WOODBOX_MOVE;
 
 			bCheckLeftHit = true;
+
+			pAnton->SetAction(CAnton::ACTION_PUSH);
 
 			PlaySeBoxSlip();
 		}
