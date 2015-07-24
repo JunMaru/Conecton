@@ -324,8 +324,8 @@ void CGame::HitCheckMinimumAnton(void)
 			blockPos = pBlock->GetPosition() + blockSize;
 
 			if ((antonPos.y + antonSize.y) - (blockPos.y - blockSize.y) >= BLOCK_HEIGHT
-				&& (antonPos.x + antonSize.x - 20.0f) >(blockPos.x - blockSize.x)
-				&& (antonPos.x - antonSize.x + 20.0f) < (blockPos.x + blockSize.x))
+				&& (antonPos.x + antonSize.x + 10.0f) >(blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x - 10.0f) < (blockPos.x + blockSize.x))
 			{
 				// 進んでいる方向に壁がある場合は目的の座標と現在の座標を１つ前に戻す
 				if ((antonPosTar.x - antonPos.x) * (blockPos.x - antonPos.x) > 0)
@@ -413,8 +413,8 @@ void CGame::HitCheckMetalAnton(void)
 			blockPos = pBlock->GetPosition() + blockSize;
 
 			if ((antonPos.y + antonSize.y) - (blockPos.y - blockSize.y) >= BLOCK_HEIGHT
-				&& (antonPos.x + antonSize.x - 20.0f) >(blockPos.x - blockSize.x)
-				&& (antonPos.x - antonSize.x + 20.0f) < (blockPos.x + blockSize.x))
+				&& (antonPos.x + antonSize.x + 10.0f) >(blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x - 10.0f) < (blockPos.x + blockSize.x))
 			{
 				// 進んでいる方向に壁がある場合は目的の座標と現在の座標を１つ前に戻す
 				if ((antonPosTar.x - antonPos.x) * (blockPos.x - antonPos.x) > 0)
@@ -489,8 +489,8 @@ void CGame::HitCheckAnton(void)
 			blockPos = pBlock->GetPosition() + blockSize;
 
 			if ((antonPos.y + antonSize.y) - (blockPos.y - blockSize.y) >= BLOCK_HEIGHT
-				&& (antonPos.x + antonSize.x - 20.0f) > (blockPos.x - blockSize.x)
-				&& (antonPos.x - antonSize.x + 20.0f) < (blockPos.x + blockSize.x))
+				&& (antonPos.x + antonSize.x + 10.0f) > (blockPos.x - blockSize.x)
+				&& (antonPos.x - antonSize.x - 10.0f) < (blockPos.x + blockSize.x))
 			{
 				// 進んでいる方向に壁がある場合は目的の座標と現在の座標を１つ前に戻す
 				if ((antonPosTar.x - antonPos.x) * (blockPos.x - antonPos.x) > 0)
@@ -786,7 +786,7 @@ bool CGame::ConnectNormalBlock(void)
 void CGame::HitCheckItem(void)
 {
 	const float fAntonOffsetX = 50.0f;
-	const float fAntonOffsetY = 50.0f;
+	const float fAntonOffsetY = 65.0f;
 
 	D3DXVECTOR3 antonPos = m_pPlayer->GetAnton()->GetPosition();
 	antonPos.x += fAntonOffsetX;
