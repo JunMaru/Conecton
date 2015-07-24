@@ -98,7 +98,7 @@ void CPlayer::Update(void)
 	CheckMove();
 	CheckChangeNormalAnton();
 
-#if 1
+#if 0
 	// test
 	if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_NORMAL))
 	{
