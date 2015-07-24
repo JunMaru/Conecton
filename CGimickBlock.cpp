@@ -49,6 +49,7 @@ void CGimmickBlock::Update()
 	// アントンのアドレスを取ってくる
 	CAnton *pAnton = CGame::GetPlayer()->GetAnton();
 	CBeecon *pBeecon = CGame::GetPlayer()->GetBeecon();
+	CBlockManager *pBlockManager = CGame::GetBlockManager();
 
 	// アントンの座標を調べる。
 	D3DXVECTOR3 antonPos = pAnton->GetPosition();
@@ -147,6 +148,10 @@ void CGimmickBlock::Update()
 		pBlock = CBlockManager::GetBlock(nArrayNumX, nArrayNumY + 1);
 
 		if (pBlock == nullptr)
+		{
+			blockPos.y += WOODBOX_MOVE;
+		}
+		else if (pBlock->GetBlockId() >= CBlock::BLOCKID_FOOD_ACORN && pBlock->GetBlockId() <= CBlock::BLOCKID_FOOD_MUSHROOM)
 		{
 			blockPos.y += WOODBOX_MOVE;
 		}
