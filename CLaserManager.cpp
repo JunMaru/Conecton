@@ -168,8 +168,10 @@ void CLaserManager::Update()
 	}
 
 	// H‚×•¨‚Í“Ë‚«”²‚¯‚Ä‚à‚ç‚¤
+	// ƒ[ƒv‚à“Ë‚«”²‚¯‚é
 	const bool bFood = (pBlock->GetBlockId() >= CBlock::BLOCKID_FOOD_ACORN) && (pBlock->GetBlockId() <= CBlock::BLOCKID_FOOD_MUSHROOM);
-	if (bFood)
+	const bool bWarp = (pBlock->GetBlockId() >= CBlock::BLOCKID_WARP_BLUE) && (pBlock->GetBlockId() <= CBlock::BLOCKID_WARP_PINK);
+	if (bFood || bWarp)
 	{
 		if (m_bStopLaserFlag[m_nCurrentLaser] == true)
 		{
