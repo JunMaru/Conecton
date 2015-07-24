@@ -98,10 +98,6 @@ void CPlayer::Update(void)
 	CheckMove();
 	CheckChangeNormalAnton();
 
-	// アントンの自動移動
-	D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
-	m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
-
 #if 1
 	// test
 	if (m_pInputCommand->IsTrigger(CInputCommand::COMMAND_NORMAL))
@@ -181,10 +177,18 @@ void CPlayer::CheckMove(void)
 	if (bRight)
 	{
 		m_pBeecon->CommandRightMove();
+
+		// アントンの自動移動
+		D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
+		m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
 	}
 	else if (bLeft)
 	{
 		m_pBeecon->CommandLeftMove();
+
+		// アントンの自動移動
+		D3DXVECTOR3 targetPos = m_pBeecon->GetPosition();
+		m_pAnton->SetTargetPosition(targetPos.x, m_pAnton->GetPosition().y);
 	}
 
 	// 上下判定
